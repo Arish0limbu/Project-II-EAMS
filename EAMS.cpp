@@ -41,6 +41,10 @@ vector<Attendance> attendanceRecords;
 // UTILITY FUNCTIONS
 // ==========================================
 
+void clearScreen() {
+    system("cls");
+}
+
 string toLower(const string& str) {
     string result = str;
     transform(result.begin(), result.end(), result.begin(), ::tolower);
@@ -647,6 +651,7 @@ bool employeeIdExists(const string& employeeId) {
 }
 
 void addEmployee() {
+    clearScreen();
     cout << "\n========== ADD EMPLOYEE ==========\n";
     
     string employeeId;
@@ -683,6 +688,7 @@ void addEmployee() {
 }
 
 void viewEmployees() {
+    clearScreen();
     if (employees.empty()) {
         cout << "\nNo employees found!\n";
         return;
@@ -702,6 +708,7 @@ void viewEmployees() {
 }
 
 void searchEmployee() {
+    clearScreen();
     cout << "\n========== SEARCH EMPLOYEE ==========\n";
     cout << "1. Search by Employee ID\n";
     cout << "2. Search by Name\n";
@@ -757,6 +764,7 @@ void searchEmployee() {
 }
 
 void updateEmployee() {
+    clearScreen();
     cout << "\n========== UPDATE EMPLOYEE ==========\n";
     
     string employeeId = getNonEmptyString("Enter Employee ID to update: ");
@@ -862,6 +870,7 @@ void updateEmployee() {
 }
 
 void deleteEmployee() {
+    clearScreen();
     cout << "\n========== DELETE EMPLOYEE ==========\n";
     
     string employeeId = getNonEmptyString("Enter Employee ID to delete: ");
@@ -891,6 +900,7 @@ void deleteEmployee() {
 // ==========================================
 
 void markAttendance() {
+    clearScreen();
     cout << "\n========== MARK ATTENDANCE ==========\n";
     
     string employeeId = getNonEmptyString("Enter Employee ID: ");
@@ -918,6 +928,7 @@ void markAttendance() {
 }
 
 void viewTodayAttendance() {
+    clearScreen();
     cout << "\n========== TODAY'S ATTENDANCE ==========\n";
     
     string today = getValidDate("Enter Date (DD/MM/YYYY): ");
@@ -943,6 +954,7 @@ void viewTodayAttendance() {
 }
 
 void viewAttendanceHistory() {
+    clearScreen();
     if (attendanceRecords.empty()) {
         cout << "\nNo attendance records found!\n";
         return;
@@ -961,6 +973,7 @@ void viewAttendanceHistory() {
 }
 
 void searchAttendance() {
+    clearScreen();
     cout << "\n========== SEARCH ATTENDANCE ==========\n";
     cout << "1. Search by Employee ID\n";
     cout << "2. Search by Date\n";
@@ -1060,6 +1073,7 @@ bool adminLogin() {
 }
 
 void employeeManagementMenu() {
+    clearScreen();
     while (true) {
         cout << "\n========== EMPLOYEE MANAGEMENT ==========\n";
         cout << "1. Add Employee\n";
@@ -1182,3 +1196,4 @@ int main() {
     
     return 0;
 }
+    
