@@ -699,7 +699,7 @@ bool employeeIdExists(const string& employeeId) {
 
 void addEmployee() {
     clearScreen();
-    cout << "\n========== ADD EMPLOYEE ==========\n";
+    printBoxHeader("ADD EMPLOYEE");
     
     string employeeId;
     while (true) {
@@ -736,27 +736,31 @@ void addEmployee() {
 
 void viewEmployees() {
     clearScreen();
+    printBoxHeader("EMPLOYEE LIST");
     if (employees.empty()) {
-        cout << "\nNo employees found!\n";
+        cout << "\n  ╔══════════════════════════════════════════╗\n";
+        cout << "  ║      No employees found!               ║\n";
+        cout << "  ╚══════════════════════════════════════════╝\n";
         return;
     }
     
-    cout << "\n========== EMPLOYEE LIST ==========\n";
-    cout << left << setw(15) << "ID" << setw(25) << "Name" << setw(8) << "Age" 
-         << setw(10) << "Gender" << setw(15) << "Phone" << setw(20) << "Department" 
-         << setw(20) << "Position" << "\n";
-    cout << string(120, '-') << "\n";
+    cout << "\n  ┌─────────────┬─────────────────────┬──────┬──────────┬───────────────┬──────────────────┬──────────────────┐\n";
+    cout << "  │    ID      │        Name         │ Age  │  Gender  │     Phone     │    Department    │     Position     │\n";
+    cout << "  ├─────────────┼─────────────────────┼──────┼──────────┼───────────────┼──────────────────┼──────────────────┤\n";
     
     for (const auto& emp : employees) {
-        cout << left << setw(15) << emp.employeeId << setw(25) << emp.name 
-             << setw(8) << emp.age << setw(10) << emp.gender << setw(15) << emp.phone 
-             << setw(20) << emp.department << setw(20) << emp.position << "\n";
+        cout << "  │ " << left << setw(11) << emp.employeeId << " │ " 
+             << setw(19) << emp.name << " │ " << setw(4) << emp.age << " │ " 
+             << setw(8) << emp.gender << " │ " << setw(13) << emp.phone << " │ " 
+             << setw(16) << emp.department << " │ " << setw(16) << emp.position << " │\n";
     }
+    
+    cout << "  └─────────────┴─────────────────────┴──────┴──────────┴───────────────┴──────────────────┴──────────────────┘\n";
 }
 
 void searchEmployee() {
     clearScreen();
-    cout << "\n========== SEARCH EMPLOYEE ==========\n";
+    printBoxHeader("SEARCH EMPLOYEE");
     cout << "1. Search by Employee ID\n";
     cout << "2. Search by Name\n";
     cout << "0. Back\n";
@@ -770,19 +774,24 @@ void searchEmployee() {
         int index = findEmployeeIndex(employeeId);
         
         if (index == -1) {
-            cout << "[WARNING] Employee ID not found!\n";
+            cout << "\n  ╔══════════════════════════════════════════╗\n";
+            cout << "  ║  [WARNING] Employee ID not found!       ║\n";
+            cout << "  ╚══════════════════════════════════════════╝\n";
             return;
         }
         
         const auto& emp = employees[index];
-        cout << "\n========== EMPLOYEE DETAILS ==========\n";
-        cout << "Employee ID: " << emp.employeeId << "\n";
-        cout << "Name: " << emp.name << "\n";
-        cout << "Age: " << emp.age << "\n";
-        cout << "Gender: " << emp.gender << "\n";
-        cout << "Phone: " << emp.phone << "\n";
-        cout << "Department: " << emp.department << "\n";
-        cout << "Position: " << emp.position << "\n";
+        cout << "\n  ╔══════════════════════════════════════════╗\n";
+        cout << "  ║           EMPLOYEE DETAILS              ║\n";
+        cout << "  ╠══════════════════════════════════════════╣\n";
+        cout << "  ║ Employee ID  : " << setw(23) << emp.employeeId << "║\n";
+        cout << "  ║ Name         : " << setw(23) << emp.name << "║\n";
+        cout << "  ║ Age          : " << setw(23) << emp.age << "║\n";
+        cout << "  ║ Gender       : " << setw(23) << emp.gender << "║\n";
+        cout << "  ║ Phone        : " << setw(23) << emp.phone << "║\n";
+        cout << "  ║ Department   : " << setw(23) << emp.department << "║\n";
+        cout << "  ║ Position     : " << setw(23) << emp.position << "║\n";
+        cout << "  ╚══════════════════════════════════════════╝\n";
     } else {
         string searchName = getNonEmptyString("Enter Name: ");
         string lowerSearch = toLower(searchName);
@@ -791,48 +800,63 @@ void searchEmployee() {
         for (const auto& emp : employees) {
             if (toLower(emp.name).find(lowerSearch) != string::npos) {
                 if (!found) {
-                    cout << "\n========== SEARCH RESULTS ==========\n";
-                    cout << left << setw(15) << "ID" << setw(25) << "Name" << setw(8) << "Age" 
-                         << setw(10) << "Gender" << setw(15) << "Phone" << setw(20) << "Department" 
-                         << setw(20) << "Position" << "\n";
-                    cout << string(120, '-') << "\n";
+                    cout << "\n  ╔══════════════════════════════════════════╗\n";
+                    cout << "  ║            SEARCH RESULTS                ║\n";
+                    cout << "  ╚══════════════════════════════════════════╝\n";
+                    cout << "\n  ┌─────────────┬─────────────────────┬──────┬──────────┬───────────────┬──────────────────┬──────────────────┐\n";
+                    cout << "  │    ID      │        Name         │ Age  │  Gender  │     Phone     │    Department    │     Position     │\n";
+                    cout << "  ├─────────────┼─────────────────────┼──────┼──────────┼───────────────┼──────────────────┼──────────────────┤\n";
                     found = true;
                 }
-                cout << left << setw(15) << emp.employeeId << setw(25) << emp.name 
-                     << setw(8) << emp.age << setw(10) << emp.gender << setw(15) << emp.phone 
-                     << setw(20) << emp.department << setw(20) << emp.position << "\n";
+                cout << "  │ " << left << setw(11) << emp.employeeId << " │ " 
+                     << setw(19) << emp.name << " │ " << setw(4) << emp.age << " │ " 
+                     << setw(8) << emp.gender << " │ " << setw(13) << emp.phone << " │ " 
+                     << setw(16) << emp.department << " │ " << setw(16) << emp.position << " │\n";
             }
         }
         
+        if (found) {
+            cout << "  └─────────────┴─────────────────────┴──────┴──────────┴───────────────┴──────────────────┴──────────────────┘\n";
+        }
+        
         if (!found) {
-            cout << "[WARNING] No employee found with that name!\n";
+            cout << "\n  ╔══════════════════════════════════════════╗\n";
+            cout << "  ║  No employee found with that name!      ║\n";
+            cout << "  ╚══════════════════════════════════════════╝\n";
         }
     }
 }
 
 void updateEmployee() {
     clearScreen();
-    cout << "\n========== UPDATE EMPLOYEE ==========\n";
+    printBoxHeader("UPDATE EMPLOYEE");
     
     string employeeId = getNonEmptyString("Enter Employee ID to update: ");
     int index = findEmployeeIndex(employeeId);
     
     if (index == -1) {
-        cout << "[WARNING] Employee ID not found!\n";
+        cout << "\n  ╔══════════════════════════════════════════╗\n";
+        cout << "  ║  [WARNING] Employee ID not found!       ║\n";
+        cout << "  ╚══════════════════════════════════════════╝\n";
         return;
     }
     
     auto& emp = employees[index];
     
-    cout << "\nCurrent Details:\n";
-    cout << "Name: " << emp.name << "\n";
-    cout << "Age: " << emp.age << "\n";
-    cout << "Gender: " << emp.gender << "\n";
-    cout << "Phone: " << emp.phone << "\n";
-    cout << "Department: " << emp.department << "\n";
-    cout << "Position: " << emp.position << "\n";
+    cout << "\n  ╔══════════════════════════════════════════╗\n";
+    cout << "  ║           CURRENT DETAILS               ║\n";
+    cout << "  ╠══════════════════════════════════════════╣\n";
+    cout << "  ║ Name         : " << setw(23) << emp.name << "║\n";
+    cout << "  ║ Age          : " << setw(23) << emp.age << "║\n";
+    cout << "  ║ Gender       : " << setw(23) << emp.gender << "║\n";
+    cout << "  ║ Phone        : " << setw(23) << emp.phone << "║\n";
+    cout << "  ║ Department   : " << setw(23) << emp.department << "║\n";
+    cout << "  ║ Position     : " << setw(23) << emp.position << "║\n";
+    cout << "  ╚══════════════════════════════════════════╝\n";
     
-    cout << "\nEnter new details (leave blank to keep current):\n";
+    cout << "\n  ╔══════════════════════════════════════════╗\n";
+    cout << "  ║  Enter new details (blank = keep current) ║\n";
+    cout << "  ╚══════════════════════════════════════════╝\n";
     
     string newName;
     cout << "Enter Name [" << emp.name << "]: ";
@@ -913,12 +937,14 @@ void updateEmployee() {
     }
     
     saveEmployees();
-    cout << "\nEmployee updated successfully!\n";
+    cout << "\n  ╔══════════════════════════════════════════╗\n";
+    cout << "  ║      Employee updated successfully!     ║\n";
+    cout << "  ╚══════════════════════════════════════════╝\n";
 }
 
 void deleteEmployee() {
     clearScreen();
-    cout << "\n========== DELETE EMPLOYEE ==========\n";
+    printBoxHeader("DELETE EMPLOYEE");
     
     string employeeId = getNonEmptyString("Enter Employee ID to delete: ");
     int index = findEmployeeIndex(employeeId);
@@ -948,7 +974,7 @@ void deleteEmployee() {
 
 void markAttendance() {
     clearScreen();
-    cout << "\n========== MARK ATTENDANCE ==========\n";
+    printBoxHeader("MARK ATTENDANCE");
     
     string employeeId = getNonEmptyString("Enter Employee ID: ");
     int index = findEmployeeIndex(employeeId);
@@ -976,7 +1002,7 @@ void markAttendance() {
 
 void viewTodayAttendance() {
     clearScreen();
-    cout << "\n========== TODAY'S ATTENDANCE ==========\n";
+    printBoxHeader("TODAY'S ATTENDANCE");
     
     string today = getValidDate("Enter Date (DD/MM/YYYY): ");
     
@@ -1002,26 +1028,33 @@ void viewTodayAttendance() {
 
 void viewAttendanceHistory() {
     clearScreen();
+    printBoxHeader("ATTENDANCE HISTORY");
     if (attendanceRecords.empty()) {
-        cout << "\nNo attendance records found!\n";
+        cout << "\n  ╔══════════════════════════════════════════╗\n";
+        cout << "  ║   No attendance records found!          ║\n";
+        cout << "  ╚══════════════════════════════════════════╝\n";
         return;
     }
     
-    cout << "\n========== ATTENDANCE HISTORY ==========\n";
-    cout << left << setw(15) << "Emp ID" << setw(25) << "Name" << setw(12) << "Date" 
-         << setw(10) << "Check In" << setw(10) << "Check Out" << setw(10) << "Status" << "\n";
-    cout << string(82, '-') << "\n";
+    cout << "\n  ┌─────────────┬─────────────────────┬────────────┬───────────┬───────────┬──────────┐\n";
+    cout << "  │    ID      │        Name         │    Date     │ Check In  │ Check Out │  Status  │\n";
+    cout << "  ├─────────────┼─────────────────────┼────────────┼───────────┼───────────┼──────────┤\n";
     
     for (const auto& att : attendanceRecords) {
-        cout << left << setw(15) << att.employeeId << setw(25) << att.employeeName 
-             << setw(12) << att.date << setw(10) << att.checkIn << setw(10) << att.checkOut 
-             << setw(10) << att.status << "\n";
+        cout << "  │ " << left << setw(11) << att.employeeId << " │ " 
+             << setw(19) << att.employeeName << " │ " 
+             << setw(10) << att.date << " │ " 
+             << setw(9) << att.checkIn << " │ " 
+             << setw(9) << att.checkOut << " │ " 
+             << setw(8) << att.status << " │\n";
     }
+    
+    cout << "  └─────────────┴─────────────────────┴────────────┴───────────┴───────────┴──────────┘\n";
 }
 
 void searchAttendance() {
     clearScreen();
-    cout << "\n========== SEARCH ATTENDANCE ==========\n";
+    printBoxHeader("SEARCH ATTENDANCE");
     cout << "1. Search by Employee ID\n";
     cout << "2. Search by Date\n";
     cout << "0. Back\n";
@@ -1184,14 +1217,38 @@ void employeeManagementMenu() {
 void attendanceManagementMenu() {
     while (true) {
         clearScreen();
-        cout << "\n========== ATTENDANCE MANAGEMENT ==========\n";
-        cout << "1. Mark Attendance\n";
-        cout << "2. View Today's Attendance\n";
-        cout << "3. View Attendance History\n";
-        cout << "4. Search Attendance\n";
-        cout << "0. Back\n";
+        printBoxHeader("ATTENDANCE MANAGEMENT");
+        printMenuBorder();
+        printMenuItem(1, "Mark Attendance");
+        printMenuItem(2, "View Today's Attendance");
+        printMenuItem(3, "View Attendance History");
+        printMenuItem(4, "Search Attendance");
+        printMenuItem(0, "Back to Main Menu");
+        printMenuFooter();
         
-        int choice = getMenuChoice("Enter choice: ", 0, 4);
+        cout << "\n  ┌──────────────────────────────────────────┐\n";
+        cout << "  │ Enter your choice: ";
+        
+        int choice;
+        if (!(cin >> choice)) {
+            cout << "  │ Invalid input!                    │\n";
+            cout << "  └──────────────────────────────────────────┘\n";
+            clearInputBuffer();
+            pauseScreen();
+            continue;
+        }
+        clearInputBuffer();
+        
+        cout << "  └──────────────────────────────────────────┘\n";
+        
+        if (choice < 0 || choice > 4) {
+            cout << "\n  ╔══════════════════════════════════════════╗\n";
+            cout << "  ║ [WARNING] Invalid choice!               ║\n";
+            cout << "  ║ Please enter a number from the menu.    ║\n";
+            cout << "  ╚══════════════════════════════════════════╝\n";
+            pauseScreen();
+            continue;
+        }
         
         switch (choice) {
             case 1:
@@ -1223,15 +1280,43 @@ void searchEmployeeMenu() {
 void mainMenu() {
     clearScreen();
     while (true) {
-        cout << "\n========================================\n";
-        cout << "       EMPLOYEE ATTENDANCE SYSTEM\n";
-        cout << "========================================\n";
-        cout << "1. Employee Management\n";
-        cout << "2. Attendance Management\n";
-        cout << "3. Search Employee\n";
-        cout << "4. Exit\n";
+        cout << "\n";
+        cout << "╔══════════════════════════════════════════════════════╗\n";
+        cout << "║                                                      ║\n";
+        cout << "║           EMPLOYEE ATTENDANCE MANAGEMENT SYSTEM      ║\n";
+        cout << "║                                                      ║\n";
+        cout << "╚══════════════════════════════════════════════════════╝\n";
+        cout << "\n";
+        cout << "  ┌──────────────────────────────────────────┐\n";
+        cout << "  │  [1] Employee Management                │\n";
+        cout << "  │  [2] Attendance Management               │\n";
+        cout << "  │  [3] Search Employee                     │\n";
+        cout << "  │  [4] Exit                                │\n";
+        cout << "  └──────────────────────────────────────────┘\n";
         
-        int choice = getMenuChoice("\nEnter choice: ", 1, 4);
+        cout << "\n  ┌──────────────────────────────────────────┐\n";
+        cout << "  │ Enter your choice: ";
+        
+        int choice;
+        if (!(cin >> choice)) {
+            cout << "  │ Invalid input!                    │\n";
+            cout << "  └──────────────────────────────────────────┘\n";
+            clearInputBuffer();
+            pauseScreen();
+            continue;
+        }
+        clearInputBuffer();
+        
+        cout << "  └──────────────────────────────────────────┘\n";
+        
+        if (choice < 1 || choice > 4) {
+            cout << "\n  ╔══════════════════════════════════════════╗\n";
+            cout << "  ║ [WARNING] Invalid choice!               ║\n";
+            cout << "  ║ Please enter a number from the menu.    ║\n";
+            cout << "  ╚══════════════════════════════════════════╝\n";
+            pauseScreen();
+            continue;
+        }
         
         switch (choice) {
             case 1:
@@ -1244,8 +1329,14 @@ void mainMenu() {
                 searchEmployeeMenu();
                 break;
             case 4:
-                cout << "\nThank you for using the Employee Attendance Management System!\n";
-                cout << "Goodbye!\n";
+                clearScreen();
+                cout << "\n";
+                cout << "╔══════════════════════════════════════════════════════╗\n";
+                cout << "║                                                      ║\n";
+                cout << "║       Thank you for using EAMS!                     ║\n";
+                cout << "║               Goodbye!                             ║\n";
+                cout << "║                                                      ║\n";
+                cout << "╚══════════════════════════════════════════════════════╝\n";
                 return;
         }
     }
