@@ -45,6 +45,53 @@ void clearScreen() {
     system("cls");
 }
 
+void printHeader(const string& title) {
+    int width = 50;
+    cout << "\n";
+    cout << string(width, '=') << "\n";
+    cout << string((width - title.length()) / 2, ' ') << title << "\n";
+    cout << string(width, '=') << "\n";
+}
+
+void printBoxHeader(const string& title) {
+    cout << "\n";
+    cout << "╔" << string(48, '═') << "╗\n";
+    cout << "║" << string((50 - title.length()) / 2, ' ') << title << string((50 - title.length()) / 2, ' ') << "║\n";
+    cout << "╚" << string(48, '═') << "╝\n";
+}
+
+void printDashedLine() {
+    cout << string(50, '-') << "\n";
+}
+
+void printStarLine() {
+    cout << string(50, '*') << "\n";
+}
+
+void printDottedLine() {
+    cout << string(50, '.') << "\n";
+}
+
+void printSeparator() {
+    cout << "\n" << string(50, '~') << "\n";
+}
+
+void printMenuBorder() {
+    cout << "┌" << string(48, "─") << "┐\n";
+}
+
+void printMenuFooter() {
+    cout << "└" << string(48, "─") << "┘\n";
+}
+
+void printMenuItem(int num, const string& text) {
+    cout << "│ " << setw(2) << num << ". " << setw(42) << left << text << "│\n";
+}
+
+void printMenuOption(const string& text) {
+    cout << "│ " << setw(45) << left << text << "│\n";
+}
+
 string toLower(const string& str) {
     string result = str;
     transform(result.begin(), result.end(), result.begin(), ::tolower);
@@ -1035,10 +1082,11 @@ void searchAttendance() {
 // ==========================================
 
 bool adminLogin() {
+    clearScreen();
     const string USERNAME = "admin";
     const string PASSWORD = "admin123";
     
-    cout << "\n========== ADMIN LOGIN ==========\n";
+    printBoxHeader("ADMIN LOGIN");
     
     string username = getNonEmptyString("Username: ");
     
@@ -1073,17 +1121,41 @@ bool adminLogin() {
 }
 
 void employeeManagementMenu() {
-    clearScreen();
     while (true) {
-        cout << "\n========== EMPLOYEE MANAGEMENT ==========\n";
-        cout << "1. Add Employee\n";
-        cout << "2. View Employees\n";
-        cout << "3. Search Employee\n";
-        cout << "4. Update Employee\n";
-        cout << "5. Delete Employee\n";
-        cout << "0. Back\n";
+        clearScreen();
+        printBoxHeader("EMPLOYEE MANAGEMENT");
+        printMenuBorder();
+        printMenuItem(1, "Add Employee");
+        printMenuItem(2, "View Employees");
+        printMenuItem(3, "Search Employee");
+        printMenuItem(4, "Update Employee");
+        printMenuItem(5, "Delete Employee");
+        printMenuItem(0, "Back to Main Menu");
+        printMenuFooter();
         
-        int choice = getMenuChoice("Enter choice: ", 0, 5);
+        cout << "\n  ┌──────────────────────────────────────────┐\n";
+        cout << "  │ Enter your choice: ";
+        
+        int choice;
+        if (!(cin >> choice)) {
+            cout << "  │ Invalid input!                    │\n";
+            cout << "  └──────────────────────────────────────────┘\n";
+            clearInputBuffer();
+            pauseScreen();
+            continue;
+        }
+        clearInputBuffer();
+        
+        cout << "  └──────────────────────────────────────────┘\n";
+        
+        if (choice < 0 || choice > 5) {
+            cout << "\n  ╔══════════════════════════════════════════╗\n";
+            cout << "  ║ [WARNING] Invalid choice!               ║\n";
+            cout << "  ║ Please enter a number from the menu.    ║\n";
+            cout << "  ╚══════════════════════════════════════════╝\n";
+            pauseScreen();
+            continue;
+        }
         
         switch (choice) {
             case 1:
@@ -1149,8 +1221,8 @@ void searchEmployeeMenu() {
 }
 
 void mainMenu() {
+    clearScreen();
     while (true) {
-        clearScreen();
         cout << "\n========================================\n";
         cout << "       EMPLOYEE ATTENDANCE SYSTEM\n";
         cout << "========================================\n";
