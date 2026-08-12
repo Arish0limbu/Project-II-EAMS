@@ -1111,6 +1111,7 @@ void employeeManagementMenu() {
 
 void attendanceManagementMenu() {
     while (true) {
+        clearScreen();
         cout << "\n========== ATTENDANCE MANAGEMENT ==========\n";
         cout << "1. Mark Attendance\n";
         cout << "2. View Today's Attendance\n";
@@ -1142,12 +1143,14 @@ void attendanceManagementMenu() {
 }
 
 void searchEmployeeMenu() {
+    clearScreen();
     searchEmployee();
     pauseScreen();
 }
 
 void mainMenu() {
     while (true) {
+        clearScreen();
         cout << "\n========================================\n";
         cout << "       EMPLOYEE ATTENDANCE SYSTEM\n";
         cout << "========================================\n";
@@ -1196,4 +1199,3 @@ int main() {
     
     return 0;
 }
-    
