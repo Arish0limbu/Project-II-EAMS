@@ -950,21 +950,30 @@ void deleteEmployee() {
     int index = findEmployeeIndex(employeeId);
     
     if (index == -1) {
-        cout << "[WARNING] Employee ID not found!\n";
+        cout << "\n  ╔══════════════════════════════════════════╗\n";
+        cout << "  ║  [WARNING] Employee ID not found!       ║\n";
+        cout << "  ╚══════════════════════════════════════════╝\n";
         return;
     }
     
     const auto& emp = employees[index];
-    cout << "\nEmployee to delete:\n";
-    cout << "ID: " << emp.employeeId << "\n";
-    cout << "Name: " << emp.name << "\n";
+    cout << "\n  ╔══════════════════════════════════════════╗\n";
+    cout << "  ║          EMPLOYEE TO DELETE              ║\n";
+    cout << "  ╠══════════════════════════════════════════╣\n";
+    cout << "  ║ ID           : " << setw(23) << emp.employeeId << "║\n";
+    cout << "  ║ Name         : " << setw(23) << emp.name << "║\n";
+    cout << "  ╚══════════════════════════════════════════╝\n";
     
     if (confirmAction("Are you sure you want to delete this employee?")) {
         employees.erase(employees.begin() + index);
         saveEmployees();
-        cout << "\nEmployee deleted successfully!\n";
+        cout << "\n  ╔══════════════════════════════════════════╗\n";
+        cout << "  ║      Employee deleted successfully!     ║\n";
+        cout << "  ╚══════════════════════════════════════════╝\n";
     } else {
-        cout << "\nDeletion cancelled.\n";
+        cout << "\n  ╔══════════════════════════════════════════╗\n";
+        cout << "  ║          Deletion cancelled.             ║\n";
+        cout << "  ╚══════════════════════════════════════════╝\n";
     }
 }
 
@@ -980,7 +989,9 @@ void markAttendance() {
     int index = findEmployeeIndex(employeeId);
     
     if (index == -1) {
-        cout << "[WARNING] Employee ID not found!\n";
+        cout << "\n  ╔══════════════════════════════════════════╗\n";
+        cout << "  ║  [WARNING] Employee ID not found!       ║\n";
+        cout << "  ╚══════════════════════════════════════════╝\n";
         return;
     }
     
@@ -997,7 +1008,9 @@ void markAttendance() {
     attendanceRecords.push_back(att);
     saveAttendance();
     
-    cout << "\nAttendance marked successfully!\n";
+    cout << "\n  ╔══════════════════════════════════════════╗\n";
+    cout << "  ║    Attendance marked successfully!        ║\n";
+    cout << "  ╚══════════════════════════════════════════╝\n";
 }
 
 void viewTodayAttendance() {
@@ -1010,19 +1023,28 @@ void viewTodayAttendance() {
     for (const auto& att : attendanceRecords) {
         if (att.date == today) {
             if (!found) {
-                cout << left << setw(15) << "Emp ID" << setw(25) << "Name" << setw(12) << "Date" 
-                     << setw(10) << "Check In" << setw(10) << "Check Out" << setw(10) << "Status" << "\n";
-                cout << string(82, '-') << "\n";
+                cout << "\n  ┌─────────────┬─────────────────────┬────────────┬───────────┬───────────┬──────────┐\n";
+                cout << "  │    ID      │        Name         │    Date     │ Check In  │ Check Out │  Status  │\n";
+                cout << "  ├─────────────┼─────────────────────┼────────────┼───────────┼───────────┼──────────┤\n";
                 found = true;
             }
-            cout << left << setw(15) << att.employeeId << setw(25) << att.employeeName 
-                 << setw(12) << att.date << setw(10) << att.checkIn << setw(10) << att.checkOut 
-                 << setw(10) << att.status << "\n";
+            cout << "  │ " << left << setw(11) << att.employeeId << " │ " 
+                 << setw(19) << att.employeeName << " │ " 
+                 << setw(10) << att.date << " │ " 
+                 << setw(9) << att.checkIn << " │ " 
+                 << setw(9) << att.checkOut << " │ " 
+                 << setw(8) << att.status << " │\n";
         }
     }
     
+    if (found) {
+        cout << "  └─────────────┴─────────────────────┴────────────┴───────────┴───────────┴──────────┘\n";
+    }
+    
     if (!found) {
-        cout << "No attendance records found for this date.\n";
+        cout << "\n  ╔══════════════════════════════════════════╗\n";
+        cout << "  ║ No attendance records found for this date ║\n";
+        cout << "  ╚══════════════════════════════════════════╝\n";
     }
 }
 
