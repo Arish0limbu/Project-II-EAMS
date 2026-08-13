@@ -1,7 +1,39 @@
 #include <iostream>
-#include <string.h>
-
+#include <string>
+#include <conio.h>
 using namespace std;
+
+string hidePassword()
+{
+    string password;
+    char ch;
+
+    while (true)
+    {
+        ch = _getch();
+
+        if (ch == 13) // Enter
+        {
+            cout << endl;
+            break;
+        }
+        else if (ch == 8) // Backspace
+        {
+            if (!password.empty())
+            {
+                password.pop_back();
+                cout << "\b \b";
+            }
+        }
+        else if (ch >= 32 && ch <= 126)
+        {
+            password += ch;
+            cout << '*';
+        }
+    }
+
+    return password;
+}
 
 bool login()
 {
@@ -15,7 +47,7 @@ bool login()
         cin >> username;
 
         cout << "Password: ";
-        cin >> password;
+        password = hidePassword();
 
         if (username == "admin" && password == "1234")
         {
@@ -30,8 +62,22 @@ bool login()
     cout << "\nToo many failed attempts. Access denied!\n";
     return false;
 }
+
 int main()
 {
+    if (login())
+    {
+        cout << "Welcome Admin!\n";
+    }
 
+    return 0;
+}
+
+int main()
+{
+    if (login())
+    {
+        cout << " hello";
+    }
     return 0;
 }
