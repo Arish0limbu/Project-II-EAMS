@@ -110,7 +110,9 @@ void clearInputBuffer() {
 }
 
 void pauseScreen() {
-    cout << "\nPress Enter to continue...";
+    cout << "\n  ┌──────────────────────────────────────────┐\n";
+    cout << "  │    Press Enter to continue...          │\n";
+    cout << "  └──────────────────────────────────────────┘\n";
     cin.ignore();
     cin.get();
 }
@@ -705,8 +707,10 @@ void addEmployee() {
     while (true) {
         employeeId = getNonEmptyString("Enter Employee ID: ");
         if (employeeIdExists(employeeId)) {
-            cout << "[WARNING] This Employee ID already exists!\n";
-            cout << "Please enter a different ID.\n";
+            cout << "\n  ╔══════════════════════════════════════════╗\n";
+            cout << "  ║ [WARNING] This Employee ID already exists! ║\n";
+            cout << "  ║ Please enter a different ID.              ║\n";
+            cout << "  ╚══════════════════════════════════════════╝\n";
         } else {
             break;
         }
@@ -731,7 +735,9 @@ void addEmployee() {
     employees.push_back(emp);
     saveEmployees();
     
-    cout << "\nEmployee added successfully!\n";
+    cout << "\n  ╔══════════════════════════════════════════╗\n";
+    cout << "  ║       Employee added successfully!       ║\n";
+    cout << "  ╚══════════════════════════════════════════╝\n";
 }
 
 void viewEmployees() {
