@@ -817,36 +817,39 @@ void searchEmployee() {
         for (const auto& emp : employees) {
             if (toLower(emp.name).find(lowerSearch) != string::npos) {
                 if (!found) {
-                    cout << "\n  ╔══════════════════════════════════════════╗\n";
-                    cout << "  ║            SEARCH RESULTS                ║\n";
-                    cout << "  ╚══════════════════════════════════════════╝\n";
-                    cout << "\n  ┌─────────────┬─────────────────────┬──────┬──────────┬───────────────┬──────────────────┬──────────────────┐\n";
-                    cout << "  │    ID      │        Name         │ Age  │  Gender  │     Phone     │    Department    │     Position     │\n";
-                    cout << "  ├─────────────┼─────────────────────┼──────┼──────────┼───────────────┼──────────────────┼──────────────────┤\n";
+                    cout << "\n+======================================+\n";
+                    cout << "|            SEARCH RESULTS          |\n";
+                    cout << "+======================================+\n";
+                    cout << "\n+-------------+---------------------+------+----------+---------------+------------------+------------------+\n";
+                    cout << "|    ID      |        Name         | Age  |  Gender  |     Phone     |    Department    |     Position     |\n";
+                    cout << "+-------------+---------------------+------+----------+---------------+------------------+------------------+\n";
                     found = true;
                 }
-                cout << "  │ " << left << setw(11) << emp.employeeId << " │ " 
-                     << setw(19) << emp.name << " │ " << setw(4) << emp.age << " │ " 
-                     << setw(8) << emp.gender << " │ " << setw(13) << emp.phone << " │ " 
-                     << setw(16) << emp.department << " │ " << setw(16) << emp.position << " │\n";
+                cout << "| " << left << setw(11) << emp.employeeId << " | " 
+                     << setw(19) << emp.name << " | " << setw(4) << emp.age << " | " 
+                     << setw(8) << emp.gender << " | " << setw(13) << emp.phone << " | " 
+                     << setw(16) << emp.department << " | " << setw(16) << emp.position << " |\n";
             }
         }
         
         if (found) {
-            cout << "  └─────────────┴─────────────────────┴──────┴──────────┴───────────────┴──────────────────┴──────────────────┘\n";
+            cout << "+-------------+---------------------+------+----------+---------------+------------------+------------------+\n";
         }
         
         if (!found) {
-            cout << "\n  ╔══════════════════════════════════════════╗\n";
-            cout << "  ║  No employee found with that name!      ║\n";
-            cout << "  ╚══════════════════════════════════════════╝\n";
+            cout << "\n+======================================+\n";
+            cout << "|  No employee found with that name! |\n";
+            cout << "+======================================+\n";
         }
     }
 }
 
 void updateEmployee() {
     clearScreen();
-    printBoxHeader("UPDATE EMPLOYEE");
+    cout << "\n";
+    cout << "========================================\n";
+    cout << "         UPDATE EMPLOYEE\n";
+    cout << "========================================\n";
     
     string employeeId = getNonEmptyString("Enter Employee ID to update: ");
     int index = findEmployeeIndex(employeeId);
