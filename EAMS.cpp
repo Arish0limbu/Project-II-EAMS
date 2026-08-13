@@ -72,12 +72,3 @@ int main()
 
     return 0;
 }
-
-int main()
-{
-    if (login())
-    {
-        cout << " hello";
-    }
-    return 0;
-}
