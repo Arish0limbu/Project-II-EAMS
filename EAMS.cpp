@@ -855,28 +855,28 @@ void updateEmployee() {
     int index = findEmployeeIndex(employeeId);
     
     if (index == -1) {
-        cout << "\n  ╔══════════════════════════════════════════╗\n";
-        cout << "  ║  [WARNING] Employee ID not found!       ║\n";
-        cout << "  ╚══════════════════════════════════════════╝\n";
+        cout << "\n+======================================+\n";
+        cout << "|  [WARNING] Employee ID not found!  |\n";
+        cout << "+======================================+\n";
         return;
     }
     
     auto& emp = employees[index];
     
-    cout << "\n  ╔══════════════════════════════════════════╗\n";
-    cout << "  ║           CURRENT DETAILS               ║\n";
-    cout << "  ╠══════════════════════════════════════════╣\n";
-    cout << "  ║ Name         : " << setw(23) << emp.name << "║\n";
-    cout << "  ║ Age          : " << setw(23) << emp.age << "║\n";
-    cout << "  ║ Gender       : " << setw(23) << emp.gender << "║\n";
-    cout << "  ║ Phone        : " << setw(23) << emp.phone << "║\n";
-    cout << "  ║ Department   : " << setw(23) << emp.department << "║\n";
-    cout << "  ║ Position     : " << setw(23) << emp.position << "║\n";
-    cout << "  ╚══════════════════════════════════════════╝\n";
+    cout << "\n+======================================+\n";
+    cout << "|           CURRENT DETAILS          |\n";
+    cout << "+======================================+\n";
+    cout << "| Name         : " << setw(23) << emp.name << "|\n";
+    cout << "| Age          : " << setw(23) << emp.age << "|\n";
+    cout << "| Gender       : " << setw(23) << emp.gender << "|\n";
+    cout << "| Phone        : " << setw(23) << emp.phone << "|\n";
+    cout << "| Department   : " << setw(23) << emp.department << "|\n";
+    cout << "| Position     : " << setw(23) << emp.position << "|\n";
+    cout << "+======================================+\n";
     
-    cout << "\n  ╔══════════════════════════════════════════╗\n";
-    cout << "  ║  Enter new details (blank = keep current) ║\n";
-    cout << "  ╚══════════════════════════════════════════╝\n";
+    cout << "\n+======================================+\n";
+    cout << "|  Enter new details (blank = keep current) |\n";
+    cout << "+======================================+\n";
     
     string newName;
     cout << "Enter Name [" << emp.name << "]: ";
@@ -957,9 +957,9 @@ void updateEmployee() {
     }
     
     saveEmployees();
-    cout << "\n  ╔══════════════════════════════════════════╗\n";
-    cout << "  ║      Employee updated successfully!     ║\n";
-    cout << "  ╚══════════════════════════════════════════╝\n";
+    cout << "\n+======================================+\n";
+    cout << "|      Employee updated successfully! |\n";
+    cout << "+======================================+\n";
 }
 
 void deleteEmployee() {
