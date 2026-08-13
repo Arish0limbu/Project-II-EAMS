@@ -964,36 +964,39 @@ void updateEmployee() {
 
 void deleteEmployee() {
     clearScreen();
-    printBoxHeader("DELETE EMPLOYEE");
+    cout << "\n";
+    cout << "========================================\n";
+    cout << "         DELETE EMPLOYEE\n";
+    cout << "========================================\n";
     
     string employeeId = getNonEmptyString("Enter Employee ID to delete: ");
     int index = findEmployeeIndex(employeeId);
     
     if (index == -1) {
-        cout << "\n  ╔══════════════════════════════════════════╗\n";
-        cout << "  ║  [WARNING] Employee ID not found!       ║\n";
-        cout << "  ╚══════════════════════════════════════════╝\n";
+        cout << "\n+======================================+\n";
+        cout << "|  [WARNING] Employee ID not found!  |\n";
+        cout << "+======================================+\n";
         return;
     }
     
     const auto& emp = employees[index];
-    cout << "\n  ╔══════════════════════════════════════════╗\n";
-    cout << "  ║          EMPLOYEE TO DELETE              ║\n";
-    cout << "  ╠══════════════════════════════════════════╣\n";
-    cout << "  ║ ID           : " << setw(23) << emp.employeeId << "║\n";
-    cout << "  ║ Name         : " << setw(23) << emp.name << "║\n";
-    cout << "  ╚══════════════════════════════════════════╝\n";
+    cout << "\n+======================================+\n";
+    cout << "|          EMPLOYEE TO DELETE         |\n";
+    cout << "+======================================+\n";
+    cout << "| ID           : " << setw(23) << emp.employeeId << "|\n";
+    cout << "| Name         : " << setw(23) << emp.name << "|\n";
+    cout << "+======================================+\n";
     
     if (confirmAction("Are you sure you want to delete this employee?")) {
         employees.erase(employees.begin() + index);
         saveEmployees();
-        cout << "\n  ╔══════════════════════════════════════════╗\n";
-        cout << "  ║      Employee deleted successfully!     ║\n";
-        cout << "  ╚══════════════════════════════════════════╝\n";
+        cout << "\n+======================================+\n";
+        cout << "|      Employee deleted successfully! |\n";
+        cout << "+======================================+\n";
     } else {
-        cout << "\n  ╔══════════════════════════════════════════╗\n";
-        cout << "  ║          Deletion cancelled.             ║\n";
-        cout << "  ╚══════════════════════════════════════════╝\n";
+        cout << "\n+======================================+\n";
+        cout << "|          Deletion cancelled.       |\n";
+        cout << "+======================================+\n";
     }
 }
 
@@ -1003,15 +1006,18 @@ void deleteEmployee() {
 
 void markAttendance() {
     clearScreen();
-    printBoxHeader("MARK ATTENDANCE");
+    cout << "\n";
+    cout << "========================================\n";
+    cout << "         MARK ATTENDANCE\n";
+    cout << "========================================\n";
     
     string employeeId = getNonEmptyString("Enter Employee ID: ");
     int index = findEmployeeIndex(employeeId);
     
     if (index == -1) {
-        cout << "\n  ╔══════════════════════════════════════════╗\n";
-        cout << "  ║  [WARNING] Employee ID not found!       ║\n";
-        cout << "  ╚══════════════════════════════════════════╝\n";
+        cout << "\n+======================================+\n";
+        cout << "|  [WARNING] Employee ID not found!  |\n";
+        cout << "+======================================+\n";
         return;
     }
     
@@ -1028,9 +1034,9 @@ void markAttendance() {
     attendanceRecords.push_back(att);
     saveAttendance();
     
-    cout << "\n  ╔══════════════════════════════════════════╗\n";
-    cout << "  ║    Attendance marked successfully!        ║\n";
-    cout << "  ╚══════════════════════════════════════════╝\n";
+    cout << "\n+======================================+\n";
+    cout << "|    Attendance marked successfully!  |\n";
+    cout << "+======================================+\n";
 }
 
 void viewTodayAttendance() {
