@@ -55,9 +55,9 @@ void printHeader(const string& title) {
 
 void printBoxHeader(const string& title) {
     cout << "\n";
-    cout << "╔" << string(48, '═') << "╗\n";
-    cout << "║" << string((50 - title.length()) / 2, ' ') << title << string((50 - title.length()) / 2, ' ') << "║\n";
-    cout << "╚" << string(48, '═') << "╝\n";
+    cout << "+" << string(48, '=') << "+\n";
+    cout << "|" << string((50 - title.length()) / 2, ' ') << title << string((50 - title.length()) / 2, ' ') << "|\n";
+    cout << "+" << string(48, '=') << "+\n";
 }
 
 void printDashedLine() {
@@ -77,19 +77,19 @@ void printSeparator() {
 }
 
 void printMenuBorder() {
-    cout << "┌" << string(48, "─") << "┐\n";
+    cout << "+" << string(48, '-') << "+\n";
 }
 
 void printMenuFooter() {
-    cout << "└" << string(48, "─") << "┘\n";
+    cout << "+" << string(48, '-') << "+\n";
 }
 
 void printMenuItem(int num, const string& text) {
-    cout << "│ " << setw(2) << num << ". " << setw(42) << left << text << "│\n";
+    cout << "| " << setw(2) << num << ". " << setw(42) << left << text << "|\n";
 }
 
 void printMenuOption(const string& text) {
-    cout << "│ " << setw(45) << left << text << "│\n";
+    cout << "| " << setw(45) << left << text << "|\n";
 }
 
 string toLower(const string& str) {
@@ -701,7 +701,10 @@ bool employeeIdExists(const string& employeeId) {
 
 void addEmployee() {
     clearScreen();
-    printBoxHeader("ADD EMPLOYEE");
+    cout << "\n";
+    cout << "========================================\n";
+    cout << "         ADD EMPLOYEE\n";
+    cout << "========================================\n";
     
     string employeeId;
     while (true) {
@@ -742,17 +745,20 @@ void addEmployee() {
 
 void viewEmployees() {
     clearScreen();
-    printBoxHeader("EMPLOYEE LIST");
+    cout << "\n";
+    cout << "========================================\n";
+    cout << "         EMPLOYEE LIST\n";
+    cout << "========================================\n";
     if (employees.empty()) {
-        cout << "\n  ╔══════════════════════════════════════════╗\n";
-        cout << "  ║      No employees found!               ║\n";
-        cout << "  ╚══════════════════════════════════════════╝\n";
+        cout << "\n+======================================+\n";
+        cout << "|      No employees found!           |\n";
+        cout << "+======================================+\n";
         return;
     }
     
-    cout << "\n  ┌─────────────┬─────────────────────┬──────┬──────────┬───────────────┬──────────────────┬──────────────────┐\n";
-    cout << "  │    ID      │        Name         │ Age  │  Gender  │     Phone     │    Department    │     Position     │\n";
-    cout << "  ├─────────────┼─────────────────────┼──────┼──────────┼───────────────┼──────────────────┼──────────────────┤\n";
+    cout << "\n+-------------+---------------------+------+----------+---------------+------------------+------------------+\n";
+    cout << "|    ID      |        Name         | Age  |  Gender  |     Phone     |    Department    |     Position     |\n";
+    cout << "+-------------+---------------------+------+----------+---------------+------------------+------------------+\n";
     
     for (const auto& emp : employees) {
         cout << "  │ " << left << setw(11) << emp.employeeId << " │ " 
