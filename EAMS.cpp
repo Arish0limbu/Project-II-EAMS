@@ -1041,7 +1041,10 @@ void markAttendance() {
 
 void viewTodayAttendance() {
     clearScreen();
-    printBoxHeader("TODAY'S ATTENDANCE");
+    cout << "\n";
+    cout << "========================================\n";
+    cout << "         TODAY'S ATTENDANCE\n";
+    cout << "========================================\n";
     
     string today = getValidDate("Enter Date (DD/MM/YYYY): ");
     
