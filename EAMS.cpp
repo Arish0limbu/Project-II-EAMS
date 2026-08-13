@@ -110,9 +110,9 @@ void clearInputBuffer() {
 }
 
 void pauseScreen() {
-    cout << "\n+------------------------------------------+\n";
-    cout << "|    Press Enter to continue...          |\n";
-    cout << "+------------------------------------------+\n";
+    cout << "\n------------------------------------------\n";
+    cout << "    Press Enter to continue...\n";
+    cout << "------------------------------------------\n";
     cin.ignore();
     cin.get();
 }
@@ -710,10 +710,10 @@ void addEmployee() {
     while (true) {
         employeeId = getNonEmptyString("Enter Employee ID: ");
         if (employeeIdExists(employeeId)) {
-            cout << "\n  ╔══════════════════════════════════════════╗\n";
-            cout << "  ║ [WARNING] This Employee ID already exists! ║\n";
-            cout << "  ║ Please enter a different ID.              ║\n";
-            cout << "  ╚══════════════════════════════════════════╝\n";
+            cout << "\n+======================================+\n";
+            cout << "| [WARNING] This Employee ID already exists! |\n";
+            cout << "| Please enter a different ID.        |\n";
+            cout << "+======================================+\n";
         } else {
             break;
         }
@@ -738,9 +738,9 @@ void addEmployee() {
     employees.push_back(emp);
     saveEmployees();
     
-    cout << "\n  ╔══════════════════════════════════════════╗\n";
-    cout << "  ║       Employee added successfully!       ║\n";
-    cout << "  ╚══════════════════════════════════════════╝\n";
+    cout << "\n+======================================+\n";
+    cout << "|       Employee added successfully! |\n";
+    cout << "+======================================+\n";
 }
 
 void viewEmployees() {
@@ -1310,35 +1310,40 @@ void employeeManagementMenu() {
 void attendanceManagementMenu() {
     while (true) {
         clearScreen();
-        printBoxHeader("ATTENDANCE MANAGEMENT");
-        printMenuBorder();
-        printMenuItem(1, "Mark Attendance");
-        printMenuItem(2, "View Today's Attendance");
-        printMenuItem(3, "View Attendance History");
-        printMenuItem(4, "Search Attendance");
-        printMenuItem(0, "Back to Main Menu");
-        printMenuFooter();
+        cout << "\n";
+        cout << "========================================\n";
+        cout << "       ATTENDANCE MANAGEMENT\n";
+        cout << "========================================\n";
+        cout << "\n";
+        cout << "+------------------------------------------+\n";
+        cout << "|  [1] Mark Attendance                     |\n";
+        cout << "|  [2] View Today's Attendance             |\n";
+        cout << "|  [3] View Attendance History             |\n";
+        cout << "|  [4] Search Attendance                   |\n";
+        cout << "|  [0] Back to Main Menu                    |\n";
+        cout << "+------------------------------------------+\n";
         
-        cout << "\n  ┌──────────────────────────────────────────┐\n";
-        cout << "  │ Enter your choice: ";
+        cout << "\n+------------------------------------------+\n";
+        cout << "| Enter your choice: ";
         
         int choice;
         if (!(cin >> choice)) {
-            cout << "  │ Invalid input!                    │\n";
-            cout << "  └──────────────────────────────────────────┘\n";
+            cout << "Invalid input!                       |\n";
+            cout << "+------------------------------------------+\n";
             clearInputBuffer();
             pauseScreen();
             continue;
         }
         clearInputBuffer();
         
-        cout << "  └──────────────────────────────────────────┘\n";
+        cout << "                                        |\n";
+        cout << "+------------------------------------------+\n";
         
         if (choice < 0 || choice > 4) {
-            cout << "\n  ╔══════════════════════════════════════════╗\n";
-            cout << "  ║ [WARNING] Invalid choice!               ║\n";
-            cout << "  ║ Please enter a number from the menu.    ║\n";
-            cout << "  ╚══════════════════════════════════════════╝\n";
+            cout << "\n+======================================+\n";
+            cout << "| [WARNING] Invalid choice!          |\n";
+            cout << "| Please enter a number from the menu.|\n";
+            cout << "+======================================+\n";
             pauseScreen();
             continue;
         }
@@ -1374,39 +1379,40 @@ void mainMenu() {
     clearScreen();
     while (true) {
         cout << "\n";
-        cout << "╔══════════════════════════════════════════════════════╗\n";
-        cout << "║                                                      ║\n";
-        cout << "║           EMPLOYEE ATTENDANCE MANAGEMENT SYSTEM      ║\n";
-        cout << "║                                                      ║\n";
-        cout << "╚══════════════════════════════════════════════════════╝\n";
+        cout << "================================================\n";
+        cout << "                                                \n";
+        cout << "           EMPLOYEE ATTENDANCE MANAGEMENT SYSTEM\n";
+        cout << "                                                \n";
+        cout << "================================================\n";
         cout << "\n";
-        cout << "  ┌──────────────────────────────────────────┐\n";
-        cout << "  │  [1] Employee Management                │\n";
-        cout << "  │  [2] Attendance Management               │\n";
-        cout << "  │  [3] Search Employee                     │\n";
-        cout << "  │  [4] Exit                                │\n";
-        cout << "  └──────────────────────────────────────────┘\n";
+        cout << "+----------------------------------------------+\n";
+        cout << "|  [1] Employee Management                     |\n";
+        cout << "|  [2] Attendance Management                    |\n";
+        cout << "|  [3] Search Employee                          |\n";
+        cout << "|  [4] Exit                                     |\n";
+        cout << "+----------------------------------------------+\n";
         
-        cout << "\n  ┌──────────────────────────────────────────┐\n";
-        cout << "  │ Enter your choice: ";
+        cout << "\n+----------------------------------------------+\n";
+        cout << "| Enter your choice: ";
         
         int choice;
         if (!(cin >> choice)) {
-            cout << "  │ Invalid input!                    │\n";
-            cout << "  └──────────────────────────────────────────┘\n";
+            cout << "Invalid input!                          |\n";
+            cout << "+----------------------------------------------+\n";
             clearInputBuffer();
             pauseScreen();
             continue;
         }
         clearInputBuffer();
         
-        cout << "  └──────────────────────────────────────────┘\n";
+        cout << "                                              |\n";
+        cout << "+----------------------------------------------+\n";
         
         if (choice < 1 || choice > 4) {
-            cout << "\n  ╔══════════════════════════════════════════╗\n";
-            cout << "  ║ [WARNING] Invalid choice!               ║\n";
-            cout << "  ║ Please enter a number from the menu.    ║\n";
-            cout << "  ╚══════════════════════════════════════════╝\n";
+            cout << "\n+==============================================+\n";
+            cout << "| [WARNING] Invalid choice!                  |\n";
+            cout << "| Please enter a number from the menu.       |\n";
+            cout << "+==============================================+\n";
             pauseScreen();
             continue;
         }
@@ -1424,12 +1430,12 @@ void mainMenu() {
             case 4:
                 clearScreen();
                 cout << "\n";
-                cout << "╔══════════════════════════════════════════════════════╗\n";
-                cout << "║                                                      ║\n";
-                cout << "║       Thank you for using EAMS!                     ║\n";
-                cout << "║               Goodbye!                             ║\n";
-                cout << "║                                                      ║\n";
-                cout << "╚══════════════════════════════════════════════════════╝\n";
+                cout << "================================================\n";
+                cout << "                                                \n";
+                cout << "       Thank you for using EAMS!                 \n";
+                cout << "               Goodbye!                         \n";
+                cout << "                                                \n";
+                cout << "================================================\n";
                 return;
         }
     }
