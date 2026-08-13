@@ -1052,67 +1052,73 @@ void viewTodayAttendance() {
     for (const auto& att : attendanceRecords) {
         if (att.date == today) {
             if (!found) {
-                cout << "\n  ┌─────────────┬─────────────────────┬────────────┬───────────┬───────────┬──────────┐\n";
-                cout << "  │    ID      │        Name         │    Date     │ Check In  │ Check Out │  Status  │\n";
-                cout << "  ├─────────────┼─────────────────────┼────────────┼───────────┼───────────┼──────────┤\n";
+                cout << "\n+-------------+---------------------+------------+-----------+-----------+----------+\n";
+                cout << "|    ID      |        Name         |    Date     | Check In  | Check Out |  Status  |\n";
+                cout << "+-------------+---------------------+------------+-----------+-----------+----------+\n";
                 found = true;
             }
-            cout << "  │ " << left << setw(11) << att.employeeId << " │ " 
-                 << setw(19) << att.employeeName << " │ " 
-                 << setw(10) << att.date << " │ " 
-                 << setw(9) << att.checkIn << " │ " 
-                 << setw(9) << att.checkOut << " │ " 
-                 << setw(8) << att.status << " │\n";
+            cout << "| " << left << setw(11) << att.employeeId << " | " 
+                 << setw(19) << att.employeeName << " | " 
+                 << setw(10) << att.date << " | " 
+                 << setw(9) << att.checkIn << " | " 
+                 << setw(9) << att.checkOut << " | " 
+                 << setw(8) << att.status << " |\n";
         }
     }
     
     if (found) {
-        cout << "  └─────────────┴─────────────────────┴────────────┴───────────┴───────────┴──────────┘\n";
+        cout << "+-------------+---------------------+------------+-----------+-----------+----------+\n";
     }
     
     if (!found) {
-        cout << "\n  ╔══════════════════════════════════════════╗\n";
-        cout << "  ║ No attendance records found for this date ║\n";
-        cout << "  ╚══════════════════════════════════════════╝\n";
+        cout << "\n+======================================+\n";
+        cout << "| No attendance records found for this date |\n";
+        cout << "+======================================+\n";
     }
 }
 
 void viewAttendanceHistory() {
     clearScreen();
-    printBoxHeader("ATTENDANCE HISTORY");
+    cout << "\n";
+    cout << "========================================\n";
+    cout << "         ATTENDANCE HISTORY\n";
+    cout << "========================================\n";
     if (attendanceRecords.empty()) {
-        cout << "\n  ╔══════════════════════════════════════════╗\n";
-        cout << "  ║   No attendance records found!          ║\n";
-        cout << "  ╚══════════════════════════════════════════╝\n";
+        cout << "\n+======================================+\n";
+        cout << "|   No attendance records found!    |\n";
+        cout << "+======================================+\n";
         return;
     }
     
-    cout << "\n  ┌─────────────┬─────────────────────┬────────────┬───────────┬───────────┬──────────┐\n";
-    cout << "  │    ID      │        Name         │    Date     │ Check In  │ Check Out │  Status  │\n";
-    cout << "  ├─────────────┼─────────────────────┼────────────┼───────────┼───────────┼──────────┤\n";
+    cout << "\n+-------------+---------------------+------------+-----------+-----------+----------+\n";
+    cout << "|    ID      |        Name         |    Date     | Check In  | Check Out |  Status  |\n";
+    cout << "+-------------+---------------------+------------+-----------+-----------+----------+\n";
     
     for (const auto& att : attendanceRecords) {
-        cout << "  │ " << left << setw(11) << att.employeeId << " │ " 
-             << setw(19) << att.employeeName << " │ " 
-             << setw(10) << att.date << " │ " 
-             << setw(9) << att.checkIn << " │ " 
-             << setw(9) << att.checkOut << " │ " 
-             << setw(8) << att.status << " │\n";
+        cout << "| " << left << setw(11) << att.employeeId << " | " 
+             << setw(19) << att.employeeName << " | " 
+             << setw(10) << att.date << " | " 
+             << setw(9) << att.checkIn << " | " 
+             << setw(9) << att.checkOut << " | " 
+             << setw(8) << att.status << " |\n";
     }
     
-    cout << "  └─────────────┴─────────────────────┴────────────┴───────────┴───────────┴──────────┘\n";
+    cout << "+-------------+---------------------+------------+-----------+-----------+----------+\n";
 }
 
 void searchAttendance() {
     clearScreen();
-    printBoxHeader("SEARCH ATTENDANCE");
-    cout << "\n  ┌──────────────────────────────────────────┐\n";
-    cout << "  │  [1] Search by Employee ID                │\n";
-    cout << "  │  [2] Search by Date                       │\n";
-    cout << "  │  [0] Back                                 │\n";
-    cout << "  └──────────────────────────────────────────┘\n";
+    cout << "\n";
+    cout << "========================================\n";
+    cout << "         SEARCH ATTENDANCE\n";
+    cout << "========================================\n";
+    cout << "\n+------------------------------------------+\n";
+    cout << "|  [1] Search by Employee ID                |\n";
+    cout << "|  [2] Search by Date                       |\n";
+    cout << "|  [0] Back                                 |\n";
+    cout << "+------------------------------------------+\n";
     
-    int choice = getMenuChoice("\n  Enter choice: ", 0, 2);
+    int choice = getMenuChoice("\nEnter choice: ", 0, 2);
     
     if (choice == 0) return;
     
@@ -1123,31 +1129,31 @@ void searchAttendance() {
         for (const auto& att : attendanceRecords) {
             if (att.employeeId == employeeId) {
                 if (!found) {
-                    cout << "\n  ╔══════════════════════════════════════════╗\n";
-                    cout << "  ║            SEARCH RESULTS                ║\n";
-                    cout << "  ╚══════════════════════════════════════════╝\n";
-                    cout << "\n  ┌─────────────┬─────────────────────┬────────────┬───────────┬───────────┬──────────┐\n";
-                    cout << "  │    ID      │        Name         │    Date     │ Check In  │ Check Out │  Status  │\n";
-                    cout << "  ├─────────────┼─────────────────────┼────────────┼───────────┼───────────┼──────────┤\n";
+                    cout << "\n+======================================+\n";
+                    cout << "|            SEARCH RESULTS          |\n";
+                    cout << "+======================================+\n";
+                    cout << "\n+-------------+---------------------+------------+-----------+-----------+----------+\n";
+                    cout << "|    ID      |        Name         |    Date     | Check In  | Check Out |  Status  |\n";
+                    cout << "+-------------+---------------------+------------+-----------+-----------+----------+\n";
                     found = true;
                 }
-                cout << "  │ " << left << setw(11) << att.employeeId << " │ " 
-                     << setw(19) << att.employeeName << " │ " 
-                     << setw(10) << att.date << " │ " 
-                     << setw(9) << att.checkIn << " │ " 
-                     << setw(9) << att.checkOut << " │ " 
-                     << setw(8) << att.status << " │\n";
+                cout << "| " << left << setw(11) << att.employeeId << " | " 
+                     << setw(19) << att.employeeName << " | " 
+                     << setw(10) << att.date << " | " 
+                     << setw(9) << att.checkIn << " | " 
+                     << setw(9) << att.checkOut << " | " 
+                     << setw(8) << att.status << " |\n";
             }
         }
         
         if (found) {
-            cout << "  └─────────────┴─────────────────────┴────────────┴───────────┴───────────┴──────────┘\n";
+            cout << "+-------------+---------------------+------------+-----------+-----------+----------+\n";
         }
         
         if (!found) {
-            cout << "\n  ╔══════════════════════════════════════════╗\n";
-            cout << "  ║ No attendance records found for this employee ║\n";
-            cout << "  ╚══════════════════════════════════════════╝\n";
+            cout << "\n+======================================+\n";
+            cout << "| No attendance records found for this employee |\n";
+            cout << "+======================================+\n";
         }
     } else {
         string date = getValidDate("Enter Date (DD/MM/YYYY): ");
@@ -1156,31 +1162,31 @@ void searchAttendance() {
         for (const auto& att : attendanceRecords) {
             if (att.date == date) {
                 if (!found) {
-                    cout << "\n  ╔══════════════════════════════════════════╗\n";
-                    cout << "  ║            SEARCH RESULTS                ║\n";
-                    cout << "  ╚══════════════════════════════════════════╝\n";
-                    cout << "\n  ┌─────────────┬─────────────────────┬────────────┬───────────┬───────────┬──────────┐\n";
-                    cout << "  │    ID      │        Name         │    Date     │ Check In  │ Check Out │  Status  │\n";
-                    cout << "  ├─────────────┼─────────────────────┼────────────┼───────────┼───────────┼──────────┤\n";
+                    cout << "\n+======================================+\n";
+                    cout << "|            SEARCH RESULTS          |\n";
+                    cout << "+======================================+\n";
+                    cout << "\n+-------------+---------------------+------------+-----------+-----------+----------+\n";
+                    cout << "|    ID      |        Name         |    Date     | Check In  | Check Out |  Status  |\n";
+                    cout << "+-------------+---------------------+------------+-----------+-----------+----------+\n";
                     found = true;
                 }
-                cout << "  │ " << left << setw(11) << att.employeeId << " │ " 
-                     << setw(19) << att.employeeName << " │ " 
-                     << setw(10) << att.date << " │ " 
-                     << setw(9) << att.checkIn << " │ " 
-                     << setw(9) << att.checkOut << " │ " 
-                     << setw(8) << att.status << " │\n";
+                cout << "| " << left << setw(11) << att.employeeId << " | " 
+                     << setw(19) << att.employeeName << " | " 
+                     << setw(10) << att.date << " | " 
+                     << setw(9) << att.checkIn << " | " 
+                     << setw(9) << att.checkOut << " | " 
+                     << setw(8) << att.status << " |\n";
             }
         }
         
         if (found) {
-            cout << "  └─────────────┴─────────────────────┴────────────┴───────────┴───────────┴──────────┘\n";
+            cout << "+-------------+---------------------+------------+-----------+-----------+----------+\n";
         }
         
         if (!found) {
-            cout << "\n  ╔══════════════════════════════════════════╗\n";
-            cout << "  ║ No attendance records found for this date   ║\n";
-            cout << "  ╚══════════════════════════════════════════╝\n";
+            cout << "\n+======================================+\n";
+            cout << "| No attendance records found for this date   |\n";
+            cout << "+======================================+\n";
         }
     }
 }
@@ -1194,7 +1200,10 @@ bool adminLogin() {
     const string USERNAME = "admin";
     const string PASSWORD = "admin123";
     
-    printBoxHeader("ADMIN LOGIN");
+    cout << "\n";
+    cout << "========================================\n";
+    cout << "           ADMIN LOGIN\n";
+    cout << "========================================\n";
     
     string username = getNonEmptyString("Username: ");
     
@@ -1220,14 +1229,14 @@ bool adminLogin() {
     cout << "\n";
     
     if (username == USERNAME && password == PASSWORD) {
-        cout << "\n  ╔══════════════════════════════════════════╗\n";
-        cout << "  ║          Login successful!              ║\n";
-        cout << "  ╚══════════════════════════════════════════╝\n";
+        cout << "\n+======================================+\n";
+        cout << "|          Login successful!          |\n";
+        cout << "+======================================+\n";
         return true;
     } else {
-        cout << "\n  ╔══════════════════════════════════════════╗\n";
-        cout << "  ║ [WARNING] Invalid username or password!  ║\n";
-        cout << "  ╚══════════════════════════════════════════╝\n";
+        cout << "\n+======================================+\n";
+        cout << "| [WARNING] Invalid username or password! |\n";
+        cout << "+======================================+\n";
         return false;
     }
 }
