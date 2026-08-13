@@ -761,11 +761,13 @@ void viewEmployees() {
 void searchEmployee() {
     clearScreen();
     printBoxHeader("SEARCH EMPLOYEE");
-    cout << "1. Search by Employee ID\n";
-    cout << "2. Search by Name\n";
-    cout << "0. Back\n";
+    cout << "\n  ┌──────────────────────────────────────────┐\n";
+    cout << "  │  [1] Search by Employee ID                │\n";
+    cout << "  │  [2] Search by Name                       │\n";
+    cout << "  │  [0] Back                                 │\n";
+    cout << "  └──────────────────────────────────────────┘\n";
     
-    int choice = getMenuChoice("Enter choice: ", 0, 2);
+    int choice = getMenuChoice("\n  Enter choice: ", 0, 2);
     
     if (choice == 0) return;
     
@@ -1120,10 +1122,6 @@ void searchAttendance() {
             cout << "  ║ No attendance records found for this employee ║\n";
             cout << "  ╚══════════════════════════════════════════╝\n";
         }
-        
-        if (!found) {
-            cout << "[WARNING] No attendance records found for this employee!\n";
-        }
     } else {
         string date = getValidDate("Enter Date (DD/MM/YYYY): ");
         
@@ -1131,20 +1129,31 @@ void searchAttendance() {
         for (const auto& att : attendanceRecords) {
             if (att.date == date) {
                 if (!found) {
-                    cout << "\n========== SEARCH RESULTS ==========\n";
-                    cout << left << setw(15) << "Emp ID" << setw(25) << "Name" << setw(12) << "Date" 
-                         << setw(10) << "Check In" << setw(10) << "Check Out" << setw(10) << "Status" << "\n";
-                    cout << string(82, '-') << "\n";
+                    cout << "\n  ╔══════════════════════════════════════════╗\n";
+                    cout << "  ║            SEARCH RESULTS                ║\n";
+                    cout << "  ╚══════════════════════════════════════════╝\n";
+                    cout << "\n  ┌─────────────┬─────────────────────┬────────────┬───────────┬───────────┬──────────┐\n";
+                    cout << "  │    ID      │        Name         │    Date     │ Check In  │ Check Out │  Status  │\n";
+                    cout << "  ├─────────────┼─────────────────────┼────────────┼───────────┼───────────┼──────────┤\n";
                     found = true;
                 }
-                cout << left << setw(15) << att.employeeId << setw(25) << att.employeeName 
-                     << setw(12) << att.date << setw(10) << att.checkIn << setw(10) << att.checkOut 
-                     << setw(10) << att.status << "\n";
+                cout << "  │ " << left << setw(11) << att.employeeId << " │ " 
+                     << setw(19) << att.employeeName << " │ " 
+                     << setw(10) << att.date << " │ " 
+                     << setw(9) << att.checkIn << " │ " 
+                     << setw(9) << att.checkOut << " │ " 
+                     << setw(8) << att.status << " │\n";
             }
         }
         
+        if (found) {
+            cout << "  └─────────────┴─────────────────────┴────────────┴───────────┴───────────┴──────────┘\n";
+        }
+        
         if (!found) {
-            cout << "[WARNING] No attendance records found for this date!\n";
+            cout << "\n  ╔══════════════════════════════════════════╗\n";
+            cout << "  ║ No attendance records found for this date   ║\n";
+            cout << "  ╚══════════════════════════════════════════╝\n";
         }
     }
 }
