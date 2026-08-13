@@ -761,25 +761,28 @@ void viewEmployees() {
     cout << "+-------------+---------------------+------+----------+---------------+------------------+------------------+\n";
     
     for (const auto& emp : employees) {
-        cout << "  │ " << left << setw(11) << emp.employeeId << " │ " 
-             << setw(19) << emp.name << " │ " << setw(4) << emp.age << " │ " 
-             << setw(8) << emp.gender << " │ " << setw(13) << emp.phone << " │ " 
-             << setw(16) << emp.department << " │ " << setw(16) << emp.position << " │\n";
+        cout << "| " << left << setw(11) << emp.employeeId << " | " 
+             << setw(19) << emp.name << " | " << setw(4) << emp.age << " | " 
+             << setw(8) << emp.gender << " | " << setw(13) << emp.phone << " | " 
+             << setw(16) << emp.department << " | " << setw(16) << emp.position << " |\n";
     }
     
-    cout << "  └─────────────┴─────────────────────┴──────┴──────────┴───────────────┴──────────────────┴──────────────────┘\n";
+    cout << "+-------------+---------------------+------+----------+---------------+------------------+------------------+\n";
 }
 
 void searchEmployee() {
     clearScreen();
-    printBoxHeader("SEARCH EMPLOYEE");
-    cout << "\n  ┌──────────────────────────────────────────┐\n";
-    cout << "  │  [1] Search by Employee ID                │\n";
-    cout << "  │  [2] Search by Name                       │\n";
-    cout << "  │  [0] Back                                 │\n";
-    cout << "  └──────────────────────────────────────────┘\n";
+    cout << "\n";
+    cout << "========================================\n";
+    cout << "         SEARCH EMPLOYEE\n";
+    cout << "========================================\n";
+    cout << "\n+------------------------------------------+\n";
+    cout << "|  [1] Search by Employee ID                |\n";
+    cout << "|  [2] Search by Name                       |\n";
+    cout << "|  [0] Back                                 |\n";
+    cout << "+------------------------------------------+\n";
     
-    int choice = getMenuChoice("\n  Enter choice: ", 0, 2);
+    int choice = getMenuChoice("\nEnter choice: ", 0, 2);
     
     if (choice == 0) return;
     
@@ -788,24 +791,24 @@ void searchEmployee() {
         int index = findEmployeeIndex(employeeId);
         
         if (index == -1) {
-            cout << "\n  ╔══════════════════════════════════════════╗\n";
-            cout << "  ║  [WARNING] Employee ID not found!       ║\n";
-            cout << "  ╚══════════════════════════════════════════╝\n";
+            cout << "\n+======================================+\n";
+            cout << "|  [WARNING] Employee ID not found!  |\n";
+            cout << "+======================================+\n";
             return;
         }
         
         const auto& emp = employees[index];
-        cout << "\n  ╔══════════════════════════════════════════╗\n";
-        cout << "  ║           EMPLOYEE DETAILS              ║\n";
-        cout << "  ╠══════════════════════════════════════════╣\n";
-        cout << "  ║ Employee ID  : " << setw(23) << emp.employeeId << "║\n";
-        cout << "  ║ Name         : " << setw(23) << emp.name << "║\n";
-        cout << "  ║ Age          : " << setw(23) << emp.age << "║\n";
-        cout << "  ║ Gender       : " << setw(23) << emp.gender << "║\n";
-        cout << "  ║ Phone        : " << setw(23) << emp.phone << "║\n";
-        cout << "  ║ Department   : " << setw(23) << emp.department << "║\n";
-        cout << "  ║ Position     : " << setw(23) << emp.position << "║\n";
-        cout << "  ╚══════════════════════════════════════════╝\n";
+        cout << "\n+======================================+\n";
+        cout << "|           EMPLOYEE DETAILS          |\n";
+        cout << "+======================================+\n";
+        cout << "| Employee ID  : " << setw(23) << emp.employeeId << "|\n";
+        cout << "| Name         : " << setw(23) << emp.name << "|\n";
+        cout << "| Age          : " << setw(23) << emp.age << "|\n";
+        cout << "| Gender       : " << setw(23) << emp.gender << "|\n";
+        cout << "| Phone        : " << setw(23) << emp.phone << "|\n";
+        cout << "| Department   : " << setw(23) << emp.department << "|\n";
+        cout << "| Position     : " << setw(23) << emp.position << "|\n";
+        cout << "+======================================+\n";
     } else {
         string searchName = getNonEmptyString("Enter Name: ");
         string lowerSearch = toLower(searchName);
