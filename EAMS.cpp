@@ -1199,10 +1199,14 @@ bool adminLogin() {
     cout << "\n";
     
     if (username == USERNAME && password == PASSWORD) {
-        cout << "\nLogin successful!\n";
+        cout << "\n  ╔══════════════════════════════════════════╗\n";
+        cout << "  ║          Login successful!              ║\n";
+        cout << "  ╚══════════════════════════════════════════╝\n";
         return true;
     } else {
-        cout << "\n[WARNING] Invalid username or password!\n";
+        cout << "\n  ╔══════════════════════════════════════════╗\n";
+        cout << "  ║ [WARNING] Invalid username or password!  ║\n";
+        cout << "  ╚══════════════════════════════════════════╝\n";
         return false;
     }
 }
