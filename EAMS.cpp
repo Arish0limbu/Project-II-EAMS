@@ -110,9 +110,9 @@ void clearInputBuffer() {
 }
 
 void pauseScreen() {
-    cout << "\n  ┌──────────────────────────────────────────┐\n";
-    cout << "  │    Press Enter to continue...          │\n";
-    cout << "  └──────────────────────────────────────────┘\n";
+    cout << "\n+------------------------------------------+\n";
+    cout << "|    Press Enter to continue...          |\n";
+    cout << "+------------------------------------------+\n";
     cin.ignore();
     cin.get();
 }
@@ -1244,36 +1244,41 @@ bool adminLogin() {
 void employeeManagementMenu() {
     while (true) {
         clearScreen();
-        printBoxHeader("EMPLOYEE MANAGEMENT");
-        printMenuBorder();
-        printMenuItem(1, "Add Employee");
-        printMenuItem(2, "View Employees");
-        printMenuItem(3, "Search Employee");
-        printMenuItem(4, "Update Employee");
-        printMenuItem(5, "Delete Employee");
-        printMenuItem(0, "Back to Main Menu");
-        printMenuFooter();
+        cout << "\n";
+        cout << "========================================\n";
+        cout << "       EMPLOYEE MANAGEMENT\n";
+        cout << "========================================\n";
+        cout << "\n";
+        cout << "+------------------------------------------+\n";
+        cout << "|  [1] Add Employee                        |\n";
+        cout << "|  [2] View Employees                       |\n";
+        cout << "|  [3] Search Employee                      |\n";
+        cout << "|  [4] Update Employee                      |\n";
+        cout << "|  [5] Delete Employee                      |\n";
+        cout << "|  [0] Back to Main Menu                    |\n";
+        cout << "+------------------------------------------+\n";
         
-        cout << "\n  ┌──────────────────────────────────────────┐\n";
-        cout << "  │ Enter your choice: ";
+        cout << "\n+------------------------------------------+\n";
+        cout << "| Enter your choice: ";
         
         int choice;
         if (!(cin >> choice)) {
-            cout << "  │ Invalid input!                    │\n";
-            cout << "  └──────────────────────────────────────────┘\n";
+            cout << "Invalid input!                       |\n";
+            cout << "+------------------------------------------+\n";
             clearInputBuffer();
             pauseScreen();
             continue;
         }
         clearInputBuffer();
         
-        cout << "  └──────────────────────────────────────────┘\n";
+        cout << "                                        |\n";
+        cout << "+------------------------------------------+\n";
         
         if (choice < 0 || choice > 5) {
-            cout << "\n  ╔══════════════════════════════════════════╗\n";
-            cout << "  ║ [WARNING] Invalid choice!               ║\n";
-            cout << "  ║ Please enter a number from the menu.    ║\n";
-            cout << "  ╚══════════════════════════════════════════╝\n";
+            cout << "\n+======================================+\n";
+            cout << "| [WARNING] Invalid choice!          |\n";
+            cout << "| Please enter a number from the menu.|\n";
+            cout << "+======================================+\n";
             pauseScreen();
             continue;
         }
