@@ -532,6 +532,7 @@ public:
             Employee e;
             e.id = startId + i;
             e.name = getRequiredLineInput("Enter employee name: ");
+            e.password = getRequiredLineInput("Enter password: ");
             e.age = getIntInput("Enter employee age: ", 15, 100);
             e.department = getLineInput("Enter department: ");
             e.position = getLineInput("Enter position/designation: ");
@@ -562,15 +563,15 @@ public:
 
     void printEmployeeTableHeader()
     {
-        cout << fitWidth("ID", 6) << fitWidth("NAME", 22) << fitWidth("AGE", 6)
-             << fitWidth("DEPARTMENT", 18) << fitWidth("POSITION", 20) << "CONTACT" << endl;
+        cout << fitWidth("ID", 6) << fitWidth("NAME", 20) << fitWidth("AGE", 6)
+             << fitWidth("DEPARTMENT", 18) << fitWidth("POSITION", 18) << "CONTACT" << endl;
         line();
     }
 
     void printEmployeeRow(const Employee &e)
     {
-        cout << fitWidth(e.id, 6) << fitWidth(e.name, 22) << fitWidth(e.age, 6)
-             << fitWidth(e.department, 18) << fitWidth(e.position, 20) << e.contact << endl;
+        cout << fitWidth(e.id, 6) << fitWidth(e.name, 20) << fitWidth(e.age, 6)
+             << fitWidth(e.department, 18) << fitWidth(e.position, 18) << e.contact << endl;
     }
 
     void displayEmployees()
