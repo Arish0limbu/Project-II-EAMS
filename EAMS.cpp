@@ -508,25 +508,46 @@ public:
     }
 
     // ---------------- Menu ----------------
-    int mainMenu()
+    int adminDashboard()
     {
         cls();
         line();
-        printCentered("|| EAMS MAIN MENU ||");
+        printCentered("|| ADMIN DASHBOARD ||");
         printCentered("Today: " + getCurrentDate() + "   |   Total Employees: " + to_string(employees.size()));
         line();
         cout << " 1) Add Employee\n"
-             << " 2) Display All Employees\n"
+             << " 2) View All Employees\n"
              << " 3) Search Employee\n"
-             << " 4) Update Employee\n"
-             << " 5) Remove Employee\n"
-             << " 6) Mark Attendance\n"
-             << " 7) View Attendance Records\n"
-             << " 8) Attendance Report\n"
-             << " 9) Change Admin Password\n"
-             << "10) Exit\n";
+             << " 4) View Employee Attendance\n"
+             << " 5) View Leave Requests\n"
+             << " 6) Approve Leave\n"
+             << " 7) Reject Leave\n"
+             << " 8) Update Employee Information\n"
+             << " 9) Update Attendance Records\n"
+             << "10) View Employee Records\n"
+             << "11) Logout\n";
         line();
-        return getIntInput("Enter number to select given option: ");
+        return getIntInput("Enter number to select given option: ", 1, 11);
+    }
+
+    int employeeDashboard(int empId)
+    {
+        cls();
+        line();
+        Employee *e = findById(empId);
+        string empName = e ? e->name : "Unknown";
+        printCentered("|| EMPLOYEE DASHBOARD ||");
+        printCentered("Welcome, " + empName + " (ID: " + to_string(empId) + ")");
+        printCentered("Today: " + getCurrentDate());
+        line();
+        cout << " 1) Mark Today's Attendance\n"
+             << " 2) View My Attendance\n"
+             << " 3) Apply for Leave\n"
+             << " 4) View Leave Status\n"
+             << " 5) View My Profile\n"
+             << " 6) Logout\n";
+        line();
+        return getIntInput("Enter number to select given option: ", 1, 6);
     }
 
     // ---------------- Employee management ----------------
