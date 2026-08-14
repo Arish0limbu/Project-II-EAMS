@@ -200,7 +200,7 @@ string toLowerStr(string s)
     return s;
 }
 
-bool login()
+pair<string, int> login(EAMS &manager)
 {
     string storedUser = "admin", storedPass = "1234";
     ifstream cred("config.txt");
@@ -223,25 +223,40 @@ bool login()
         printCentered("|| EAMS - LOGIN PAGE ||");
         line();
 
-        string username = getLineInput("Username: ");
+        string userId = getLineInput("User ID: ");
         cout << "Password: ";
         string password = hidePassword();
 
-        if (username == storedUser && password == storedPass)
+        // Check admin credentials
+        if (userId == storedUser && password == storedPass)
         {
-            showBox("|| Login Successful ||");
+            showBox("|| Admin Login Successful ||");
             pauseScreen();
-            return true;
+            return make_pair("admin", 0);
+        }
+
+        // Check employee credentials
+        int empId;
+        try
+        {
+            empId = stoi(userId);
+        }
+        catch (...)
+        {
+            empId = -1;
+        }
+
+        Employee *emp = manager.findById(empId);
+        if (emp && emp->password == password)
+        {
+            showBox("|| Employee Login Successful ||");
+            pauseScreen();
+            return make_pair("employee", empId);
         }
 
         attemptsLeft--;
         line();
-        if (username != storedUser && password != storedPass)
-            printCentered("|| Incorrect Username & Password ||");
-        else if (username != storedUser)
-            printCentered("|| Incorrect Username ||");
-        else
-            printCentered("|| Incorrect Password ||");
+        printCentered("|| Invalid User ID or Password ||");
         printCentered("(" + to_string(attemptsLeft) + " attempt(s) left)");
         line();
         pauseScreen();
@@ -252,7 +267,7 @@ bool login()
     printCentered("|| Too Many Failed Attempts - Access Denied ||");
     line();
     pauseScreen();
-    return false;
+    return make_pair("", -1);
 }
 
 // ------------------------------------------------------------
