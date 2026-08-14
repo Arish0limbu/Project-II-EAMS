@@ -1,30 +1,3 @@
-/*
-    ============================================================
-    Employee Attendance Management System (EAMS)
-    ------------------------------------------------------------
-    Converted and extended from a student-record console program
-    into a full employee attendance system.
-
-    Features:
-      1) Admin login (lockout after 3 failed attempts)
-      2) Add Employee            6) Mark Attendance
-      3) Display All Employees   7) View Attendance Records
-      4) Search Employee         8) Attendance Report (+ export)
-      5) Update Employee         9) Change Admin Password
-                                 10) Exit
-      - Remove Employee (was left unfinished in the original file)
-
-    Data is stored in employees.txt / attendance.txt using a
-    tab-delimited format, loaded into memory on startup and
-    rewritten whenever it changes. This replaces the original's
-    fixed-width "pretty" file format, which is what made a real
-    Remove feature hard to implement.
-
-    Compile (Windows / MinGW):  g++ -std=c++17 -O2 EAMS.cpp -o EAMS.exe
-    Compile (Linux / macOS):    g++ -std=c++17 -O2 EAMS.cpp -o EAMS
-    ============================================================
-*/
-
 #include <iostream>
 #include <fstream>
 #include <sstream>
