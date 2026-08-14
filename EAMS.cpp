@@ -200,76 +200,6 @@ string toLowerStr(string s)
     return s;
 }
 
-pair<string, int> login(EAMS &manager)
-{
-    string storedUser = "admin", storedPass = "1234";
-    ifstream cred("config.txt");
-    if (cred)
-    {
-        string u, p;
-        if (getline(cred, u) && getline(cred, p) && !u.empty() && !p.empty())
-        {
-            storedUser = u;
-            storedPass = p;
-        }
-    }
-    cred.close();
-
-    int attemptsLeft = 3;
-    while (attemptsLeft > 0)
-    {
-        cls();
-        line();
-        printCentered("|| EAMS - LOGIN PAGE ||");
-        line();
-
-        string userId = getLineInput("User ID: ");
-        cout << "Password: ";
-        string password = hidePassword();
-
-        // Check admin credentials
-        if (userId == storedUser && password == storedPass)
-        {
-            showBox("|| Admin Login Successful ||");
-            pauseScreen();
-            return make_pair("admin", 0);
-        }
-
-        // Check employee credentials
-        int empId;
-        try
-        {
-            empId = stoi(userId);
-        }
-        catch (...)
-        {
-            empId = -1;
-        }
-
-        Employee *emp = manager.findById(empId);
-        if (emp && emp->password == password)
-        {
-            showBox("|| Employee Login Successful ||");
-            pauseScreen();
-            return make_pair("employee", empId);
-        }
-
-        attemptsLeft--;
-        line();
-        printCentered("|| Invalid User ID or Password ||");
-        printCentered("(" + to_string(attemptsLeft) + " attempt(s) left)");
-        line();
-        pauseScreen();
-    }
-
-    cls();
-    line();
-    printCentered("|| Too Many Failed Attempts - Access Denied ||");
-    line();
-    pauseScreen();
-    return make_pair("", -1);
-}
-
 // ------------------------------------------------------------
 // Data models
 // ------------------------------------------------------------
@@ -1616,6 +1546,79 @@ public:
         pauseScreen();
     }
 };
+
+// ------------------------------------------------------------
+// Login function (must be after EAMS class definition)
+// ------------------------------------------------------------
+pair<string, int> login(EAMS &manager)
+{
+    string storedUser = "admin", storedPass = "1234";
+    ifstream cred("config.txt");
+    if (cred)
+    {
+        string u, p;
+        if (getline(cred, u) && getline(cred, p) && !u.empty() && !p.empty())
+        {
+            storedUser = u;
+            storedPass = p;
+        }
+    }
+    cred.close();
+
+    int attemptsLeft = 3;
+    while (attemptsLeft > 0)
+    {
+        cls();
+        line();
+        printCentered("|| EAMS - LOGIN PAGE ||");
+        line();
+
+        string userId = getLineInput("User ID: ");
+        cout << "Password: ";
+        string password = hidePassword();
+
+        // Check admin credentials
+        if (userId == storedUser && password == storedPass)
+        {
+            showBox("|| Admin Login Successful ||");
+            pauseScreen();
+            return make_pair("admin", 0);
+        }
+
+        // Check employee credentials
+        int empId;
+        try
+        {
+            empId = stoi(userId);
+        }
+        catch (...)
+        {
+            empId = -1;
+        }
+
+        Employee *emp = manager.findById(empId);
+        if (emp && emp->password == password)
+        {
+            showBox("|| Employee Login Successful ||");
+            pauseScreen();
+            return make_pair("employee", empId);
+        }
+
+        attemptsLeft--;
+        line();
+        printCentered("|| Invalid User ID or Password ||");
+        printCentered("(" + to_string(attemptsLeft) + " attempt(s) left)");
+        line();
+        pauseScreen();
+    }
+
+    cls();
+    line();
+    printCentered("|| Too Many Failed Attempts - Access Denied ||");
+    line();
+    pauseScreen();
+    return make_pair("", -1);
+}
 
 // ------------------------------------------------------------
 int main()
