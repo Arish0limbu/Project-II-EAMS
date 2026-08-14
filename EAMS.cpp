@@ -677,6 +677,10 @@ public:
         if (!input.empty())
             e->name = input;
 
+        input = getLineInput("Password [" + e->password + "]: ");
+        if (!input.empty())
+            e->password = input;
+
         input = getLineInput("Age [" + to_string(e->age) + "]: ");
         if (!input.empty())
         {
