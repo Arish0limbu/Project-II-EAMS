@@ -1082,6 +1082,539 @@ public:
         showBox("|| Credentials Updated ||");
         pauseScreen();
     }
+
+    // ---------------- Leave Management ----------------
+    void viewLeaveRequests()
+    {
+        cls();
+        line();
+        printCentered("|| Leave Requests ||");
+        line();
+
+        if (leaveRequests.empty())
+        {
+            printCentered("|| No Leave Requests Found ||");
+            line();
+            pauseScreen();
+            return;
+        }
+
+        cout << fitWidth("EMP ID", 8) << fitWidth("NAME", 20) << fitWidth("DATE", 15)
+             << fitWidth("TYPE", 12) << fitWidth("REASON", 25) << "STATUS" << endl;
+        line();
+
+        for (auto &lr : leaveRequests)
+        {
+            cout << fitWidth(lr.empId, 8) << fitWidth(lr.empName, 20) << fitWidth(lr.leaveDate, 15)
+                 << fitWidth(lr.leaveType, 12) << fitWidth(lr.reason, 25) << lr.status << endl;
+        }
+        line();
+        pauseScreen();
+    }
+
+    void approveLeave()
+    {
+        cls();
+        line();
+        printCentered("|| Approve Leave ||");
+        line();
+
+        vector<LeaveRequest*> pending;
+        for (auto &lr : leaveRequests)
+            if (lr.status == "Pending")
+                pending.push_back(&lr);
+
+        if (pending.empty())
+        {
+            printCentered("|| No Pending Leave Requests ||");
+            line();
+            pauseScreen();
+            return;
+        }
+
+        cout << fitWidth("#", 4) << fitWidth("EMP ID", 8) << fitWidth("NAME", 20) << fitWidth("DATE", 15)
+             << fitWidth("TYPE", 12) << fitWidth("REASON", 25) << endl;
+        line();
+
+        for (size_t i = 0; i < pending.size(); i++)
+        {
+            cout << fitWidth(i + 1, 4) << fitWidth(pending[i]->empId, 8) << fitWidth(pending[i]->empName, 20)
+                 << fitWidth(pending[i]->leaveDate, 15) << fitWidth(pending[i]->leaveType, 12)
+                 << fitWidth(pending[i]->reason, 25) << endl;
+        }
+        line();
+
+        int choice = getIntInput("Enter request number to approve (0 to cancel): ", 0, (int)pending.size());
+        if (choice == 0)
+        {
+            showBox("|| Cancelled ||");
+            pauseScreen();
+            return;
+        }
+
+        LeaveRequest *lr = pending[choice - 1];
+        lr->status = "Approved";
+        saveLeaveRequests();
+
+        // Update attendance record for the leave date
+        bool found = false;
+        for (auto &a : attendance)
+        {
+            if (a.empId == lr->empId && a.date == lr->leaveDate)
+            {
+                a.status = "Leave";
+                found = true;
+                break;
+            }
+        }
+        if (!found)
+        {
+            AttendanceRecord a;
+            a.empId = lr->empId;
+            a.date = lr->leaveDate;
+            a.status = "Leave";
+            attendance.push_back(a);
+        }
+        saveAttendance();
+
+        showBox("|| Leave Approved ||");
+        pauseScreen();
+    }
+
+    void rejectLeave()
+    {
+        cls();
+        line();
+        printCentered("|| Reject Leave ||");
+        line();
+
+        vector<LeaveRequest*> pending;
+        for (auto &lr : leaveRequests)
+            if (lr.status == "Pending")
+                pending.push_back(&lr);
+
+        if (pending.empty())
+        {
+            printCentered("|| No Pending Leave Requests ||");
+            line();
+            pauseScreen();
+            return;
+        }
+
+        cout << fitWidth("#", 4) << fitWidth("EMP ID", 8) << fitWidth("NAME", 20) << fitWidth("DATE", 15)
+             << fitWidth("TYPE", 12) << fitWidth("REASON", 25) << endl;
+        line();
+
+        for (size_t i = 0; i < pending.size(); i++)
+        {
+            cout << fitWidth(i + 1, 4) << fitWidth(pending[i]->empId, 8) << fitWidth(pending[i]->empName, 20)
+                 << fitWidth(pending[i]->leaveDate, 15) << fitWidth(pending[i]->leaveType, 12)
+                 << fitWidth(pending[i]->reason, 25) << endl;
+        }
+        line();
+
+        int choice = getIntInput("Enter request number to reject (0 to cancel): ", 0, (int)pending.size());
+        if (choice == 0)
+        {
+            showBox("|| Cancelled ||");
+            pauseScreen();
+            return;
+        }
+
+        LeaveRequest *lr = pending[choice - 1];
+        lr->status = "Rejected";
+        saveLeaveRequests();
+
+        showBox("|| Leave Rejected ||");
+        pauseScreen();
+    }
+
+    void applyLeave(int empId)
+    {
+        cls();
+        line();
+        printCentered("|| Apply for Leave ||");
+        line();
+
+        Employee *e = findById(empId);
+        if (!e)
+        {
+            showBox("|| Employee Not Found ||");
+            pauseScreen();
+            return;
+        }
+
+        string leaveDate = getLineInput("Enter leave date (DD/MM/YYYY): ");
+        string reason = getRequiredLineInput("Enter reason for leave: ");
+
+        cout << "\nLeave Type:\n"
+             << " 1) Sick Leave\n"
+             << " 2) Casual Leave\n"
+             << " 3) Annual Leave\n"
+             << " 4) Other\n";
+        int typeChoice = getIntInput("Select leave type: ", 1, 4);
+        string leaveType;
+        switch (typeChoice)
+        {
+        case 1:
+            leaveType = "Sick Leave";
+            break;
+        case 2:
+            leaveType = "Casual Leave";
+            break;
+        case 3:
+            leaveType = "Annual Leave";
+            break;
+        default:
+            leaveType = "Other";
+        }
+
+        // Check for duplicate leave request
+        for (auto &lr : leaveRequests)
+        {
+            if (lr.empId == empId && lr.leaveDate == leaveDate)
+            {
+                showBox("|| Leave request already exists for this date ||");
+                pauseScreen();
+                return;
+            }
+        }
+
+        LeaveRequest lr;
+        lr.empId = empId;
+        lr.empName = e->name;
+        lr.leaveDate = leaveDate;
+        lr.reason = reason;
+        lr.leaveType = leaveType;
+        lr.status = "Pending";
+        leaveRequests.push_back(lr);
+        saveLeaveRequests();
+
+        showBox("|| Leave Request Submitted ||");
+        pauseScreen();
+    }
+
+    void viewLeaveStatus(int empId)
+    {
+        cls();
+        line();
+        printCentered("|| My Leave Status ||");
+        line();
+
+        vector<LeaveRequest*> myRequests;
+        for (auto &lr : leaveRequests)
+            if (lr.empId == empId)
+                myRequests.push_back(&lr);
+
+        if (myRequests.empty())
+        {
+            printCentered("|| No Leave Requests Found ||");
+            line();
+            pauseScreen();
+            return;
+        }
+
+        cout << fitWidth("DATE", 15) << fitWidth("TYPE", 15) << fitWidth("REASON", 30) << "STATUS" << endl;
+        line();
+
+        for (auto *lr : myRequests)
+        {
+            cout << fitWidth(lr->leaveDate, 15) << fitWidth(lr->leaveType, 15)
+                 << fitWidth(lr->reason, 30) << lr->status << endl;
+        }
+        line();
+        pauseScreen();
+    }
+
+    // ---------------- Employee Functions ----------------
+    void markTodayAttendance(int empId)
+    {
+        cls();
+        line();
+        printCentered("|| Mark Today's Attendance ||");
+        line();
+
+        Employee *e = findById(empId);
+        if (!e)
+        {
+            showBox("|| Employee Not Found ||");
+            pauseScreen();
+            return;
+        }
+
+        string today = getCurrentDate();
+
+        // Check if attendance already marked for today
+        for (auto &a : attendance)
+        {
+            if (a.empId == empId && a.date == today)
+            {
+                cout << "\nAttendance already marked as: " << a.status << endl;
+                showBox("|| Attendance Already Marked ||");
+                pauseScreen();
+                return;
+            }
+        }
+
+        cout << "\nMarking attendance for: " << e->name << endl;
+        cout << "Date: " << today << endl;
+
+        cout << "\nAttendance status:\n"
+             << " 1) Present\n"
+             << " 2) Absent\n"
+             << " 3) Leave\n";
+        int s = getIntInput("Select status: ", 1, 3);
+        string status;
+        switch (s)
+        {
+        case 1:
+            status = "Present";
+            break;
+        case 2:
+            status = "Absent";
+            break;
+        case 3:
+            status = "Leave";
+            break;
+        }
+
+        AttendanceRecord a;
+        a.empId = empId;
+        a.date = today;
+        a.status = status;
+        attendance.push_back(a);
+        saveAttendance();
+
+        showBox("|| Attendance marked successfully for today ||");
+        pauseScreen();
+    }
+
+    void viewMyAttendance(int empId)
+    {
+        cls();
+        line();
+        printCentered("|| My Attendance ||");
+        line();
+
+        Employee *e = findById(empId);
+        if (!e)
+        {
+            showBox("|| Employee Not Found ||");
+            pauseScreen();
+            return;
+        }
+
+        cout << fitWidth("DATE", 15) << "STATUS" << endl;
+        line();
+
+        int p = 0, ab = 0, lv = 0;
+        for (auto &a : attendance)
+        {
+            if (a.empId == empId)
+            {
+                cout << fitWidth(a.date, 15) << a.status << endl;
+                if (a.status == "Present")
+                    p++;
+                else if (a.status == "Absent")
+                    ab++;
+                else if (a.status == "Leave")
+                    lv++;
+            }
+        }
+
+        int total = p + ab + lv;
+        line();
+        if (total == 0)
+        {
+            cout << "No attendance records found." << endl;
+        }
+        else
+        {
+            cout << "Present: " << p << "   Absent: " << ab << "   Leave: " << lv << endl;
+            double pct = ((double)p / total) * 100.0;
+            cout << fixed << setprecision(2);
+            cout << "Attendance Percentage: " << pct << "%" << endl;
+        }
+        line();
+        pauseScreen();
+    }
+
+    void viewMyProfile(int empId)
+    {
+        cls();
+        line();
+        printCentered("|| My Profile ||");
+        line();
+
+        Employee *e = findById(empId);
+        if (!e)
+        {
+            showBox("|| Employee Not Found ||");
+            pauseScreen();
+            return;
+        }
+
+        cout << "Employee ID: " << e->id << endl;
+        cout << "Name: " << e->name << endl;
+        cout << "Age: " << e->age << endl;
+        cout << "Department: " << e->department << endl;
+        cout << "Position: " << e->position << endl;
+        cout << "Contact: " << e->contact << endl;
+        line();
+        pauseScreen();
+    }
+
+    // ---------------- Admin Specific Functions ----------------
+    void viewEmployeeAttendance()
+    {
+        cls();
+        line();
+        printCentered("|| View Employee Attendance ||");
+        line();
+
+        if (employees.empty())
+        {
+            printCentered("|| No Employees Found ||");
+            line();
+            pauseScreen();
+            return;
+        }
+
+        int id = getIntInput("Enter Employee ID: ");
+        Employee *e = findById(id);
+        if (!e)
+        {
+            showBox("|| Employee Not Found ||");
+            pauseScreen();
+            return;
+        }
+
+        cls();
+        line();
+        printCentered("|| Attendance for " + e->name + " ||");
+        line();
+        cout << fitWidth("DATE", 15) << "STATUS" << endl;
+        line();
+
+        int p = 0, ab = 0, lv = 0, hd = 0;
+        for (auto &a : attendance)
+        {
+            if (a.empId == id)
+            {
+                cout << fitWidth(a.date, 15) << a.status << endl;
+                if (a.status == "Present")
+                    p++;
+                else if (a.status == "Absent")
+                    ab++;
+                else if (a.status == "Leave")
+                    lv++;
+                else if (a.status == "Half Day")
+                    hd++;
+            }
+        }
+
+        int total = p + ab + lv + hd;
+        line();
+        if (total == 0)
+        {
+            cout << "No attendance records found for this employee." << endl;
+        }
+        else
+        {
+            cout << "Present: " << p << "   Absent: " << ab
+                 << "   Leave: " << lv << "   Half Day: " << hd << endl;
+            double pct = ((p + hd * 0.5) / total) * 100.0;
+            cout << fixed << setprecision(2);
+            cout << "Attendance Percentage: " << pct << "%" << endl;
+        }
+        line();
+        pauseScreen();
+    }
+
+    void updateAttendanceRecords()
+    {
+        cls();
+        line();
+        printCentered("|| Update Attendance Records ||");
+        line();
+
+        if (attendance.empty())
+        {
+            printCentered("|| No Attendance Records Found ||");
+            line();
+            pauseScreen();
+            return;
+        }
+
+        int id = getIntInput("Enter Employee ID: ");
+        Employee *e = findById(id);
+        if (!e)
+        {
+            showBox("|| Employee Not Found ||");
+            pauseScreen();
+            return;
+        }
+
+        string date = getLineInput("Enter date (DD/MM/YYYY): ");
+
+        AttendanceRecord *target = nullptr;
+        for (auto &a : attendance)
+        {
+            if (a.empId == id && a.date == date)
+            {
+                target = &a;
+                break;
+            }
+        }
+
+        if (!target)
+        {
+            cout << "No attendance record found for this date." << endl;
+            char create = getCharInput("Create new record? (Y/N): ");
+            if (create != 'y' && create != 'Y')
+            {
+                pauseScreen();
+                return;
+            }
+            AttendanceRecord a;
+            a.empId = id;
+            a.date = date;
+            a.status = askStatus();
+            attendance.push_back(a);
+            saveAttendance();
+            showBox("|| Attendance Record Created ||");
+            pauseScreen();
+            return;
+        }
+
+        cout << "\nCurrent status: " << target->status << endl;
+        target->status = askStatus();
+        saveAttendance();
+        showBox("|| Attendance Record Updated ||");
+        pauseScreen();
+    }
+
+    void viewEmployeeRecords()
+    {
+        cls();
+        line();
+        printCentered("|| View Employee Records ||");
+        line();
+
+        if (employees.empty())
+        {
+            printCentered("|| No Employees Found ||");
+            line();
+            pauseScreen();
+            return;
+        }
+
+        printEmployeeTableHeader();
+        for (auto &e : employees)
+            printEmployeeRow(e);
+        line();
+        pauseScreen();
+    }
 };
 
 // ------------------------------------------------------------
