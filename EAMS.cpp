@@ -1620,51 +1620,110 @@ public:
 // ------------------------------------------------------------
 int main()
 {
-    if (!login())
-        return 0;
-
     EAMS manager;
+    
     while (true)
     {
-        int choice = manager.mainMenu();
-        switch (choice)
+        pair<string, int> loginResult = login(manager);
+        string role = loginResult.first;
+        int userId = loginResult.second;
+        
+        if (role.empty())
         {
-        case 1:
-            manager.addEmployee();
-            break;
-        case 2:
-            manager.displayEmployees();
-            break;
-        case 3:
-            manager.searchEmployee();
-            break;
-        case 4:
-            manager.updateEmployee();
-            break;
-        case 5:
-            manager.removeEmployee();
-            break;
-        case 6:
-            manager.markAttendance();
-            break;
-        case 7:
-            manager.viewAttendance();
-            break;
-        case 8:
-            manager.attendanceReport();
-            break;
-        case 9:
-            manager.changePassword();
-            break;
-        case 10:
-            cls();
-            cout << "Thank you for using EAMS. Goodbye!" << endl;
+            // Login failed, exit program
             return 0;
-        default:
-            cls();
-            showBox("|| Invalid Input ||");
-            pauseScreen();
+        }
+        
+        if (role == "admin")
+        {
+            // Admin Dashboard
+            while (true)
+            {
+                int choice = manager.adminDashboard();
+                switch (choice)
+                {
+                case 1:
+                    manager.addEmployee();
+                    break;
+                case 2:
+                    manager.displayEmployees();
+                    break;
+                case 3:
+                    manager.searchEmployee();
+                    break;
+                case 4:
+                    manager.viewEmployeeAttendance();
+                    break;
+                case 5:
+                    manager.viewLeaveRequests();
+                    break;
+                case 6:
+                    manager.approveLeave();
+                    break;
+                case 7:
+                    manager.rejectLeave();
+                    break;
+                case 8:
+                    manager.updateEmployee();
+                    break;
+                case 9:
+                    manager.updateAttendanceRecords();
+                    break;
+                case 10:
+                    manager.viewEmployeeRecords();
+                    break;
+                case 11:
+                    showBox("|| Logged Out Successfully ||");
+                    pauseScreen();
+                    break; // Exit admin loop, return to login
+                default:
+                    cls();
+                    showBox("|| Invalid Input ||");
+                    pauseScreen();
+                }
+                
+                if (choice == 11)
+                    break; // Logout
+            }
+        }
+        else if (role == "employee")
+        {
+            // Employee Dashboard
+            while (true)
+            {
+                int choice = manager.employeeDashboard(userId);
+                switch (choice)
+                {
+                case 1:
+                    manager.markTodayAttendance(userId);
+                    break;
+                case 2:
+                    manager.viewMyAttendance(userId);
+                    break;
+                case 3:
+                    manager.applyLeave(userId);
+                    break;
+                case 4:
+                    manager.viewLeaveStatus(userId);
+                    break;
+                case 5:
+                    manager.viewMyProfile(userId);
+                    break;
+                case 6:
+                    showBox("|| Logged Out Successfully ||");
+                    pauseScreen();
+                    break; // Exit employee loop, return to login
+                default:
+                    cls();
+                    showBox("|| Invalid Input ||");
+                    pauseScreen();
+                }
+                
+                if (choice == 6)
+                    break; // Logout
+            }
         }
     }
+    
     return 0;
 }
