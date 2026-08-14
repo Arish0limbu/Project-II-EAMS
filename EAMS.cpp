@@ -262,10 +262,21 @@ struct Employee
 {
     int id = 0;
     string name;
+    string password;
     int age = 0;
     string department;
     string position;
     string contact;
+};
+
+struct LeaveRequest
+{
+    int empId = 0;
+    string empName;
+    string leaveDate;
+    string reason;
+    string leaveType;
+    string status; // Pending, Approved, Rejected
 };
 
 struct AttendanceRecord
@@ -283,9 +294,13 @@ class EAMS
 private:
     vector<Employee> employees;
     vector<AttendanceRecord> attendance;
+    vector<LeaveRequest> leaveRequests;
     const string EMP_FILE = "employees.txt";
     const string ATT_FILE = "attendance.txt";
+    const string LEAVE_FILE = "leave_requests.txt";
     const string CFG_FILE = "config.txt";
+    int currentUserId = 0;
+    string currentUserRole = "";
 
     static vector<string> splitFields(const string &ln, char delim)
     {
@@ -302,6 +317,7 @@ public:
     {
         loadEmployees();
         loadAttendance();
+        loadLeaveRequests();
     }
 
     // ---------------- Persistence ----------------
@@ -318,7 +334,7 @@ public:
             if (ln.empty())
                 continue;
             vector<string> f = splitFields(ln, '\t');
-            if (f.size() < 6)
+            if (f.size() < 7)
                 continue;
 
             Employee e;
@@ -331,17 +347,18 @@ public:
                 continue;
             }
             e.name = f[1];
+            e.password = f[2];
             try
             {
-                e.age = stoi(f[2]);
+                e.age = stoi(f[3]);
             }
             catch (...)
             {
                 e.age = 0;
             }
-            e.department = f[3];
-            e.position = f[4];
-            e.contact = f[5];
+            e.department = f[4];
+            e.position = f[5];
+            e.contact = f[6];
             employees.push_back(e);
         }
     }
@@ -351,7 +368,7 @@ public:
         ofstream fout(EMP_FILE, ios::trunc);
         for (auto &e : employees)
         {
-            fout << e.id << "\t" << e.name << "\t" << e.age << "\t"
+            fout << e.id << "\t" << e.name << "\t" << e.password << "\t" << e.age << "\t"
                  << e.department << "\t" << e.position << "\t" << e.contact << "\n";
         }
     }
@@ -392,6 +409,48 @@ public:
         ofstream fout(ATT_FILE, ios::trunc);
         for (auto &a : attendance)
             fout << a.empId << "\t" << a.date << "\t" << a.status << "\n";
+    }
+
+    void loadLeaveRequests()
+    {
+        leaveRequests.clear();
+        ifstream fin(LEAVE_FILE);
+        if (!fin)
+            return;
+
+        string ln;
+        while (getline(fin, ln))
+        {
+            if (ln.empty())
+                continue;
+            vector<string> f = splitFields(ln, '\t');
+            if (f.size() < 6)
+                continue;
+
+            LeaveRequest lr;
+            try
+            {
+                lr.empId = stoi(f[0]);
+            }
+            catch (...)
+            {
+                continue;
+            }
+            lr.empName = f[1];
+            lr.leaveDate = f[2];
+            lr.reason = f[3];
+            lr.leaveType = f[4];
+            lr.status = f[5];
+            leaveRequests.push_back(lr);
+        }
+    }
+
+    void saveLeaveRequests()
+    {
+        ofstream fout(LEAVE_FILE, ios::trunc);
+        for (auto &lr : leaveRequests)
+            fout << lr.empId << "\t" << lr.empName << "\t" << lr.leaveDate << "\t"
+                 << lr.reason << "\t" << lr.leaveType << "\t" << lr.status << "\n";
     }
 
     // ---------------- Helpers ----------------
