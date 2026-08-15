@@ -993,9 +993,6 @@ public:
         cout << "\nEnter your choice : ";
         return getIntInput("", 1, 6);
     }
-        line();
-        return getIntInput("Enter number to select given option: ", 1, 6);
-    }
 
     int employeeDashboard(int empId)
     {
