@@ -1750,6 +1750,67 @@ public:
     }
 
     // ---------------- Employee Functions ----------------
+    void changePassword(int empId)
+    {
+        cls();
+        line();
+        printCentered("|| CHANGE PASSWORD ||");
+        line();
+
+        Employee *e = findById(empId);
+        if (!e)
+        {
+            showBox("|| Employee Not Found ||");
+            pauseScreen();
+            return;
+        }
+
+        string empIdStr = generateEmployeeId(empId);
+        string oldPassword = e->password;
+
+        while (true)
+        {
+            cout << "\nEnter New Password    : ";
+            string newPass = hidePassword();
+            cout << "Confirm New Password  : ";
+            string confirmPass = hidePassword();
+
+            if (newPass.empty())
+            {
+                cout << "\nPassword cannot be empty. Please try again." << endl;
+                pauseScreen();
+                continue;
+            }
+
+            if (newPass != confirmPass)
+            {
+                cout << "\nPasswords do not match. Please try again." << endl;
+                pauseScreen();
+                continue;
+            }
+
+            if (newPass == oldPassword)
+            {
+                cout << "\nNew password cannot be the same as the old password. Please try again." << endl;
+                pauseScreen();
+                continue;
+            }
+
+            // Password change successful
+            e->password = newPass;
+            e->firstLogin = false;
+            saveEmployees();
+
+            cls();
+            line();
+            printCentered("|| Password changed successfully ||");
+            line();
+            cout << "\nWelcome, " << empIdStr << "!" << endl;
+            pauseScreen();
+            return;
+        }
+    }
+
     void markTodayAttendance(int empId)
     {
         cls();
