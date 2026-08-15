@@ -524,28 +524,67 @@ public:
             return;
 
         string ln;
+        int lineNum = 0;
         while (getline(fin, ln))
         {
-            if (ln.empty())
+            lineNum++;
+            // Skip header lines (first 5 lines)
+            if (lineNum <= 5)
                 continue;
-            vector<string> f = splitFields(ln, '\t');
-            if (f.size() < 6)
+            // Skip border line at end
+            if (ln.find('=') != string::npos)
+                continue;
+            if (ln.empty() || ln.find('-') != string::npos)
+                continue;
+            
+            // Parse the formatted line
+            vector<string> f = splitFields(ln, ' ');
+            // Filter out empty strings
+            vector<string> fields;
+            for (auto &field : f)
+            {
+                if (!field.empty())
+                    fields.push_back(field);
+            }
+            
+            if (fields.size() < 7)
                 continue;
 
             LeaveRequest lr;
-            try
+            lr.leaveId = fields[0];
+            
+            // Parse EMP001 format
+            string empIdStr = fields[1];
+            if (empIdStr.length() >= 4 && empIdStr.substr(0, 3) == "EMP")
             {
-                lr.empId = stoi(f[0]);
+                try
+                {
+                    lr.empId = stoi(empIdStr.substr(3));
+                }
+                catch (...)
+                {
+                    continue;
+                }
             }
-            catch (...)
+            else
             {
-                continue;
+                try
+                {
+                    lr.empId = stoi(empIdStr);
+                }
+                catch (...)
+                {
+                    continue;
+                }
             }
-            lr.empName = f[1];
-            lr.leaveDate = f[2];
-            lr.reason = f[3];
-            lr.leaveType = f[4];
-            lr.status = f[5];
+            
+            lr.empName = fields[2];
+            lr.fromDate = fields[3];
+            lr.toDate = fields[4];
+            lr.leaveType = fields[5];
+            lr.status = fields[6];
+            lr.reason = "Leave request"; // Default reason
+            
             leaveRequests.push_back(lr);
         }
     }
