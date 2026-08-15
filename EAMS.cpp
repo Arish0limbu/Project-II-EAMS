@@ -65,6 +65,11 @@ void line(int l = 100)
     cout << string(l, '=') << endl;
 }
 
+void separator(int l = 100)
+{
+    cout << string(l, '-') << endl;
+}
+
 void printCentered(const string &text, int width = 100)
 {
     int padding = (width - (int)text.length()) / 2;
@@ -77,6 +82,41 @@ void showBox(const string &msg)
 {
     line();
     printCentered(msg);
+    line();
+}
+
+void drawHeader(const string &title)
+{
+    line();
+    printCentered("|| " + title + " ||");
+    line();
+}
+
+void showSuccess(const string &msg)
+{
+    drawHeader("SUCCESS");
+    cout << "\n" << msg << "\n" << endl;
+    line();
+}
+
+void showError(const string &msg)
+{
+    drawHeader("ERROR");
+    cout << "\n" << msg << "\n" << endl;
+    line();
+}
+
+void showWarning(const string &msg)
+{
+    drawHeader("WARNING");
+    cout << "\n" << msg << "\n" << endl;
+    line();
+}
+
+void showInfo(const string &msg)
+{
+    drawHeader("INFORMATION");
+    cout << "\n" << msg << "\n" << endl;
     line();
 }
 
@@ -248,6 +288,80 @@ string getValidContactInput(const string &prompt)
         if (isValidContactNumber(contact))
             return contact;
         cout << "Invalid contact number. Please enter exactly 10 digits." << endl;
+    }
+}
+
+bool isValidName(const string &name)
+{
+    if (name.empty())
+        return false;
+    for (char c : name)
+    {
+        if (!isalpha(c) && c != ' ')
+            return false;
+    }
+    return true;
+}
+
+string getValidNameInput(const string &prompt)
+{
+    while (true)
+    {
+        string name = getLineInput(prompt);
+        if (isValidName(name))
+            return name;
+        cout << "Invalid name!\nName must contain letters and spaces only.\nPlease enter the name again: ";
+    }
+}
+
+bool isValidEmail(const string &email)
+{
+    if (email.empty())
+        return false;
+    size_t atPos = email.find('@');
+    if (atPos == string::npos || atPos == 0 || atPos == email.length() - 1)
+        return false;
+    size_t dotPos = email.find('.', atPos);
+    if (dotPos == string::npos || dotPos == atPos + 1 || dotPos == email.length() - 1)
+        return false;
+    return true;
+}
+
+string getValidEmailInput(const string &prompt)
+{
+    while (true)
+    {
+        string email = getLineInput(prompt);
+        if (isValidEmail(email))
+            return email;
+        cout << "Invalid email address!\nPlease enter a valid email: ";
+    }
+}
+
+bool isValidAddress(const string &address)
+{
+    if (address.empty() || address.length() < 3)
+        return false;
+    bool hasAlpha = false;
+    bool hasDigit = false;
+    for (char c : address)
+    {
+        if (isalpha(c))
+            hasAlpha = true;
+        if (isdigit(c))
+            hasDigit = true;
+    }
+    return hasAlpha || hasDigit;
+}
+
+string getValidAddressInput(const string &prompt)
+{
+    while (true)
+    {
+        string address = getLineInput(prompt);
+        if (isValidAddress(address))
+            return address;
+        cout << "Invalid address!\nPlease enter a valid address: ";
     }
 }
 
@@ -816,34 +930,34 @@ public:
     int adminDashboard()
     {
         cls();
-        line();
-        printCentered("|| ADMIN DASHBOARD ||");
-        printCentered("Today: " + getCurrentDate() + "   |   Total Employees: " + to_string(employees.size()));
-        line();
-        cout << " 1) Employee Management\n"
-             << " 2) View Employees & Attendance\n"
-             << " 3) Review & Update Employee Requests\n"
-             << " 4) Logout\n";
-        line();
-        return getIntInput("Enter number to select given option: ", 1, 4);
+        drawHeader("ADMIN DASHBOARD");
+        cout << "\n                 Welcome, Administrator\n" << endl;
+        separator();
+        cout << "\n  [1] Employee Management\n"
+             << "  [2] View Employees & Attendance\n"
+             << "  [3] Review Leave & Update Records\n"
+             << "  [4] Logout\n" << endl;
+        separator();
+        cout << "\nEnter your choice : ";
+        return getIntInput("", 1, 4);
     }
 
     int employeeManagementMenu()
     {
         cls();
-        line();
-        printCentered("|| EMPLOYEE MANAGEMENT ||");
-        line();
-        cout << " 1) Add New Employee\n"
-             << " 2) Add Department\n"
-             << " 3) Manage Departments\n"
-             << " 4) Add Position\n"
-             << " 5) Manage Positions\n"
-             << " 6) Update Employee Information\n"
-             << " 7) Remove Employee\n"
-             << " 8) Back to Admin Dashboard\n";
-        line();
-        return getIntInput("Enter number to select given option: ", 1, 8);
+        drawHeader("EMPLOYEE MANAGEMENT");
+        separator();
+        cout << "\n  [1] Add New Employee\n"
+             << "  [2] Add Department\n"
+             << "  [3] Manage Departments\n"
+             << "  [4] Add Position\n"
+             << "  [5] Manage Positions\n"
+             << "  [6] Update Employee Information\n"
+             << "  [7] Remove Employee\n"
+             << "  [0] Back\n" << endl;
+        separator();
+        cout << "\nEnter your choice : ";
+        return getIntInput("", 1, 8);
     }
 
     int viewEmployeesAttendanceMenu()
@@ -943,7 +1057,7 @@ public:
             string empId = generateEmployeeId(e.id);
             
             cout << "Employee ID   : " << empId << " [SYSTEM GENERATED]" << endl;
-            e.name = getRequiredLineInput("Name          : ");
+            e.name = getValidNameInput("Name          : ");
             
             // Department selection
             cout << "\nAvailable Departments:" << endl;
@@ -964,8 +1078,8 @@ public:
             e.position = positions[posChoice - 1].name;
             
             e.contact = getValidContactInput("Contact       : ");
-            e.email = getLineInput("Email         : ");
-            e.address = getLineInput("Address       : ");
+            e.email = getValidEmailInput("Email         : ");
+            e.address = getValidAddressInput("Address       : ");
             e.status = "Active";
             e.firstLogin = true;
             e.password = empId; // Initial password is same as employee ID
@@ -2424,18 +2538,23 @@ LoginResult login(EAMS &manager)
     while (attemptsLeft > 0)
     {
         cls();
-        line();
-        printCentered("|| EAMS - LOGIN PAGE ||");
-        line();
-
-        string userId = getLineInput("User ID: ");
-        cout << "Password: ";
+        drawHeader("EAMS LOGIN");
+        cout << "\n         EMPLOYEE ATTENDANCE MANAGEMENT" << endl;
+        cout << "                    SYSTEM\n" << endl;
+        separator();
+        cout << "\nUser ID       : ";
+        string userId = getLineInput("");
+        cout << "Password      : ";
         string password = hidePassword();
+        cout << endl;
+        separator();
+        cout << "\nEnter your credentials to continue.\n" << endl;
+        line();
 
         // Check admin credentials
         if (userId == storedUser && password == storedPass)
         {
-            showBox("|| Admin Login Successful ||");
+            showSuccess("Admin Login Successful");
             pauseScreen();
             return {"admin", 0, false};
         }
@@ -2454,23 +2573,17 @@ LoginResult login(EAMS &manager)
         Employee *emp = manager.findById(empId);
         if (emp && emp->password == password)
         {
-            showBox("|| Employee Login Successful ||");
+            showSuccess("Employee Login Successful");
             pauseScreen();
             return {"employee", empId, emp->firstLogin};
         }
 
         attemptsLeft--;
-        line();
-        printCentered("|| Invalid User ID or Password ||");
-        printCentered("(" + to_string(attemptsLeft) + " attempt(s) left)");
-        line();
+        showError("Invalid User ID or Password\n(" + to_string(attemptsLeft) + " attempt(s) left)");
         pauseScreen();
     }
 
-    cls();
-    line();
-    printCentered("|| Too Many Failed Attempts - Access Denied ||");
-    line();
+    showError("Too Many Failed Attempts - Access Denied");
     pauseScreen();
     return {"", -1, false};
 }
