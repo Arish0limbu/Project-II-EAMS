@@ -2482,9 +2482,10 @@ int main()
     
     while (true)
     {
-        pair<string, int> loginResult = login(manager);
-        string role = loginResult.first;
-        int userId = loginResult.second;
+        LoginResult loginResult = login(manager);
+        string role = loginResult.role;
+        int userId = loginResult.userId;
+        bool isFirstLogin = loginResult.firstLogin;
         
         if (role.empty())
         {
