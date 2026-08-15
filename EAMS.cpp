@@ -1251,7 +1251,7 @@ public:
         Employee *e = findById(id);
         if (!e)
         {
-            showBox("|| Employee Not Found ||");
+            showError("Employee Not Found");
             pauseScreen();
             return;
         }
@@ -1296,7 +1296,7 @@ public:
             e->contact = input;
 
         saveEmployees();
-        showBox("|| Employee Updated ||");
+        showSuccess("Employee Updated");
         pauseScreen();
     }
 
@@ -1319,7 +1319,7 @@ public:
         Employee *e = findById(id);
         if (!e)
         {
-            showBox("|| Employee Not Found ||");
+            showError("Employee Not Found");
             pauseScreen();
             return;
         }
@@ -1344,11 +1344,11 @@ public:
                                   attendance.end());
                 saveAttendance();
             }
-            showBox("|| Employee Removed ||");
+            showSuccess("Employee Removed");
         }
         else
         {
-            showBox("|| Removal Cancelled ||");
+            showInfo("Removal Cancelled");
         }
         pauseScreen();
     }
@@ -1373,7 +1373,7 @@ public:
         Employee *e = findById(id);
         if (!e)
         {
-            showBox("|| Employee Not Found ||");
+            showError("Employee Not Found");
             pauseScreen();
             return;
         }
@@ -1397,7 +1397,7 @@ public:
                 }
                 a.status = askStatus();
                 saveAttendance();
-                showBox("|| Attendance Updated ||");
+                showSuccess("Attendance Updated");
                 pauseScreen();
                 return;
             }
@@ -1410,7 +1410,7 @@ public:
         attendance.push_back(a);
         saveAttendance();
 
-        showBox("|| Attendance Recorded ||");
+        showSuccess("Attendance Recorded");
         pauseScreen();
     }
 
@@ -1784,28 +1784,29 @@ public:
     void applyLeave(int empId)
     {
         cls();
-        line();
-        printCentered("|| Apply for Leave ||");
-        line();
+        drawHeader("APPLY FOR LEAVE");
 
         Employee *e = findById(empId);
         if (!e)
         {
-            showBox("|| Employee Not Found ||");
+            showError("Employee Not Found");
             pauseScreen();
             return;
         }
 
-        string fromDate = getLineInput("Enter from date (DD/MM/YYYY): ");
-        string toDate = getLineInput("Enter to date (DD/MM/YYYY): ");
-        string reason = getRequiredLineInput("Enter reason for leave: ");
-
-        cout << "\nLeave Type:\n"
-             << " 1) Sick Leave\n"
-             << " 2) Casual Leave\n"
-             << " 3) Annual Leave\n"
-             << " 4) Other\n";
-        int typeChoice = getIntInput("Select leave type: ", 1, 4);
+        cout << "\nLeave Type        :\n";
+        cout << "From Date         :\n";
+        cout << "To Date           :\n";
+        cout << "Reason            :\n" << endl;
+        separator();
+        cout << "\nLeave Type:\n";
+        cout << "  [1] Sick Leave\n";
+        cout << "  [2] Casual Leave\n";
+        cout << "  [3] Annual Leave\n";
+        cout << "  [4] Other\n" << endl;
+        separator();
+        cout << "\nSelect Leave Type : ";
+        int typeChoice = getIntInput("", 1, 4);
         string leaveType;
         switch (typeChoice)
         {
@@ -1822,12 +1823,19 @@ public:
             leaveType = "Other";
         }
 
+        cout << "\nFrom Date (DD/MM/YYYY) : ";
+        string fromDate = getLineInput("");
+        cout << "To Date (DD/MM/YYYY)   : ";
+        string toDate = getLineInput("");
+        cout << "Reason                  : ";
+        string reason = getRequiredLineInput("");
+
         // Check for duplicate leave request
         for (auto &lr : leaveRequests)
         {
             if (lr.empId == empId && lr.fromDate == fromDate)
             {
-                showBox("|| Leave request already exists for this date ||");
+                showWarning("Leave request already exists for this date");
                 pauseScreen();
                 return;
             }
@@ -1849,7 +1857,7 @@ public:
         leaveRequests.push_back(lr);
         saveLeaveRequests();
 
-        showBox("|| Leave Request Submitted ||");
+        showSuccess("Leave Request Submitted");
         pauseScreen();
     }
 
@@ -2106,7 +2114,7 @@ public:
         Employee *e = findById(id);
         if (!e)
         {
-            showBox("|| Employee Not Found ||");
+            showError("Employee Not Found");
             pauseScreen();
             return;
         }
@@ -2172,7 +2180,7 @@ public:
         Employee *e = findById(id);
         if (!e)
         {
-            showBox("|| Employee Not Found ||");
+            showError("Employee Not Found");
             pauseScreen();
             return;
         }
@@ -2269,8 +2277,6 @@ public:
         departments.push_back(d);
         saveDepartments();
         showSuccess("Department added successfully");
-
-        showBox("|| Department Added Successfully ||");
         pauseScreen();
     }
 
@@ -2344,32 +2350,33 @@ public:
     void addPosition()
     {
         cls();
-        line();
-        printCentered("|| Add Position ||");
-        line();
-
-        string name = getRequiredLineInput("Enter position name: ");
+        drawHeader("ADD POSITION");
+        separator();
+        cout << "\nPosition Name :\n" << endl;
+        separator();
+        cout << "\nEnter position name : ";
+        string name = getRequiredLineInput("");
         
         // Check for duplicate
         for (auto &p : positions)
         {
             if (toLowerStr(p.name) == toLowerStr(name))
             {
-                showBox("|| Position Already Exists ||");
+                showWarning("Position Already Exists");
                 pauseScreen();
                 return;
             }
         }
 
-        string description = getLineInput("Enter description (optional): ");
+        cout << "Enter description (optional) : ";
+        string description = getLineInput("");
 
         Position p;
         p.name = name;
         p.description = description;
         positions.push_back(p);
         savePositions();
-
-        showBox("|| Position Added Successfully ||");
+        showSuccess("Position added successfully");
         pauseScreen();
     }
 
@@ -2620,6 +2627,28 @@ int main()
     
     while (true)
     {
+        cls();
+        drawHeader("EAMS");
+        cout << "\n                 EMPLOYEE ATTENDANCE\n";
+        cout << "                  MANAGEMENT SYSTEM\n" << endl;
+        separator();
+        cout << "\n  [1] Admin Login\n"
+             << "  [2] Employee Login\n"
+             << "  [0] Exit\n" << endl;
+        separator();
+        cout << "\nEnter your choice : ";
+        int mainChoice = getIntInput("", 0, 2);
+        
+        if (mainChoice == 0)
+        {
+            return 0;
+        }
+        
+        if (mainChoice != 1 && mainChoice != 2)
+        {
+            continue;
+        }
+        
         LoginResult loginResult = login(manager);
         string role = loginResult.role;
         int userId = loginResult.userId;
@@ -2627,8 +2656,8 @@ int main()
         
         if (role.empty())
         {
-            // Login failed, exit program
-            return 0;
+            // Login failed, return to main menu
+            continue;
         }
         
         if (role == "admin")
