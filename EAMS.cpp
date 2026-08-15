@@ -707,8 +707,21 @@ public:
     void savePositions()
     {
         ofstream fout(POS_FILE, ios::trunc);
+        string border = string(70, '=');
+        string separator = string(70, '-');
+        
+        fout << border << endl;
+        fout << fitWidth("", 22) << "EAMS - POSITION RECORDS" << endl;
+        fout << border << endl;
+        fout << fitWidth("NAME", 30) << "DESCRIPTION" << endl;
+        fout << separator << endl;
+        
         for (auto &p : positions)
-            fout << p.name << "\t" << p.description << "\n";
+        {
+            fout << fitWidth(p.name, 30) << p.description << endl;
+        }
+        
+        fout << border << endl;
     }
 
     // ---------------- Helpers ----------------
