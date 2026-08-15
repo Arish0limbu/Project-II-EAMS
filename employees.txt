@@ -1,2 +1,0 @@
-1	yum senehang	1234	18	doom	ceo	9817374903
-2	rupson	1234	17	doom	manager	1234567

@@ -212,13 +212,16 @@ struct Employee
     string department;
     string position;
     string contact;
+    string status; // Active, Inactive
 };
 
 struct LeaveRequest
 {
+    string leaveId;
     int empId = 0;
     string empName;
-    string leaveDate;
+    string fromDate;
+    string toDate;
     string reason;
     string leaveType;
     string status; // Pending, Approved, Rejected
@@ -228,6 +231,8 @@ struct AttendanceRecord
 {
     int empId = 0;
     string date;
+    string timeIn;
+    string timeOut;
     string status;
 };
 
