@@ -295,11 +295,29 @@ bool isValidName(const string &name)
 {
     if (name.empty())
         return false;
+    
+    // Check for leading or trailing spaces
+    if (name[0] == ' ' || name[name.length() - 1] == ' ')
+        return false;
+    
+    // Check for multiple consecutive spaces
+    for (size_t i = 0; i < name.length() - 1; i++)
+    {
+        if (name[i] == ' ' && name[i + 1] == ' ')
+            return false;
+    }
+    
+    // Check that all characters are letters or single spaces
     for (char c : name)
     {
         if (!isalpha(c) && c != ' ')
             return false;
     }
+    
+    // Check that there's at least one space (at least 2 words)
+    if (name.find(' ') == string::npos)
+        return false;
+    
     return true;
 }
 
@@ -1162,17 +1180,15 @@ public:
     void displayEmployees()
     {
         cls();
-        line();
+        drawHeader("EMPLOYEE RECORDS");
         if (employees.empty())
         {
-            printCentered("|| No Employees Found ||");
-            line();
+            showInfo("No Employees Found");
             pauseScreen();
             return;
         }
 
-        printCentered("|| Employee Information ||");
-        line();
+        cout << "\n";
         printEmployeeTableHeader();
         for (auto &e : employees)
             printEmployeeRow(e);
@@ -1417,35 +1433,34 @@ public:
     void viewAttendance()
     {
         cls();
-        line();
-        printCentered("|| View Attendance ||");
-        line();
+        drawHeader("VIEW ATTENDANCE");
 
         if (attendance.empty())
         {
-            printCentered("|| No Attendance Records Found ||");
-            line();
+            showInfo("No Attendance Records Found");
             pauseScreen();
             return;
         }
 
-        cout << "1) View by Employee\n2) View by Date\n";
-        int choice = getIntInput("Choose an option: ", 1, 2);
+        cout << "\n  [1] View by Employee\n  [2] View by Date\n" << endl;
+        separator();
+        cout << "\nChoose an option : ";
+        int choice = getIntInput("", 1, 2);
 
         if (choice == 1)
         {
-            int id = getIntInput("Enter Employee ID: ");
+            cout << "\nEnter Employee ID : ";
+            int id = getIntInput("", 1, 999);
             Employee *e = findById(id);
             cls();
-            line();
             if (!e)
             {
-                showBox("|| Employee Not Found ||");
+                showError("Employee Not Found");
                 pauseScreen();
                 return;
             }
 
-            printCentered("|| Attendance for " + e->name + " ||");
+            drawHeader("ATTENDANCE FOR " + e->name);
             line();
             cout << fitWidth("DATE", 15) << "STATUS" << endl;
             line();
@@ -1609,7 +1624,7 @@ public:
         string current = hidePassword();
         if (current != storedPass)
         {
-            showBox("|| Incorrect Password ||");
+            showError("Incorrect Password");
             pauseScreen();
             return;
         }
@@ -1628,7 +1643,7 @@ public:
                << newPass << "\n";
         cfgOut.close();
 
-        showBox("|| Credentials Updated ||");
+        showSuccess("Credentials Updated");
         pauseScreen();
     }
 
@@ -1697,7 +1712,7 @@ public:
         int choice = getIntInput("Enter request number to approve (0 to cancel): ", 0, (int)pending.size());
         if (choice == 0)
         {
-            showBox("|| Cancelled ||");
+            showInfo("Cancelled");
             pauseScreen();
             return;
         }
@@ -1729,7 +1744,7 @@ public:
         }
         saveAttendance();
 
-        showBox("|| Leave Approved ||");
+        showSuccess("Leave Approved");
         pauseScreen();
     }
 
@@ -1768,7 +1783,7 @@ public:
         int choice = getIntInput("Enter request number to reject (0 to cancel): ", 0, (int)pending.size());
         if (choice == 0)
         {
-            showBox("|| Cancelled ||");
+            showInfo("Cancelled");
             pauseScreen();
             return;
         }
@@ -1777,7 +1792,7 @@ public:
         lr->status = "Rejected";
         saveLeaveRequests();
 
-        showBox("|| Leave Rejected ||");
+        showSuccess("Leave Rejected");
         pauseScreen();
     }
 
@@ -1864,9 +1879,7 @@ public:
     void viewLeaveStatus(int empId)
     {
         cls();
-        line();
-        printCentered("|| My Leave Status ||");
-        line();
+        drawHeader("MY LEAVE REQUESTS");
 
         vector<LeaveRequest*> myRequests;
         for (auto &lr : leaveRequests)
@@ -1875,13 +1888,12 @@ public:
 
         if (myRequests.empty())
         {
-            printCentered("|| No Leave Requests Found ||");
-            line();
+            showInfo("No Leave Requests Found");
             pauseScreen();
             return;
         }
 
-        cout << fitWidth("LEAVE ID", 12) << fitWidth("FROM DATE", 15) << fitWidth("TO DATE", 15) << fitWidth("TYPE", 15) << fitWidth("REASON", 20) << "STATUS" << endl;
+        cout << "\n" << fitWidth("LEAVE ID", 12) << fitWidth("FROM DATE", 15) << fitWidth("TO DATE", 15) << fitWidth("TYPE", 15) << fitWidth("REASON", 20) << "STATUS" << endl;
         line();
 
         for (auto *lr : myRequests)
@@ -1978,7 +1990,7 @@ public:
             if (a.empId == empId && a.date == today)
             {
                 cout << "\nAttendance already marked as: " << a.status << endl;
-                showBox("|| Attendance Already Marked ||");
+                showWarning("Attendance Already Marked");
                 pauseScreen();
                 return;
             }
@@ -2015,21 +2027,19 @@ public:
         attendance.push_back(a);
         saveAttendance();
 
-        showBox("|| Attendance marked successfully for today ||");
+        showSuccess("Attendance marked successfully for today");
         pauseScreen();
     }
 
     void viewMyAttendance(int empId)
     {
         cls();
-        line();
-        printCentered("|| My Attendance ||");
-        line();
+        drawHeader("MY ATTENDANCE");
 
         Employee *e = findById(empId);
         if (!e)
         {
-            showBox("|| Employee Not Found ||");
+            showError("Employee Not Found");
             pauseScreen();
             return;
         }
@@ -2212,7 +2222,7 @@ public:
             a.status = askStatus();
             attendance.push_back(a);
             saveAttendance();
-            showBox("|| Attendance Record Created ||");
+            showSuccess("Attendance Record Created");
             pauseScreen();
             return;
         }
@@ -2220,7 +2230,7 @@ public:
         cout << "\nCurrent status: " << target->status << endl;
         target->status = askStatus();
         saveAttendance();
-        showBox("|| Attendance Record Updated ||");
+        showSuccess("Attendance Record Updated");
         pauseScreen();
     }
 
@@ -2329,7 +2339,7 @@ public:
                         departments[deptNum - 1].description = newDesc;
 
                     saveDepartments();
-                    showBox("|| Department Updated ||");
+                    showSuccess("Department Updated");
                 }
                 else
                 {
@@ -2338,7 +2348,7 @@ public:
                     {
                         departments.erase(departments.begin() + deptNum - 1);
                         saveDepartments();
-                        showBox("|| Department Deleted ||");
+                        showSuccess("Department Deleted");
                     }
                 }
                 pauseScreen();
@@ -2429,7 +2439,7 @@ public:
                         positions[posNum - 1].description = newDesc;
 
                     savePositions();
-                    showBox("|| Position Updated ||");
+                    showSuccess("Position Updated");
                 }
                 else
                 {
@@ -2438,7 +2448,7 @@ public:
                     {
                         positions.erase(positions.begin() + posNum - 1);
                         savePositions();
-                        showBox("|| Position Deleted ||");
+                        showSuccess("Position Deleted");
                     }
                 }
                 pauseScreen();
@@ -2668,7 +2678,7 @@ int main()
                 int choice = manager.adminDashboard();
                 if (choice == 4) // Logout
                 {
-                    showBox("|| Logged Out Successfully ||");
+                    showSuccess("Logged Out Successfully");
                     pauseScreen();
                     break; // Exit admin loop, return to login
                 }
@@ -2706,7 +2716,7 @@ int main()
                             break;
                         default:
                             cls();
-                            showBox("|| Invalid Input ||");
+                            showError("Invalid Input");
                             pauseScreen();
                         }
                     }
@@ -2744,7 +2754,7 @@ int main()
                             break;
                         default:
                             cls();
-                            showBox("|| Invalid Input ||");
+                            showError("Invalid Input");
                             pauseScreen();
                         }
                     }
@@ -2776,7 +2786,7 @@ int main()
                             break;
                         default:
                             cls();
-                            showBox("|| Invalid Input ||");
+                            showError("Invalid Input");
                             pauseScreen();
                         }
                     }
@@ -2821,12 +2831,12 @@ int main()
                     manager.viewMyProfile(userId);
                     break;
                 case 6:
-                    showBox("|| Logged Out Successfully ||");
+                    showSuccess("Logged Out Successfully");
                     pauseScreen();
                     break; // Exit employee loop, return to login
                 default:
                     cls();
-                    showBox("|| Invalid Input ||");
+                    showError("Invalid Input");
                     pauseScreen();
                 }
                 
