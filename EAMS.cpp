@@ -428,25 +428,64 @@ public:
             return;
 
         string ln;
+        int lineNum = 0;
         while (getline(fin, ln))
         {
-            if (ln.empty())
+            lineNum++;
+            // Skip header lines (first 5 lines)
+            if (lineNum <= 5)
                 continue;
-            vector<string> f = splitFields(ln, '\t');
-            if (f.size() < 3)
+            // Skip border line at end
+            if (ln.find('=') != string::npos)
+                continue;
+            if (ln.empty() || ln.find('-') != string::npos)
+                continue;
+            
+            // Parse the formatted line
+            vector<string> f = splitFields(ln, ' ');
+            // Filter out empty strings
+            vector<string> fields;
+            for (auto &field : f)
+            {
+                if (!field.empty())
+                    fields.push_back(field);
+            }
+            
+            if (fields.size() < 6)
                 continue;
 
             AttendanceRecord a;
-            try
+            // Parse EMP001 format
+            string empIdStr = fields[0];
+            if (empIdStr.length() >= 4 && empIdStr.substr(0, 3) == "EMP")
             {
-                a.empId = stoi(f[0]);
+                try
+                {
+                    a.empId = stoi(empIdStr.substr(3));
+                }
+                catch (...)
+                {
+                    continue;
+                }
             }
-            catch (...)
+            else
             {
-                continue;
+                try
+                {
+                    a.empId = stoi(empIdStr);
+                }
+                catch (...)
+                {
+                    continue;
+                }
             }
-            a.date = f[1];
-            a.status = f[2];
+            
+            // fields[1] is name (skip)
+            a.date = fields[2];
+            a.timeIn = fields[3];
+            a.timeOut = fields[4];
+            a.status = fields[5];
+            
             attendance.push_back(a);
         }
     }
