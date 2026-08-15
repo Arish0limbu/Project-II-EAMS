@@ -2398,7 +2398,14 @@ public:
 // ------------------------------------------------------------
 // Login function (must be after EAMS class definition)
 // ------------------------------------------------------------
-pair<string, int> login(EAMS &manager)
+struct LoginResult
+{
+    string role;
+    int userId;
+    bool firstLogin;
+};
+
+LoginResult login(EAMS &manager)
 {
     string storedUser = "admin", storedPass = "1234";
     ifstream cred("config.txt");
@@ -2430,7 +2437,7 @@ pair<string, int> login(EAMS &manager)
         {
             showBox("|| Admin Login Successful ||");
             pauseScreen();
-            return make_pair("admin", 0);
+            return {"admin", 0, false};
         }
 
         // Check employee credentials
@@ -2449,7 +2456,7 @@ pair<string, int> login(EAMS &manager)
         {
             showBox("|| Employee Login Successful ||");
             pauseScreen();
-            return make_pair("employee", empId);
+            return {"employee", empId, emp->firstLogin};
         }
 
         attemptsLeft--;
@@ -2465,7 +2472,7 @@ pair<string, int> login(EAMS &manager)
     printCentered("|| Too Many Failed Attempts - Access Denied ||");
     line();
     pauseScreen();
-    return make_pair("", -1);
+    return {"", -1, false};
 }
 
 // ------------------------------------------------------------
