@@ -1480,7 +1480,7 @@ public:
         bool found = false;
         for (auto &a : attendance)
         {
-            if (a.empId == lr->empId && a.date == lr->leaveDate)
+            if (a.empId == lr->empId && a.date == lr->fromDate)
             {
                 a.status = "Leave";
                 found = true;
@@ -1491,7 +1491,9 @@ public:
         {
             AttendanceRecord a;
             a.empId = lr->empId;
-            a.date = lr->leaveDate;
+            a.date = lr->fromDate;
+            a.timeIn = "--";
+            a.timeOut = "--";
             a.status = "Leave";
             attendance.push_back(a);
         }
@@ -1564,7 +1566,8 @@ public:
             return;
         }
 
-        string leaveDate = getLineInput("Enter leave date (DD/MM/YYYY): ");
+        string fromDate = getLineInput("Enter from date (DD/MM/YYYY): ");
+        string toDate = getLineInput("Enter to date (DD/MM/YYYY): ");
         string reason = getRequiredLineInput("Enter reason for leave: ");
 
         cout << "\nLeave Type:\n"
@@ -1592,7 +1595,7 @@ public:
         // Check for duplicate leave request
         for (auto &lr : leaveRequests)
         {
-            if (lr.empId == empId && lr.leaveDate == leaveDate)
+            if (lr.empId == empId && lr.fromDate == fromDate)
             {
                 showBox("|| Leave request already exists for this date ||");
                 pauseScreen();
@@ -1600,10 +1603,16 @@ public:
             }
         }
 
+        // Generate leave ID
+        int leaveNum = leaveRequests.size() + 1;
+        string leaveId = generateLeaveId(leaveNum);
+
         LeaveRequest lr;
+        lr.leaveId = leaveId;
         lr.empId = empId;
         lr.empName = e->name;
-        lr.leaveDate = leaveDate;
+        lr.fromDate = fromDate;
+        lr.toDate = toDate;
         lr.reason = reason;
         lr.leaveType = leaveType;
         lr.status = "Pending";
