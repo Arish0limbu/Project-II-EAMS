@@ -639,8 +639,21 @@ public:
     void saveDepartments()
     {
         ofstream fout(DEPT_FILE, ios::trunc);
+        string border = string(70, '=');
+        string separator = string(70, '-');
+        
+        fout << border << endl;
+        fout << fitWidth("", 22) << "EAMS - DEPARTMENT RECORDS" << endl;
+        fout << border << endl;
+        fout << fitWidth("NAME", 30) << "DESCRIPTION" << endl;
+        fout << separator << endl;
+        
         for (auto &d : departments)
-            fout << d.name << "\t" << d.description << "\n";
+        {
+            fout << fitWidth(d.name, 30) << d.description << endl;
+        }
+        
+        fout << border << endl;
     }
 
     void loadPositions()
