@@ -1701,6 +1701,8 @@ public:
         AttendanceRecord a;
         a.empId = empId;
         a.date = today;
+        a.timeIn = (status == "Present") ? getCurrentTime() : "--";
+        a.timeOut = (status == "Present") ? "05:00 PM" : "--";
         a.status = status;
         attendance.push_back(a);
         saveAttendance();
