@@ -3,10 +3,5 @@
 ========================================================================================================================
 ID        NAME                DEPARTMENT        POSITION          CONTACT       EMAIL               STATUS    FIRST LOGIN
 ------------------------------------------------------------------------------------------------------------------------
-EMP001    yum senehang limbu  IT                ceo               9817374903    limbuarish0@gmail.c Active    Yes
-EMP002    Jental karki        IT                manager           9800000000    jentalkarki@gmail.c Active    Yes
-EMP003    Rupson sapkota      IT                leader            9800000000    rupsonsapkota@gmail Active    Yes
-EMP004    Parth paudel        IT                staff             9800000000    parthpaudel@gmail.c Active    Yes
-EMP005    Pramesh yadhav      IT                staff             9800000000    pramesh@gmail.com   Active    Yes
-EMP006    Sangham giri        IT                staff             9800000000    sanghamgiri@gmail.c Active    Yes
+EMP001    YUM senehang        IT                ceo               9817374903    yumlimbu@gmail.com  Active    No
 ========================================================================================================================

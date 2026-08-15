@@ -975,7 +975,7 @@ public:
              << "  [0] Back\n" << endl;
         separator();
         cout << "\nEnter your choice : ";
-        return getIntInput("", 1, 8);
+        return getIntInput("", 0, 7);
     }
 
     int viewEmployeesAttendanceMenu()
@@ -993,7 +993,7 @@ public:
              << "  [0] Back\n" << endl;
         separator();
         cout << "\nEnter your choice : ";
-        return getIntInput("", 1, 8);
+        return getIntInput("", 0, 7);
     }
 
     int reviewUpdateRequestsMenu()
@@ -1009,7 +1009,7 @@ public:
              << "  [0] Back\n" << endl;
         separator();
         cout << "\nEnter your choice : ";
-        return getIntInput("", 1, 6);
+        return getIntInput("", 0, 5);
     }
 
     int employeeDashboard(int empId)
@@ -2316,13 +2316,13 @@ public:
             }
             line();
 
-            cout << " 1) Edit Department\n"
-                 << " 2) Delete Department\n"
-                 << " 3) Back\n";
-            line();
+            cout << "  [1] Edit Department\n"
+                 << "  [2] Delete Department\n"
+                 << "  [0] Back\n" << endl;
+            separator();
 
-            int choice = getIntInput("Enter number to select given option: ", 1, 3);
-            if (choice == 3)
+            int choice = getIntInput("Enter your choice : ", 0, 2);
+            if (choice == 0)
                 break;
 
             if (choice == 1 || choice == 2)
@@ -2416,13 +2416,13 @@ public:
             }
             line();
 
-            cout << " 1) Edit Position\n"
-                 << " 2) Delete Position\n"
-                 << " 3) Back\n";
-            line();
+            cout << "  [1] Edit Position\n"
+                 << "  [2] Delete Position\n"
+                 << "  [0] Back\n" << endl;
+            separator();
 
-            int choice = getIntInput("Enter number to select given option: ", 1, 3);
-            if (choice == 3)
+            int choice = getIntInput("Enter your choice : ", 0, 2);
+            if (choice == 0)
                 break;
 
             if (choice == 1 || choice == 2)
@@ -2605,7 +2605,16 @@ LoginResult login(EAMS &manager)
         int empId;
         try
         {
-            empId = stoi(userId);
+            // Handle EMP prefix format (e.g., EMP001)
+            if (userId.length() >= 4 && userId.substr(0, 3) == "EMP")
+            {
+                string idStr = userId.substr(3); // Extract numeric part
+                empId = stoi(idStr);
+            }
+            else
+            {
+                empId = stoi(userId);
+            }
         }
         catch (...)
         {
