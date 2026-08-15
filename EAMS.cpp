@@ -892,6 +892,7 @@ public:
             e.department = getLineInput("Enter department: ");
             e.position = getLineInput("Enter position/designation: ");
             e.contact = getLineInput("Enter contact number: ");
+            e.status = "Active"; // Default status
 
             batch.push_back(e);
         }
