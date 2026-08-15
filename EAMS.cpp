@@ -231,6 +231,18 @@ struct AttendanceRecord
     string status;
 };
 
+struct Department
+{
+    string name;
+    string description;
+};
+
+struct Position
+{
+    string name;
+    string description;
+};
+
 // ------------------------------------------------------------
 // Core system
 // ------------------------------------------------------------
@@ -240,9 +252,13 @@ private:
     vector<Employee> employees;
     vector<AttendanceRecord> attendance;
     vector<LeaveRequest> leaveRequests;
+    vector<Department> departments;
+    vector<Position> positions;
     const string EMP_FILE = "employees.txt";
     const string ATT_FILE = "attendance.txt";
     const string LEAVE_FILE = "leave_requests.txt";
+    const string DEPT_FILE = "departments.txt";
+    const string POS_FILE = "positions.txt";
     const string CFG_FILE = "config.txt";
     int currentUserId = 0;
     string currentUserRole = "";
@@ -263,6 +279,8 @@ public:
         loadEmployees();
         loadAttendance();
         loadLeaveRequests();
+        loadDepartments();
+        loadPositions();
     }
 
     Employee *findById(int id)
@@ -404,6 +422,66 @@ public:
         for (auto &lr : leaveRequests)
             fout << lr.empId << "\t" << lr.empName << "\t" << lr.leaveDate << "\t"
                  << lr.reason << "\t" << lr.leaveType << "\t" << lr.status << "\n";
+    }
+
+    void loadDepartments()
+    {
+        departments.clear();
+        ifstream fin(DEPT_FILE);
+        if (!fin)
+            return;
+
+        string ln;
+        while (getline(fin, ln))
+        {
+            if (ln.empty())
+                continue;
+            vector<string> f = splitFields(ln, '\t');
+            if (f.size() < 2)
+                continue;
+
+            Department d;
+            d.name = f[0];
+            d.description = f[1];
+            departments.push_back(d);
+        }
+    }
+
+    void saveDepartments()
+    {
+        ofstream fout(DEPT_FILE, ios::trunc);
+        for (auto &d : departments)
+            fout << d.name << "\t" << d.description << "\n";
+    }
+
+    void loadPositions()
+    {
+        positions.clear();
+        ifstream fin(POS_FILE);
+        if (!fin)
+            return;
+
+        string ln;
+        while (getline(fin, ln))
+        {
+            if (ln.empty())
+                continue;
+            vector<string> f = splitFields(ln, '\t');
+            if (f.size() < 2)
+                continue;
+
+            Position p;
+            p.name = f[0];
+            p.description = f[1];
+            positions.push_back(p);
+        }
+    }
+
+    void savePositions()
+    {
+        ofstream fout(POS_FILE, ios::trunc);
+        for (auto &p : positions)
+            fout << p.name << "\t" << p.description << "\n";
     }
 
     // ---------------- Helpers ----------------
