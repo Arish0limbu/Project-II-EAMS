@@ -997,21 +997,22 @@ public:
     int employeeDashboard(int empId)
     {
         cls();
-        line();
         Employee *e = findById(empId);
         string empName = e ? e->name : "Unknown";
-        printCentered("|| EMPLOYEE DASHBOARD ||");
-        printCentered("Welcome, " + empName + " (ID: " + to_string(empId) + ")");
-        printCentered("Today: " + getCurrentDate());
-        line();
-        cout << " 1) Mark Today's Attendance\n"
-             << " 2) View My Attendance\n"
-             << " 3) Apply for Leave\n"
-             << " 4) View Leave Status\n"
-             << " 5) View My Profile\n"
-             << " 6) Logout\n";
-        line();
-        return getIntInput("Enter number to select given option: ", 1, 6);
+        string empIdStr = "EMP" + string(3 - to_string(empId).length(), '0') + to_string(empId);
+        drawHeader("EMPLOYEE DASHBOARD");
+        cout << "\n                 Welcome, " << empName << "\n" << endl;
+        separator();
+        cout << "\n  [1] Mark Today's Attendance\n"
+             << "  [2] View Attendance\n"
+             << "  [3] Apply for Leave\n"
+             << "  [4] View Leave Requests\n"
+             << "  [5] View Profile\n"
+             << "  [6] Change Password\n"
+             << "  [0] Logout\n" << endl;
+        separator();
+        cout << "\nEnter your choice : ";
+        return getIntInput("", 1, 6);
     }
 
     // ---------------- Employee management ----------------
