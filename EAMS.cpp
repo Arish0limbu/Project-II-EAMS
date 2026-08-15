@@ -524,19 +524,64 @@ public:
         printCentered("|| ADMIN DASHBOARD ||");
         printCentered("Today: " + getCurrentDate() + "   |   Total Employees: " + to_string(employees.size()));
         line();
-        cout << " 1) Add Employee\n"
-             << " 2) View All Employees\n"
-             << " 3) Search Employee\n"
-             << " 4) View Employee Attendance\n"
-             << " 5) View Leave Requests\n"
-             << " 6) Approve Leave\n"
-             << " 7) Reject Leave\n"
-             << " 8) Update Employee Information\n"
-             << " 9) Update Attendance Records\n"
-             << "10) View Employee Records\n"
-             << "11) Logout\n";
+        cout << " 1) Employee Management\n"
+             << " 2) View Employees & Attendance\n"
+             << " 3) Review & Update Employee Requests\n"
+             << " 4) Logout\n";
         line();
-        return getIntInput("Enter number to select given option: ", 1, 11);
+        return getIntInput("Enter number to select given option: ", 1, 4);
+    }
+
+    int employeeManagementMenu()
+    {
+        cls();
+        line();
+        printCentered("|| EMPLOYEE MANAGEMENT ||");
+        line();
+        cout << " 1) Add New Employee\n"
+             << " 2) Add Department\n"
+             << " 3) Manage Departments\n"
+             << " 4) Add Position\n"
+             << " 5) Manage Positions\n"
+             << " 6) Update Employee Information\n"
+             << " 7) Remove Employee\n"
+             << " 8) Back to Admin Dashboard\n";
+        line();
+        return getIntInput("Enter number to select given option: ", 1, 8);
+    }
+
+    int viewEmployeesAttendanceMenu()
+    {
+        cls();
+        line();
+        printCentered("|| VIEW EMPLOYEES & ATTENDANCE ||");
+        line();
+        cout << " 1) View All Employee Records\n"
+             << " 2) Search Employee\n"
+             << " 3) View Employee Attendance\n"
+             << " 4) View Daily Attendance\n"
+             << " 5) View Monthly Attendance\n"
+             << " 6) View Overall Attendance Report\n"
+             << " 7) View Leave Records\n"
+             << " 8) Back to Admin Dashboard\n";
+        line();
+        return getIntInput("Enter number to select given option: ", 1, 8);
+    }
+
+    int reviewUpdateRequestsMenu()
+    {
+        cls();
+        line();
+        printCentered("|| REVIEW & UPDATE EMPLOYEE REQUESTS ||");
+        line();
+        cout << " 1) View Leave Requests\n"
+             << " 2) Approve Leave Request\n"
+             << " 3) Reject Leave Request\n"
+             << " 4) Update Attendance Records\n"
+             << " 5) Update Employee Information\n"
+             << " 6) Back to Admin Dashboard\n";
+        line();
+        return getIntInput("Enter number to select given option: ", 1, 6);
     }
 
     int employeeDashboard(int empId)
@@ -1624,6 +1669,297 @@ public:
         line();
         pauseScreen();
     }
+
+    // ---------------- Department Management ----------------
+    void addDepartment()
+    {
+        cls();
+        line();
+        printCentered("|| Add Department ||");
+        line();
+
+        string name = getRequiredLineInput("Enter department name: ");
+        
+        // Check for duplicate
+        for (auto &d : departments)
+        {
+            if (toLowerStr(d.name) == toLowerStr(name))
+            {
+                showBox("|| Department Already Exists ||");
+                pauseScreen();
+                return;
+            }
+        }
+
+        string description = getLineInput("Enter description (optional): ");
+
+        Department d;
+        d.name = name;
+        d.description = description;
+        departments.push_back(d);
+        saveDepartments();
+
+        showBox("|| Department Added Successfully ||");
+        pauseScreen();
+    }
+
+    void manageDepartments()
+    {
+        while (true)
+        {
+            cls();
+            line();
+            printCentered("|| Manage Departments ||");
+            line();
+
+            if (departments.empty())
+            {
+                printCentered("|| No Departments Found ||");
+                line();
+                pauseScreen();
+                return;
+            }
+
+            cout << fitWidth("#", 4) << fitWidth("NAME", 25) << "DESCRIPTION" << endl;
+            line();
+
+            for (size_t i = 0; i < departments.size(); i++)
+            {
+                cout << fitWidth(i + 1, 4) << fitWidth(departments[i].name, 25) << departments[i].description << endl;
+            }
+            line();
+
+            cout << " 1) Edit Department\n"
+                 << " 2) Delete Department\n"
+                 << " 3) Back\n";
+            line();
+
+            int choice = getIntInput("Enter number to select given option: ", 1, 3);
+            if (choice == 3)
+                break;
+
+            if (choice == 1 || choice == 2)
+            {
+                int deptNum = getIntInput("Enter department number: ", 1, (int)departments.size());
+                if (choice == 1)
+                {
+                    string newName = getLineInput("New name [" + departments[deptNum - 1].name + "]: ");
+                    if (!newName.empty())
+                        departments[deptNum - 1].name = newName;
+
+                    string newDesc = getLineInput("New description [" + departments[deptNum - 1].description + "]: ");
+                    if (!newDesc.empty())
+                        departments[deptNum - 1].description = newDesc;
+
+                    saveDepartments();
+                    showBox("|| Department Updated ||");
+                }
+                else
+                {
+                    char confirm = getCharInput("Delete this department? (Y/N): ");
+                    if (confirm == 'y' || confirm == 'Y')
+                    {
+                        departments.erase(departments.begin() + deptNum - 1);
+                        saveDepartments();
+                        showBox("|| Department Deleted ||");
+                    }
+                }
+                pauseScreen();
+            }
+        }
+    }
+
+    // ---------------- Position Management ----------------
+    void addPosition()
+    {
+        cls();
+        line();
+        printCentered("|| Add Position ||");
+        line();
+
+        string name = getRequiredLineInput("Enter position name: ");
+        
+        // Check for duplicate
+        for (auto &p : positions)
+        {
+            if (toLowerStr(p.name) == toLowerStr(name))
+            {
+                showBox("|| Position Already Exists ||");
+                pauseScreen();
+                return;
+            }
+        }
+
+        string description = getLineInput("Enter description (optional): ");
+
+        Position p;
+        p.name = name;
+        p.description = description;
+        positions.push_back(p);
+        savePositions();
+
+        showBox("|| Position Added Successfully ||");
+        pauseScreen();
+    }
+
+    void managePositions()
+    {
+        while (true)
+        {
+            cls();
+            line();
+            printCentered("|| Manage Positions ||");
+            line();
+
+            if (positions.empty())
+            {
+                printCentered("|| No Positions Found ||");
+                line();
+                pauseScreen();
+                return;
+            }
+
+            cout << fitWidth("#", 4) << fitWidth("NAME", 25) << "DESCRIPTION" << endl;
+            line();
+
+            for (size_t i = 0; i < positions.size(); i++)
+            {
+                cout << fitWidth(i + 1, 4) << fitWidth(positions[i].name, 25) << positions[i].description << endl;
+            }
+            line();
+
+            cout << " 1) Edit Position\n"
+                 << " 2) Delete Position\n"
+                 << " 3) Back\n";
+            line();
+
+            int choice = getIntInput("Enter number to select given option: ", 1, 3);
+            if (choice == 3)
+                break;
+
+            if (choice == 1 || choice == 2)
+            {
+                int posNum = getIntInput("Enter position number: ", 1, (int)positions.size());
+                if (choice == 1)
+                {
+                    string newName = getLineInput("New name [" + positions[posNum - 1].name + "]: ");
+                    if (!newName.empty())
+                        positions[posNum - 1].name = newName;
+
+                    string newDesc = getLineInput("New description [" + positions[posNum - 1].description + "]: ");
+                    if (!newDesc.empty())
+                        positions[posNum - 1].description = newDesc;
+
+                    savePositions();
+                    showBox("|| Position Updated ||");
+                }
+                else
+                {
+                    char confirm = getCharInput("Delete this position? (Y/N): ");
+                    if (confirm == 'y' || confirm == 'Y')
+                    {
+                        positions.erase(positions.begin() + posNum - 1);
+                        savePositions();
+                        showBox("|| Position Deleted ||");
+                    }
+                }
+                pauseScreen();
+            }
+        }
+    }
+
+    // ---------------- View Functions ----------------
+    void viewDailyAttendance()
+    {
+        cls();
+        line();
+        printCentered("|| View Daily Attendance ||");
+        line();
+
+        string date = getLineInput("Enter date (DD/MM/YYYY): ");
+        cls();
+        line();
+        printCentered("|| Attendance on " + date + " ||");
+        line();
+        cout << fitWidth("ID", 6) << fitWidth("NAME", 22) << "STATUS" << endl;
+        line();
+
+        bool found = false;
+        for (auto &a : attendance)
+        {
+            if (a.date == date)
+            {
+                Employee *e = findById(a.empId);
+                string name = e ? e->name : "(Unknown)";
+                cout << fitWidth(a.empId, 6) << fitWidth(name, 22) << a.status << endl;
+                found = true;
+            }
+        }
+        if (!found)
+            cout << "No attendance records found for this date." << endl;
+        line();
+        pauseScreen();
+    }
+
+    void viewLeaveRecords()
+    {
+        cls();
+        line();
+        printCentered("|| Leave Records ||");
+        line();
+
+        if (leaveRequests.empty())
+        {
+            printCentered("|| No Leave Records Found ||");
+            line();
+            pauseScreen();
+            return;
+        }
+
+        cout << fitWidth("EMP ID", 8) << fitWidth("NAME", 20) << fitWidth("DATE", 15)
+             << fitWidth("TYPE", 12) << fitWidth("REASON", 25) << "STATUS" << endl;
+        line();
+
+        for (auto &lr : leaveRequests)
+        {
+            cout << fitWidth(lr.empId, 8) << fitWidth(lr.empName, 20) << fitWidth(lr.leaveDate, 15)
+                 << fitWidth(lr.leaveType, 12) << fitWidth(lr.reason, 25) << lr.status << endl;
+        }
+        line();
+        pauseScreen();
+    }
+
+    void viewMonthlyAttendance()
+    {
+        cls();
+        line();
+        printCentered("|| View Monthly Attendance ||");
+        line();
+
+        string month = getLineInput("Enter month (MM/YYYY): ");
+        cls();
+        line();
+        printCentered("|| Attendance for " + month + " ||");
+        line();
+        cout << fitWidth("ID", 6) << fitWidth("NAME", 22) << fitWidth("DATE", 15) << "STATUS" << endl;
+        line();
+
+        bool found = false;
+        for (auto &a : attendance)
+        {
+            if (a.date.length() >= 7 && a.date.substr(3, 7) == month)
+            {
+                Employee *e = findById(a.empId);
+                string name = e ? e->name : "(Unknown)";
+                cout << fitWidth(a.empId, 6) << fitWidth(name, 22) << fitWidth(a.date, 15) << a.status << endl;
+                found = true;
+            }
+        }
+        if (!found)
+            cout << "No attendance records found for this month." << endl;
+        line();
+        pauseScreen();
+    }
 };
 
 // ------------------------------------------------------------
@@ -1722,50 +2058,121 @@ int main()
             while (true)
             {
                 int choice = manager.adminDashboard();
-                switch (choice)
+                if (choice == 4) // Logout
                 {
-                case 1:
-                    manager.addEmployee();
-                    break;
-                case 2:
-                    manager.displayEmployees();
-                    break;
-                case 3:
-                    manager.searchEmployee();
-                    break;
-                case 4:
-                    manager.viewEmployeeAttendance();
-                    break;
-                case 5:
-                    manager.viewLeaveRequests();
-                    break;
-                case 6:
-                    manager.approveLeave();
-                    break;
-                case 7:
-                    manager.rejectLeave();
-                    break;
-                case 8:
-                    manager.updateEmployee();
-                    break;
-                case 9:
-                    manager.updateAttendanceRecords();
-                    break;
-                case 10:
-                    manager.viewEmployeeRecords();
-                    break;
-                case 11:
                     showBox("|| Logged Out Successfully ||");
                     pauseScreen();
                     break; // Exit admin loop, return to login
-                default:
-                    cls();
-                    showBox("|| Invalid Input ||");
-                    pauseScreen();
                 }
                 
-                if (choice == 11)
-                    break; // Logout
+                if (choice == 1) // Employee Management
+                {
+                    while (true)
+                    {
+                        int subChoice = manager.employeeManagementMenu();
+                        if (subChoice == 8) // Back to Admin Dashboard
+                            break;
+                        
+                        switch (subChoice)
+                        {
+                        case 1:
+                            manager.addEmployee();
+                            break;
+                        case 2:
+                            manager.addDepartment();
+                            break;
+                        case 3:
+                            manager.manageDepartments();
+                            break;
+                        case 4:
+                            manager.addPosition();
+                            break;
+                        case 5:
+                            manager.managePositions();
+                            break;
+                        case 6:
+                            manager.updateEmployee();
+                            break;
+                        case 7:
+                            manager.removeEmployee();
+                            break;
+                        default:
+                            cls();
+                            showBox("|| Invalid Input ||");
+                            pauseScreen();
+                        }
+                    }
+                }
+                else if (choice == 2) // View Employees & Attendance
+                {
+                    while (true)
+                    {
+                        int subChoice = manager.viewEmployeesAttendanceMenu();
+                        if (subChoice == 8) // Back to Admin Dashboard
+                            break;
+                        
+                        switch (subChoice)
+                        {
+                        case 1:
+                            manager.displayEmployees();
+                            break;
+                        case 2:
+                            manager.searchEmployee();
+                            break;
+                        case 3:
+                            manager.viewEmployeeAttendance();
+                            break;
+                        case 4:
+                            manager.viewDailyAttendance();
+                            break;
+                        case 5:
+                            manager.viewMonthlyAttendance();
+                            break;
+                        case 6:
+                            manager.attendanceReport();
+                            break;
+                        case 7:
+                            manager.viewLeaveRecords();
+                            break;
+                        default:
+                            cls();
+                            showBox("|| Invalid Input ||");
+                            pauseScreen();
+                        }
+                    }
+                }
+                else if (choice == 3) // Review & Update Employee Requests
+                {
+                    while (true)
+                    {
+                        int subChoice = manager.reviewUpdateRequestsMenu();
+                        if (subChoice == 6) // Back to Admin Dashboard
+                            break;
+                        
+                        switch (subChoice)
+                        {
+                        case 1:
+                            manager.viewLeaveRequests();
+                            break;
+                        case 2:
+                            manager.approveLeave();
+                            break;
+                        case 3:
+                            manager.rejectLeave();
+                            break;
+                        case 4:
+                            manager.updateAttendanceRecords();
+                            break;
+                        case 5:
+                            manager.updateEmployee();
+                            break;
+                        default:
+                            cls();
+                            showBox("|| Invalid Input ||");
+                            pauseScreen();
+                        }
+                    }
+                }
             }
         }
         else if (role == "employee")
