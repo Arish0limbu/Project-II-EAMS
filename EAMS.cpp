@@ -689,17 +689,42 @@ public:
             return;
 
         string ln;
+        int lineNum = 0;
         while (getline(fin, ln))
         {
-            if (ln.empty())
+            lineNum++;
+            // Skip header lines (first 4 lines)
+            if (lineNum <= 4)
                 continue;
-            vector<string> f = splitFields(ln, '\t');
-            if (f.size() < 2)
+            // Skip border line at end
+            if (ln.find('=') != string::npos)
+                continue;
+            if (ln.empty() || ln.find('-') != string::npos)
+                continue;
+            
+            // Parse the formatted line
+            vector<string> f = splitFields(ln, ' ');
+            // Filter out empty strings
+            vector<string> fields;
+            for (auto &field : f)
+            {
+                if (!field.empty())
+                    fields.push_back(field);
+            }
+            
+            if (fields.size() < 2)
                 continue;
 
             Position p;
-            p.name = f[0];
-            p.description = f[1];
+            p.name = fields[0];
+            // Join remaining fields as description
+            string desc = "";
+            for (size_t i = 1; i < fields.size(); i++)
+            {
+                if (i > 1) desc += " ";
+                desc += fields[i];
+            }
+            p.description = desc;
             positions.push_back(p);
         }
     }
