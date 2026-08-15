@@ -1104,12 +1104,6 @@ public:
             e.email = getValidEmailInput("");
             cout << "Address           : ";
             e.address = getValidAddressInput("");
-            int posChoice = getIntInput("Select position: ", 1, (int)positions.size());
-            e.position = positions[posChoice - 1].name;
-            
-            e.contact = getValidContactInput("Contact       : ");
-            e.email = getValidEmailInput("Email         : ");
-            e.address = getValidAddressInput("Address       : ");
             e.status = "Active";
             e.firstLogin = true;
             e.password = empId; // Initial password is same as employee ID
