@@ -418,6 +418,9 @@ public:
             e.status = fields[5];
             e.password = "1234"; // Default password for backward compatibility
             e.age = 25; // Default age for backward compatibility
+            e.email = (fields.size() >= 7) ? fields[6] : "";
+            e.firstLogin = (fields.size() >= 8) ? (fields[7] == "Yes") : true; // Default to first login for old records
+            e.address = ""; // Default empty address
             
             employees.push_back(e);
         }
@@ -426,21 +429,23 @@ public:
     void saveEmployees()
     {
         ofstream fout(EMP_FILE, ios::trunc);
-        string border = string(88, '=');
-        string separator = string(88, '-');
+        string border = string(120, '=');
+        string separator = string(120, '-');
         
         fout << border << endl;
-        fout << fitWidth("", 35) << "EAMS - EMPLOYEE RECORDS" << endl;
+        fout << fitWidth("", 45) << "EAMS - EMPLOYEE RECORDS" << endl;
         fout << border << endl;
         fout << fitWidth("ID", 10) << fitWidth("NAME", 20) << fitWidth("DEPARTMENT", 18) 
-             << fitWidth("POSITION", 18) << fitWidth("CONTACT", 14) << "STATUS" << endl;
+             << fitWidth("POSITION", 18) << fitWidth("CONTACT", 14) << fitWidth("EMAIL", 20) << fitWidth("STATUS", 10) << "FIRST LOGIN" << endl;
         fout << separator << endl;
         
         for (auto &e : employees)
         {
             string empId = "EMP" + string(3 - to_string(e.id).length(), '0') + to_string(e.id);
+            string firstLoginStr = e.firstLogin ? "Yes" : "No";
             fout << fitWidth(empId, 10) << fitWidth(e.name, 20) << fitWidth(e.department, 18) 
-                 << fitWidth(e.position, 18) << fitWidth(e.contact, 14) << e.status << endl;
+                 << fitWidth(e.position, 18) << fitWidth(e.contact, 14) << fitWidth(e.email, 20) 
+                 << fitWidth(e.status, 10) << firstLoginStr << endl;
         }
         
         fout << border << endl;
@@ -898,6 +903,28 @@ public:
     // ---------------- Employee management ----------------
     void addEmployee()
     {
+        // Check if departments exist
+        if (departments.empty())
+        {
+            cls();
+            line();
+            printCentered("|| No department found. Please add a department first. ||");
+            line();
+            pauseScreen();
+            return;
+        }
+
+        // Check if positions exist
+        if (positions.empty())
+        {
+            cls();
+            line();
+            printCentered("|| No position found. Please add a position first. ||");
+            line();
+            pauseScreen();
+            return;
+        }
+
         int count = getIntInput("Enter number of employees to add: ", 1, 200);
         vector<Employee> batch;
         int startId = nextEmployeeId();
@@ -906,26 +933,66 @@ public:
         {
             cls();
             line();
-            printCentered("|| Enter Employee Details ||");
+            printCentered("|| ADD NEW EMPLOYEE ||");
             line();
             printCentered("!! Employee " + to_string(i + 1) + " of " + to_string(count) + " !!");
+            line();
 
             Employee e;
             e.id = startId + i;
-            e.name = getRequiredLineInput("Enter employee name: ");
-            e.password = getRequiredLineInput("Enter password: ");
-            e.age = getIntInput("Enter employee age: ", 15, 100);
-            e.department = getLineInput("Enter department: ");
-            e.position = getLineInput("Enter position/designation: ");
-            e.contact = getLineInput("Enter contact number: ");
-            e.status = "Active"; // Default status
+            string empId = generateEmployeeId(e.id);
+            
+            cout << "Employee ID   : " << empId << " [SYSTEM GENERATED]" << endl;
+            e.name = getRequiredLineInput("Name          : ");
+            
+            // Department selection
+            cout << "\nAvailable Departments:" << endl;
+            for (size_t j = 0; j < departments.size(); j++)
+            {
+                cout << " " << (j + 1) << ") " << departments[j].name << endl;
+            }
+            int deptChoice = getIntInput("Select department: ", 1, (int)departments.size());
+            e.department = departments[deptChoice - 1].name;
+            
+            // Position selection
+            cout << "\nAvailable Positions:" << endl;
+            for (size_t j = 0; j < positions.size(); j++)
+            {
+                cout << " " << (j + 1) << ") " << positions[j].name << endl;
+            }
+            int posChoice = getIntInput("Select position: ", 1, (int)positions.size());
+            e.position = positions[posChoice - 1].name;
+            
+            e.contact = getValidContactInput("Contact       : ");
+            e.email = getLineInput("Email         : ");
+            e.address = getLineInput("Address       : ");
+            e.status = "Active";
+            e.firstLogin = true;
+            e.password = empId; // Initial password is same as employee ID
+            e.age = 25; // Default age
 
             batch.push_back(e);
         }
 
         cls();
         line();
-        printCentered("|| Save Details ||");
+        printCentered("|| EMPLOYEE DETAILS SAVED ||");
+        line();
+        
+        for (size_t i = 0; i < batch.size(); i++)
+        {
+            string empId = generateEmployeeId(batch[i].id);
+            cout << "\nEmployee " << (i + 1) << ":" << endl;
+            cout << "  Employee ID   : " << empId << endl;
+            cout << "  Name          : " << batch[i].name << endl;
+            cout << "  Department    : " << batch[i].department << endl;
+            cout << "  Position      : " << batch[i].position << endl;
+            cout << "  Contact       : " << batch[i].contact << endl;
+            cout << "  Email         : " << batch[i].email << endl;
+            cout << "  Address       : " << batch[i].address << endl;
+            cout << "  Initial Password : " << empId << endl;
+        }
+        
         line();
         char save = getCharInput("Save these employee record(s) to file? (Y/N): ");
 
