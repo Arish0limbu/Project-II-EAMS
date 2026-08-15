@@ -19,13 +19,13 @@
 
 using namespace std;
 
-// ------------------------------------------------------------
-// Cross platform console helpers
-// ------------------------------------------------------------
+
+
+
 #ifndef _WIN32
-// Minimal stand-in for conio.h's _getch() on Linux/macOS so the
-// same masked-password code works outside Windows too. Falls
-// back to plain getchar() if stdin isn't a real terminal.
+
+
+
 int _getch()
 {
     termios oldt;
@@ -120,9 +120,9 @@ void showInfo(const string &msg)
     line();
 }
 
-// Pads (or, for values that are too long, truncates with a trailing
-// space) so table columns always stay aligned - plain setw() only
-// pads short values and lets long ones collide with the next column.
+
+
+
 string fitWidth(const string &s, size_t width)
 {
     if (s.length() >= width)
@@ -142,10 +142,10 @@ string hidePassword()
     {
         int ch = _getch();
 
-        if (ch == 13 || ch == 10 || ch == EOF) // Enter
+        if (ch == 13 || ch == 10 || ch == EOF) 
             break;
 
-        if (ch == 8 || ch == 127) // Backspace
+        if (ch == 8 || ch == 127) 
         {
             if (!password.empty())
             {
@@ -296,25 +296,25 @@ bool isValidName(const string &name)
     if (name.empty())
         return false;
     
-    // Check for leading or trailing spaces
+    
     if (name[0] == ' ' || name[name.length() - 1] == ' ')
         return false;
     
-    // Check for multiple consecutive spaces
+    
     for (size_t i = 0; i < name.length() - 1; i++)
     {
         if (name[i] == ' ' && name[i + 1] == ' ')
             return false;
     }
     
-    // Check that all characters are letters or single spaces
+    
     for (char c : name)
     {
         if (!isalpha(c) && c != ' ')
             return false;
     }
     
-    // Check that there's at least one space (at least 2 words)
+    
     if (name.find(' ') == string::npos)
         return false;
     
@@ -383,9 +383,9 @@ string getValidAddressInput(const string &prompt)
     }
 }
 
-// ------------------------------------------------------------
-// Data models
-// ------------------------------------------------------------
+
+
+
 struct Employee
 {
     int id = 0;
@@ -397,8 +397,8 @@ struct Employee
     string contact;
     string email;
     string address;
-    string status; // Active, Inactive
-    bool firstLogin = true; // true if employee hasn't changed password yet
+    string status; 
+    bool firstLogin = true; 
 };
 
 struct LeaveRequest
@@ -410,7 +410,7 @@ struct LeaveRequest
     string toDate;
     string reason;
     string leaveType;
-    string status; // Pending, Approved, Rejected
+    string status; 
 };
 
 struct AttendanceRecord
@@ -434,9 +434,9 @@ struct Position
     string description;
 };
 
-// ------------------------------------------------------------
-// Core system
-// ------------------------------------------------------------
+
+
+
 class EAMS
 {
 private:
@@ -482,7 +482,7 @@ public:
         return nullptr;
     }
 
-    // ---------------- Persistence ----------------
+    
     void loadEmployees()
     {
         employees.clear();
@@ -495,18 +495,18 @@ public:
         while (getline(fin, ln))
         {
             lineNum++;
-            // Skip header lines (first 4 lines: border, title, border, header, separator)
+            
             if (lineNum <= 5)
                 continue;
-            // Skip border line at end
+            
             if (ln.find('=') != string::npos)
                 continue;
             if (ln.empty() || ln.find('-') != string::npos)
                 continue;
             
-            // Parse the formatted line
+            
             vector<string> f = splitFields(ln, ' ');
-            // Filter out empty strings
+            
             vector<string> fields;
             for (auto &field : f)
             {
@@ -518,7 +518,7 @@ public:
                 continue;
 
             Employee e;
-            // Parse EMP001 format
+            
             string empIdStr = fields[0];
             if (empIdStr.length() >= 4 && empIdStr.substr(0, 3) == "EMP")
             {
@@ -548,11 +548,11 @@ public:
             e.position = fields[3];
             e.contact = fields[4];
             e.status = fields[5];
-            e.password = "1234"; // Default password for backward compatibility
-            e.age = 25; // Default age for backward compatibility
+            e.password = "1234"; 
+            e.age = 25; 
             e.email = (fields.size() >= 7) ? fields[6] : "";
-            e.firstLogin = (fields.size() >= 8) ? (fields[7] == "Yes") : true; // Default to first login for old records
-            e.address = ""; // Default empty address
+            e.firstLogin = (fields.size() >= 8) ? (fields[7] == "Yes") : true; 
+            e.address = ""; 
             
             employees.push_back(e);
         }
@@ -595,18 +595,18 @@ public:
         while (getline(fin, ln))
         {
             lineNum++;
-            // Skip header lines (first 5 lines)
+            
             if (lineNum <= 5)
                 continue;
-            // Skip border line at end
+            
             if (ln.find('=') != string::npos)
                 continue;
             if (ln.empty() || ln.find('-') != string::npos)
                 continue;
             
-            // Parse the formatted line
+            
             vector<string> f = splitFields(ln, ' ');
-            // Filter out empty strings
+            
             vector<string> fields;
             for (auto &field : f)
             {
@@ -618,7 +618,7 @@ public:
                 continue;
 
             AttendanceRecord a;
-            // Parse EMP001 format
+            
             string empIdStr = fields[0];
             if (empIdStr.length() >= 4 && empIdStr.substr(0, 3) == "EMP")
             {
@@ -643,7 +643,7 @@ public:
                 }
             }
             
-            // fields[1] is name (skip)
+            
             a.date = fields[2];
             a.timeIn = fields[3];
             a.timeOut = fields[4];
@@ -691,18 +691,18 @@ public:
         while (getline(fin, ln))
         {
             lineNum++;
-            // Skip header lines (first 5 lines)
+            
             if (lineNum <= 5)
                 continue;
-            // Skip border line at end
+            
             if (ln.find('=') != string::npos)
                 continue;
             if (ln.empty() || ln.find('-') != string::npos)
                 continue;
             
-            // Parse the formatted line
+            
             vector<string> f = splitFields(ln, ' ');
-            // Filter out empty strings
+            
             vector<string> fields;
             for (auto &field : f)
             {
@@ -716,7 +716,7 @@ public:
             LeaveRequest lr;
             lr.leaveId = fields[0];
             
-            // Parse EMP001 format
+            
             string empIdStr = fields[1];
             if (empIdStr.length() >= 4 && empIdStr.substr(0, 3) == "EMP")
             {
@@ -746,7 +746,7 @@ public:
             lr.toDate = fields[4];
             lr.leaveType = fields[5];
             lr.status = fields[6];
-            lr.reason = "Leave request"; // Default reason
+            lr.reason = "Leave request"; 
             
             leaveRequests.push_back(lr);
         }
@@ -788,18 +788,18 @@ public:
         while (getline(fin, ln))
         {
             lineNum++;
-            // Skip header lines (first 4 lines)
+            
             if (lineNum <= 4)
                 continue;
-            // Skip border line at end
+            
             if (ln.find('=') != string::npos)
                 continue;
             if (ln.empty() || ln.find('-') != string::npos)
                 continue;
             
-            // Parse the formatted line
+            
             vector<string> f = splitFields(ln, ' ');
-            // Filter out empty strings
+            
             vector<string> fields;
             for (auto &field : f)
             {
@@ -812,7 +812,7 @@ public:
 
             Department d;
             d.name = fields[0];
-            // Join remaining fields as description
+            
             string desc = "";
             for (size_t i = 1; i < fields.size(); i++)
             {
@@ -856,18 +856,18 @@ public:
         while (getline(fin, ln))
         {
             lineNum++;
-            // Skip header lines (first 4 lines)
+            
             if (lineNum <= 4)
                 continue;
-            // Skip border line at end
+            
             if (ln.find('=') != string::npos)
                 continue;
             if (ln.empty() || ln.find('-') != string::npos)
                 continue;
             
-            // Parse the formatted line
+            
             vector<string> f = splitFields(ln, ' ');
-            // Filter out empty strings
+            
             vector<string> fields;
             for (auto &field : f)
             {
@@ -880,7 +880,7 @@ public:
 
             Position p;
             p.name = fields[0];
-            // Join remaining fields as description
+            
             string desc = "";
             for (size_t i = 1; i < fields.size(); i++)
             {
@@ -912,7 +912,7 @@ public:
         fout << border << endl;
     }
 
-    // ---------------- Helpers ----------------
+    
     int nextEmployeeId()
     {
         int mx = 0;
@@ -944,7 +944,7 @@ public:
         }
     }
 
-    // ---------------- Menu ----------------
+    
     int adminDashboard()
     {
         cls();
@@ -1030,13 +1030,13 @@ public:
              << "  [0] Logout\n" << endl;
         separator();
         cout << "\nEnter your choice : ";
-        return getIntInput("", 1, 6);
+        return getIntInput("", 0, 6);
     }
 
-    // ---------------- Employee management ----------------
+    
     void addEmployee()
     {
-        // Check if departments exist
+        
         if (departments.empty())
         {
             showWarning("No department found. Please add a department first.");
@@ -1044,7 +1044,7 @@ public:
             return;
         }
 
-        // Check if positions exist
+        
         if (positions.empty())
         {
             showWarning("No position found. Please add a position first.");
@@ -1076,7 +1076,7 @@ public:
             cout << "\nName              : ";
             e.name = getValidNameInput("");
             
-            // Department selection
+            
             cls();
             drawHeader("SELECT DEPARTMENT");
             cout << "\n                 Available Departments\n" << endl;
@@ -1092,7 +1092,7 @@ public:
             int deptChoice = getIntInput("", 1, (int)departments.size());
             e.department = departments[deptChoice - 1].name;
             
-            // Position selection
+            
             cls();
             drawHeader("SELECT POSITION");
             cout << "\n                  Available Positions\n" << endl;
@@ -1108,7 +1108,7 @@ public:
             int posChoice = getIntInput("", 1, (int)positions.size());
             e.position = positions[posChoice - 1].name;
             
-            // Contact, email, address
+            
             cls();
             drawHeader("ADD EMPLOYEE " + to_string(i + 1) + " OF " + to_string(count));
             cout << "\nEmployee ID       : " << empId << " [SYSTEM GENERATED]\n";
@@ -1124,8 +1124,8 @@ public:
             e.address = getValidAddressInput("");
             e.status = "Active";
             e.firstLogin = true;
-            e.password = empId; // Initial password is same as employee ID
-            e.age = 25; // Default age
+            e.password = empId; 
+            e.age = 25; 
 
             batch.push_back(e);
         }
@@ -1369,7 +1369,7 @@ public:
         pauseScreen();
     }
 
-    // ---------------- Attendance management ----------------
+    
     void markAttendance()
     {
         cls();
@@ -1599,7 +1599,7 @@ public:
         pauseScreen();
     }
 
-    // ---------------- Account ----------------
+    
     void changePassword()
     {
         cls();
@@ -1647,7 +1647,7 @@ public:
         pauseScreen();
     }
 
-    // ---------------- Leave Management ----------------
+    
     void viewLeaveRequests()
     {
         cls();
@@ -1721,7 +1721,7 @@ public:
         lr->status = "Approved";
         saveLeaveRequests();
 
-        // Update attendance record for the leave date
+        
         bool found = false;
         for (auto &a : attendance)
         {
@@ -1845,7 +1845,7 @@ public:
         cout << "Reason                  : ";
         string reason = getRequiredLineInput("");
 
-        // Check for duplicate leave request
+        
         for (auto &lr : leaveRequests)
         {
             if (lr.empId == empId && lr.fromDate == fromDate)
@@ -1856,7 +1856,7 @@ public:
             }
         }
 
-        // Generate leave ID
+        
         int leaveNum = leaveRequests.size() + 1;
         string leaveId = generateLeaveId(leaveNum);
 
@@ -1905,7 +1905,7 @@ public:
         pauseScreen();
     }
 
-    // ---------------- Employee Functions ----------------
+    
     void changePassword(int empId)
     {
         cls();
@@ -1952,7 +1952,7 @@ public:
                 continue;
             }
 
-            // Password change successful
+            
             e->password = newPass;
             e->firstLogin = false;
             saveEmployees();
@@ -1984,7 +1984,7 @@ public:
 
         string today = getCurrentDate();
 
-        // Check if attendance already marked for today
+        
         for (auto &a : attendance)
         {
             if (a.empId == empId && a.date == today)
@@ -2104,7 +2104,7 @@ public:
         pauseScreen();
     }
 
-    // ---------------- Admin Specific Functions ----------------
+    
     void viewEmployeeAttendance()
     {
         cls();
@@ -2256,7 +2256,7 @@ public:
         pauseScreen();
     }
 
-    // ---------------- Department Management ----------------
+    
     void addDepartment()
     {
         cls();
@@ -2267,7 +2267,7 @@ public:
         cout << "\nEnter department name : ";
         string name = getRequiredLineInput("");
         
-        // Check for duplicate
+        
         for (auto &d : departments)
         {
             if (toLowerStr(d.name) == toLowerStr(name))
@@ -2356,7 +2356,7 @@ public:
         }
     }
 
-    // ---------------- Position Management ----------------
+    
     void addPosition()
     {
         cls();
@@ -2367,7 +2367,7 @@ public:
         cout << "\nEnter position name : ";
         string name = getRequiredLineInput("");
         
-        // Check for duplicate
+        
         for (auto &p : positions)
         {
             if (toLowerStr(p.name) == toLowerStr(name))
@@ -2456,7 +2456,7 @@ public:
         }
     }
 
-    // ---------------- View Functions ----------------
+    
     void viewDailyAttendance()
     {
         cls();
@@ -2551,9 +2551,9 @@ public:
     }
 };
 
-// ------------------------------------------------------------
-// Login function (must be after EAMS class definition)
-// ------------------------------------------------------------
+
+
+
 struct LoginResult
 {
     string role;
@@ -2593,7 +2593,7 @@ LoginResult login(EAMS &manager)
         cout << "\nEnter your credentials to continue.\n" << endl;
         line();
 
-        // Check admin credentials
+        
         if (userId == storedUser && password == storedPass)
         {
             showSuccess("Admin Login Successful");
@@ -2601,14 +2601,14 @@ LoginResult login(EAMS &manager)
             return {"admin", 0, false};
         }
 
-        // Check employee credentials
+        
         int empId;
         try
         {
-            // Handle EMP prefix format (e.g., EMP001)
+            
             if (userId.length() >= 4 && userId.substr(0, 3) == "EMP")
             {
-                string idStr = userId.substr(3); // Extract numeric part
+                string idStr = userId.substr(3); 
                 empId = stoi(idStr);
             }
             else
@@ -2639,7 +2639,7 @@ LoginResult login(EAMS &manager)
     return {"", -1, false};
 }
 
-// ------------------------------------------------------------
+
 int main()
 {
     EAMS manager;
@@ -2675,29 +2675,29 @@ int main()
         
         if (role.empty())
         {
-            // Login failed, return to main menu
+            
             continue;
         }
         
         if (role == "admin")
         {
-            // Admin Dashboard
+            
             while (true)
             {
                 int choice = manager.adminDashboard();
-                if (choice == 4) // Logout
+                if (choice == 4) 
                 {
                     showSuccess("Logged Out Successfully");
                     pauseScreen();
-                    break; // Exit admin loop, return to login
+                    break; 
                 }
                 
-                if (choice == 1) // Employee Management
+                if (choice == 1) 
                 {
                     while (true)
                     {
                         int subChoice = manager.employeeManagementMenu();
-                        if (subChoice == 8) // Back to Admin Dashboard
+                        if (subChoice == 0) 
                             break;
                         
                         switch (subChoice)
@@ -2730,12 +2730,12 @@ int main()
                         }
                     }
                 }
-                else if (choice == 2) // View Employees & Attendance
+                else if (choice == 2) 
                 {
                     while (true)
                     {
                         int subChoice = manager.viewEmployeesAttendanceMenu();
-                        if (subChoice == 8) // Back to Admin Dashboard
+                        if (subChoice == 0) 
                             break;
                         
                         switch (subChoice)
@@ -2768,12 +2768,12 @@ int main()
                         }
                     }
                 }
-                else if (choice == 3) // Review & Update Employee Requests
+                else if (choice == 3) 
                 {
                     while (true)
                     {
                         int subChoice = manager.reviewUpdateRequestsMenu();
-                        if (subChoice == 6) // Back to Admin Dashboard
+                        if (subChoice == 0) 
                             break;
                         
                         switch (subChoice)
@@ -2804,7 +2804,7 @@ int main()
         }
         else if (role == "employee")
         {
-            // Check if first login - force password change
+            
             if (isFirstLogin)
             {
                 cls();
@@ -2815,10 +2815,10 @@ int main()
                 cout << "\nFor security, you must change your password before continuing." << endl;
                 pauseScreen();
                 manager.changePassword(userId);
-                // After password change, continue to dashboard
+                
             }
             
-            // Employee Dashboard
+            
             while (true)
             {
                 int choice = manager.employeeDashboard(userId);
@@ -2839,18 +2839,18 @@ int main()
                 case 5:
                     manager.viewMyProfile(userId);
                     break;
-                case 6:
+                case 0:
                     showSuccess("Logged Out Successfully");
                     pauseScreen();
-                    break; // Exit employee loop, return to login
+                    break; 
                 default:
                     cls();
                     showError("Invalid Input");
                     pauseScreen();
                 }
                 
-                if (choice == 6)
-                    break; // Logout
+                if (choice == 0)
+                    break; 
             }
         }
     }
