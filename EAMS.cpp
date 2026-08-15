@@ -2618,6 +2618,20 @@ int main()
         }
         else if (role == "employee")
         {
+            // Check if first login - force password change
+            if (isFirstLogin)
+            {
+                cls();
+                line();
+                string empIdStr = "EMP" + string(3 - to_string(userId).length(), '0') + to_string(userId);
+                printCentered("|| This is your first login ||");
+                line();
+                cout << "\nFor security, you must change your password before continuing." << endl;
+                pauseScreen();
+                manager.changePassword(userId);
+                // After password change, continue to dashboard
+            }
+            
             // Employee Dashboard
             while (true)
             {
