@@ -265,6 +265,14 @@ public:
         loadLeaveRequests();
     }
 
+    Employee *findById(int id)
+    {
+        for (auto &e : employees)
+            if (e.id == id)
+                return &e;
+        return nullptr;
+    }
+
     // ---------------- Persistence ----------------
     void loadEmployees()
     {
@@ -408,13 +416,6 @@ public:
         return mx + 1;
     }
 
-    Employee *findById(int id)
-    {
-        for (auto &e : employees)
-            if (e.id == id)
-                return &e;
-        return nullptr;
-    }
 
     string askStatus()
     {
