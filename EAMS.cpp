@@ -1141,7 +1141,7 @@ public:
         }
         else
         {
-            showBox("|| Employee Record(s) Discarded ||");
+            showInfo("Employee Record(s) Discarded");
         }
         pauseScreen();
     }
