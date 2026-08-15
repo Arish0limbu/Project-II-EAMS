@@ -1021,10 +1021,7 @@ public:
         // Check if departments exist
         if (departments.empty())
         {
-            cls();
-            line();
-            printCentered("|| No department found. Please add a department first. ||");
-            line();
+            showWarning("No department found. Please add a department first.");
             pauseScreen();
             return;
         }
@@ -1032,49 +1029,81 @@ public:
         // Check if positions exist
         if (positions.empty())
         {
-            cls();
-            line();
-            printCentered("|| No position found. Please add a position first. ||");
-            line();
+            showWarning("No position found. Please add a position first.");
             pauseScreen();
             return;
         }
 
-        int count = getIntInput("Enter number of employees to add: ", 1, 200);
+        cls();
+        drawHeader("ADD NEW EMPLOYEE");
+        cout << "\n              How many employees to add?\n" << endl;
+        separator();
+        cout << "\nEnter Number : ";
+        int count = getIntInput("", 1, 200);
+        
         vector<Employee> batch;
         int startId = nextEmployeeId();
 
         for (int i = 0; i < count; i++)
         {
             cls();
-            line();
-            printCentered("|| ADD NEW EMPLOYEE ||");
-            line();
-            printCentered("!! Employee " + to_string(i + 1) + " of " + to_string(count) + " !!");
-            line();
+            drawHeader("ADD EMPLOYEE " + to_string(i + 1) + " OF " + to_string(count));
 
             Employee e;
             e.id = startId + i;
             string empId = generateEmployeeId(e.id);
             
-            cout << "Employee ID   : " << empId << " [SYSTEM GENERATED]" << endl;
-            e.name = getValidNameInput("Name          : ");
+            cout << "\nEmployee ID       : " << empId << " [SYSTEM GENERATED]\n" << endl;
+            separator();
+            cout << "\nName              : ";
+            e.name = getValidNameInput("");
             
             // Department selection
-            cout << "\nAvailable Departments:" << endl;
+            cls();
+            drawHeader("SELECT DEPARTMENT");
+            cout << "\n                 Available Departments\n" << endl;
+            separator();
+            cout << "\n";
             for (size_t j = 0; j < departments.size(); j++)
             {
-                cout << " " << (j + 1) << ") " << departments[j].name << endl;
+                cout << "  [" << (j + 1) << "] " << departments[j].name << endl;
             }
-            int deptChoice = getIntInput("Select department: ", 1, (int)departments.size());
+            cout << "\n" << endl;
+            separator();
+            cout << "\nSelect Department : ";
+            int deptChoice = getIntInput("", 1, (int)departments.size());
             e.department = departments[deptChoice - 1].name;
             
             // Position selection
-            cout << "\nAvailable Positions:" << endl;
+            cls();
+            drawHeader("SELECT POSITION");
+            cout << "\n                  Available Positions\n" << endl;
+            separator();
+            cout << "\n";
             for (size_t j = 0; j < positions.size(); j++)
             {
-                cout << " " << (j + 1) << ") " << positions[j].name << endl;
+                cout << "  [" << (j + 1) << "] " << positions[j].name << endl;
             }
+            cout << "\n" << endl;
+            separator();
+            cout << "\nSelect Position : ";
+            int posChoice = getIntInput("", 1, (int)positions.size());
+            e.position = positions[posChoice - 1].name;
+            
+            // Contact, email, address
+            cls();
+            drawHeader("ADD EMPLOYEE " + to_string(i + 1) + " OF " + to_string(count));
+            cout << "\nEmployee ID       : " << empId << " [SYSTEM GENERATED]\n";
+            cout << "Name              : " << e.name << "\n";
+            cout << "Department        : " << e.department << "\n";
+            cout << "Position          : " << e.position << "\n" << endl;
+            separator();
+            cout << "\nContact Number    : ";
+            e.contact = getValidContactInput("");
+            cout << "Email             : ";
+            e.email = getValidEmailInput("");
+            cout << "Address           : ";
+            e.address = getValidAddressInput("");
             int posChoice = getIntInput("Select position: ", 1, (int)positions.size());
             e.position = positions[posChoice - 1].name;
             
