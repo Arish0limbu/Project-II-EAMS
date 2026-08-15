@@ -1113,21 +1113,19 @@ public:
         }
 
         cls();
-        line();
-        printCentered("|| EMPLOYEE DETAILS SAVED ||");
-        line();
+        drawHeader("EMPLOYEE DETAILS SAVED");
         
         for (size_t i = 0; i < batch.size(); i++)
         {
             string empId = generateEmployeeId(batch[i].id);
             cout << "\nEmployee " << (i + 1) << ":" << endl;
-            cout << "  Employee ID   : " << empId << endl;
-            cout << "  Name          : " << batch[i].name << endl;
-            cout << "  Department    : " << batch[i].department << endl;
-            cout << "  Position      : " << batch[i].position << endl;
-            cout << "  Contact       : " << batch[i].contact << endl;
-            cout << "  Email         : " << batch[i].email << endl;
-            cout << "  Address       : " << batch[i].address << endl;
+            cout << "  Employee ID       : " << empId << endl;
+            cout << "  Name              : " << batch[i].name << endl;
+            cout << "  Department        : " << batch[i].department << endl;
+            cout << "  Position          : " << batch[i].position << endl;
+            cout << "  Contact Number    : " << batch[i].contact << endl;
+            cout << "  Email             : " << batch[i].email << endl;
+            cout << "  Address           : " << batch[i].address << endl;
             cout << "  Initial Password : " << empId << endl;
         }
         
@@ -1139,7 +1137,7 @@ public:
             for (auto &e : batch)
                 employees.push_back(e);
             saveEmployees();
-            showBox("|| Employee Record(s) Saved ||");
+            showSuccess("Employee Record(s) Saved");
         }
         else
         {
