@@ -3,5 +3,8 @@
 ======================================================================
 NAME                          DESCRIPTION
 ----------------------------------------------------------------------
-ceo                           head
+ceo                           Handle the whole componey
+manager                       Handle the depart's.
+leader                        Lead the team or group
+staff                         worker
 ======================================================================
