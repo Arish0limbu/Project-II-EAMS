@@ -963,33 +963,36 @@ public:
     int viewEmployeesAttendanceMenu()
     {
         cls();
-        line();
-        printCentered("|| VIEW EMPLOYEES & ATTENDANCE ||");
-        line();
-        cout << " 1) View All Employee Records\n"
-             << " 2) Search Employee\n"
-             << " 3) View Employee Attendance\n"
-             << " 4) View Daily Attendance\n"
-             << " 5) View Monthly Attendance\n"
-             << " 6) View Overall Attendance Report\n"
-             << " 7) View Leave Records\n"
-             << " 8) Back to Admin Dashboard\n";
-        line();
-        return getIntInput("Enter number to select given option: ", 1, 8);
+        drawHeader("VIEW EMPLOYEES & ATTENDANCE");
+        separator();
+        cout << "\n  [1] View All Employee Records\n"
+             << "  [2] Search Employee\n"
+             << "  [3] View Employee Attendance\n"
+             << "  [4] View Daily Attendance\n"
+             << "  [5] View Monthly Attendance\n"
+             << "  [6] View Overall Attendance Report\n"
+             << "  [7] View Leave Records\n"
+             << "  [0] Back\n" << endl;
+        separator();
+        cout << "\nEnter your choice : ";
+        return getIntInput("", 1, 8);
     }
 
     int reviewUpdateRequestsMenu()
     {
         cls();
-        line();
-        printCentered("|| REVIEW & UPDATE EMPLOYEE REQUESTS ||");
-        line();
-        cout << " 1) View Leave Requests\n"
-             << " 2) Approve Leave Request\n"
-             << " 3) Reject Leave Request\n"
-             << " 4) Update Attendance Records\n"
-             << " 5) Update Employee Information\n"
-             << " 6) Back to Admin Dashboard\n";
+        drawHeader("REVIEW & UPDATE EMPLOYEE REQUESTS");
+        separator();
+        cout << "\n  [1] View Leave Requests\n"
+             << "  [2] Approve Leave Request\n"
+             << "  [3] Reject Leave Request\n"
+             << "  [4] Update Attendance Records\n"
+             << "  [5] Update Employee Information\n"
+             << "  [0] Back\n" << endl;
+        separator();
+        cout << "\nEnter your choice : ";
+        return getIntInput("", 1, 6);
+    }
         line();
         return getIntInput("Enter number to select given option: ", 1, 6);
     }
