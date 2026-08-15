@@ -228,6 +228,29 @@ string getCurrentTime()
     return oss.str();
 }
 
+bool isValidContactNumber(const string &contact)
+{
+    if (contact.length() != 10)
+        return false;
+    for (char c : contact)
+    {
+        if (!isdigit(c))
+            return false;
+    }
+    return true;
+}
+
+string getValidContactInput(const string &prompt)
+{
+    while (true)
+    {
+        string contact = getLineInput(prompt);
+        if (isValidContactNumber(contact))
+            return contact;
+        cout << "Invalid contact number. Please enter exactly 10 digits." << endl;
+    }
+}
+
 // ------------------------------------------------------------
 // Data models
 // ------------------------------------------------------------
@@ -240,7 +263,10 @@ struct Employee
     string department;
     string position;
     string contact;
+    string email;
+    string address;
     string status; // Active, Inactive
+    bool firstLogin = true; // true if employee hasn't changed password yet
 };
 
 struct LeaveRequest
