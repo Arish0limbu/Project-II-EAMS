@@ -1452,14 +1452,14 @@ public:
             return;
         }
 
-        cout << fitWidth("#", 4) << fitWidth("EMP ID", 8) << fitWidth("NAME", 20) << fitWidth("DATE", 15)
+        cout << fitWidth("#", 4) << fitWidth("LEAVE ID", 10) << fitWidth("EMP ID", 8) << fitWidth("NAME", 20) << fitWidth("FROM DATE", 15)
              << fitWidth("TYPE", 12) << fitWidth("REASON", 25) << endl;
         line();
 
         for (size_t i = 0; i < pending.size(); i++)
         {
-            cout << fitWidth(i + 1, 4) << fitWidth(pending[i]->empId, 8) << fitWidth(pending[i]->empName, 20)
-                 << fitWidth(pending[i]->leaveDate, 15) << fitWidth(pending[i]->leaveType, 12)
+            cout << fitWidth(i + 1, 4) << fitWidth(pending[i]->leaveId, 10) << fitWidth(pending[i]->empId, 8) << fitWidth(pending[i]->empName, 20)
+                 << fitWidth(pending[i]->fromDate, 15) << fitWidth(pending[i]->leaveType, 12)
                  << fitWidth(pending[i]->reason, 25) << endl;
         }
         line();
@@ -1523,14 +1523,14 @@ public:
             return;
         }
 
-        cout << fitWidth("#", 4) << fitWidth("EMP ID", 8) << fitWidth("NAME", 20) << fitWidth("DATE", 15)
+        cout << fitWidth("#", 4) << fitWidth("LEAVE ID", 10) << fitWidth("EMP ID", 8) << fitWidth("NAME", 20) << fitWidth("FROM DATE", 15)
              << fitWidth("TYPE", 12) << fitWidth("REASON", 25) << endl;
         line();
 
         for (size_t i = 0; i < pending.size(); i++)
         {
-            cout << fitWidth(i + 1, 4) << fitWidth(pending[i]->empId, 8) << fitWidth(pending[i]->empName, 20)
-                 << fitWidth(pending[i]->leaveDate, 15) << fitWidth(pending[i]->leaveType, 12)
+            cout << fitWidth(i + 1, 4) << fitWidth(pending[i]->leaveId, 10) << fitWidth(pending[i]->empId, 8) << fitWidth(pending[i]->empName, 20)
+                 << fitWidth(pending[i]->fromDate, 15) << fitWidth(pending[i]->leaveType, 12)
                  << fitWidth(pending[i]->reason, 25) << endl;
         }
         line();
@@ -1643,13 +1643,13 @@ public:
             return;
         }
 
-        cout << fitWidth("DATE", 15) << fitWidth("TYPE", 15) << fitWidth("REASON", 30) << "STATUS" << endl;
+        cout << fitWidth("LEAVE ID", 12) << fitWidth("FROM DATE", 15) << fitWidth("TO DATE", 15) << fitWidth("TYPE", 15) << fitWidth("REASON", 20) << "STATUS" << endl;
         line();
 
         for (auto *lr : myRequests)
         {
-            cout << fitWidth(lr->leaveDate, 15) << fitWidth(lr->leaveType, 15)
-                 << fitWidth(lr->reason, 30) << lr->status << endl;
+            cout << fitWidth(lr->leaveId, 12) << fitWidth(lr->fromDate, 15) << fitWidth(lr->toDate, 15) << fitWidth(lr->leaveType, 15)
+                 << fitWidth(lr->reason, 20) << lr->status << endl;
         }
         line();
         pauseScreen();
