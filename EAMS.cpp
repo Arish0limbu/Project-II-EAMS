@@ -200,6 +200,34 @@ string toLowerStr(string s)
     return s;
 }
 
+string generateEmployeeId(int id)
+{
+    ostringstream oss;
+    oss << "EMP" << setfill('0') << setw(3) << id;
+    return oss.str();
+}
+
+string generateLeaveId(int id)
+{
+    ostringstream oss;
+    oss << "L" << setfill('0') << setw(3) << id;
+    return oss.str();
+}
+
+string getCurrentTime()
+{
+    time_t now = time(nullptr);
+    tm *ltm = localtime(&now);
+    ostringstream oss;
+    int hour = ltm->tm_hour;
+    int min = ltm->tm_min;
+    string ampm = hour >= 12 ? "PM" : "AM";
+    hour = hour % 12;
+    if (hour == 0) hour = 12;
+    oss << setfill('0') << setw(2) << hour << ":" << setfill('0') << setw(2) << min << " " << ampm;
+    return oss.str();
+}
+
 // ------------------------------------------------------------
 // Data models
 // ------------------------------------------------------------
@@ -305,36 +333,66 @@ public:
             return;
 
         string ln;
+        int lineNum = 0;
         while (getline(fin, ln))
         {
-            if (ln.empty())
+            lineNum++;
+            // Skip header lines (first 4 lines: border, title, border, header, separator)
+            if (lineNum <= 5)
                 continue;
-            vector<string> f = splitFields(ln, '\t');
-            if (f.size() < 7)
+            // Skip border line at end
+            if (ln.find('=') != string::npos)
+                continue;
+            if (ln.empty() || ln.find('-') != string::npos)
+                continue;
+            
+            // Parse the formatted line
+            vector<string> f = splitFields(ln, ' ');
+            // Filter out empty strings
+            vector<string> fields;
+            for (auto &field : f)
+            {
+                if (!field.empty())
+                    fields.push_back(field);
+            }
+            
+            if (fields.size() < 6)
                 continue;
 
             Employee e;
-            try
+            // Parse EMP001 format
+            string empIdStr = fields[0];
+            if (empIdStr.length() >= 4 && empIdStr.substr(0, 3) == "EMP")
             {
-                e.id = stoi(f[0]);
+                try
+                {
+                    e.id = stoi(empIdStr.substr(3));
+                }
+                catch (...)
+                {
+                    continue;
+                }
             }
-            catch (...)
+            else
             {
-                continue;
+                try
+                {
+                    e.id = stoi(empIdStr);
+                }
+                catch (...)
+                {
+                    continue;
+                }
             }
-            e.name = f[1];
-            e.password = f[2];
-            try
-            {
-                e.age = stoi(f[3]);
-            }
-            catch (...)
-            {
-                e.age = 0;
-            }
-            e.department = f[4];
-            e.position = f[5];
-            e.contact = f[6];
+            
+            e.name = fields[1];
+            e.department = fields[2];
+            e.position = fields[3];
+            e.contact = fields[4];
+            e.status = fields[5];
+            e.password = "1234"; // Default password for backward compatibility
+            e.age = 25; // Default age for backward compatibility
+            
             employees.push_back(e);
         }
     }
@@ -342,11 +400,24 @@ public:
     void saveEmployees()
     {
         ofstream fout(EMP_FILE, ios::trunc);
+        string border = string(88, '=');
+        string separator = string(88, '-');
+        
+        fout << border << endl;
+        fout << fitWidth("", 35) << "EAMS - EMPLOYEE RECORDS" << endl;
+        fout << border << endl;
+        fout << fitWidth("ID", 10) << fitWidth("NAME", 20) << fitWidth("DEPARTMENT", 18) 
+             << fitWidth("POSITION", 18) << fitWidth("CONTACT", 14) << "STATUS" << endl;
+        fout << separator << endl;
+        
         for (auto &e : employees)
         {
-            fout << e.id << "\t" << e.name << "\t" << e.password << "\t" << e.age << "\t"
-                 << e.department << "\t" << e.position << "\t" << e.contact << "\n";
+            string empId = "EMP" + string(3 - to_string(e.id).length(), '0') + to_string(e.id);
+            fout << fitWidth(empId, 10) << fitWidth(e.name, 20) << fitWidth(e.department, 18) 
+                 << fitWidth(e.position, 18) << fitWidth(e.contact, 14) << e.status << endl;
         }
+        
+        fout << border << endl;
     }
 
     void loadAttendance()
