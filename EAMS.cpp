@@ -2242,30 +2242,33 @@ public:
     void addDepartment()
     {
         cls();
-        line();
-        printCentered("|| Add Department ||");
-        line();
-
-        string name = getRequiredLineInput("Enter department name: ");
+        drawHeader("ADD DEPARTMENT");
+        separator();
+        cout << "\nDepartment Name :\n" << endl;
+        separator();
+        cout << "\nEnter department name : ";
+        string name = getRequiredLineInput("");
         
         // Check for duplicate
         for (auto &d : departments)
         {
             if (toLowerStr(d.name) == toLowerStr(name))
             {
-                showBox("|| Department Already Exists ||");
+                showWarning("Department Already Exists");
                 pauseScreen();
                 return;
             }
         }
 
-        string description = getLineInput("Enter description (optional): ");
+        cout << "Enter description (optional) : ";
+        string description = getLineInput("");
 
         Department d;
         d.name = name;
         d.description = description;
         departments.push_back(d);
         saveDepartments();
+        showSuccess("Department added successfully");
 
         showBox("|| Department Added Successfully ||");
         pauseScreen();
