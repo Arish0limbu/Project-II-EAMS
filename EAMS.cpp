@@ -1419,13 +1419,14 @@ public:
             return;
         }
 
-        cout << fitWidth("EMP ID", 8) << fitWidth("NAME", 20) << fitWidth("DATE", 15)
+        cout << fitWidth("LEAVE ID", 12) << fitWidth("EMP ID", 8) << fitWidth("NAME", 20) << fitWidth("FROM DATE", 15)
              << fitWidth("TYPE", 12) << fitWidth("REASON", 25) << "STATUS" << endl;
         line();
 
         for (auto &lr : leaveRequests)
         {
-            cout << fitWidth(lr.empId, 8) << fitWidth(lr.empName, 20) << fitWidth(lr.leaveDate, 15)
+            string empId = "EMP" + string(3 - to_string(lr.empId).length(), '0') + to_string(lr.empId);
+            cout << fitWidth(lr.leaveId, 12) << fitWidth(empId, 8) << fitWidth(lr.empName, 20) << fitWidth(lr.fromDate, 15)
                  << fitWidth(lr.leaveType, 12) << fitWidth(lr.reason, 25) << lr.status << endl;
         }
         line();
@@ -2193,13 +2194,14 @@ public:
             return;
         }
 
-        cout << fitWidth("EMP ID", 8) << fitWidth("NAME", 20) << fitWidth("DATE", 15)
+        cout << fitWidth("LEAVE ID", 12) << fitWidth("EMP ID", 8) << fitWidth("NAME", 20) << fitWidth("FROM DATE", 15)
              << fitWidth("TYPE", 12) << fitWidth("REASON", 25) << "STATUS" << endl;
         line();
 
         for (auto &lr : leaveRequests)
         {
-            cout << fitWidth(lr.empId, 8) << fitWidth(lr.empName, 20) << fitWidth(lr.leaveDate, 15)
+            string empId = "EMP" + string(3 - to_string(lr.empId).length(), '0') + to_string(lr.empId);
+            cout << fitWidth(lr.leaveId, 12) << fitWidth(empId, 8) << fitWidth(lr.empName, 20) << fitWidth(lr.fromDate, 15)
                  << fitWidth(lr.leaveType, 12) << fitWidth(lr.reason, 25) << lr.status << endl;
         }
         line();
