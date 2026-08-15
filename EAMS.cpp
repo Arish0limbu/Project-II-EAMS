@@ -454,8 +454,27 @@ public:
     void saveAttendance()
     {
         ofstream fout(ATT_FILE, ios::trunc);
+        string border = string(100, '=');
+        string separator = string(100, '-');
+        
+        fout << border << endl;
+        fout << fitWidth("", 32) << "EAMS - ATTENDANCE RECORDS" << endl;
+        fout << border << endl;
+        fout << fitWidth("EMP ID", 10) << fitWidth("NAME", 20) << fitWidth("DATE", 15) 
+             << fitWidth("TIME IN", 12) << fitWidth("TIME OUT", 12) << "STATUS" << endl;
+        fout << separator << endl;
+        
         for (auto &a : attendance)
-            fout << a.empId << "\t" << a.date << "\t" << a.status << "\n";
+        {
+            Employee *e = findById(a.empId);
+            string empId = e ? "EMP" + string(3 - to_string(a.empId).length(), '0') + to_string(a.empId) : "Unknown";
+            string empName = e ? e->name : "Unknown";
+            
+            fout << fitWidth(empId, 10) << fitWidth(empName, 20) << fitWidth(a.date, 15) 
+                 << fitWidth(a.timeIn, 12) << fitWidth(a.timeOut, 12) << a.status << endl;
+        }
+        
+        fout << border << endl;
     }
 
     void loadLeaveRequests()
