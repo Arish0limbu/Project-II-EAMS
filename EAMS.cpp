@@ -553,9 +553,25 @@ public:
     void saveLeaveRequests()
     {
         ofstream fout(LEAVE_FILE, ios::trunc);
+        string border = string(110, '=');
+        string separator = string(110, '-');
+        
+        fout << border << endl;
+        fout << fitWidth("", 35) << "EAMS - LEAVE RECORDS" << endl;
+        fout << border << endl;
+        fout << fitWidth("LEAVE ID", 12) << fitWidth("EMP ID", 10) << fitWidth("NAME", 20) 
+             << fitWidth("FROM DATE", 15) << fitWidth("TO DATE", 15) << fitWidth("TYPE", 12) << "STATUS" << endl;
+        fout << separator << endl;
+        
         for (auto &lr : leaveRequests)
-            fout << lr.empId << "\t" << lr.empName << "\t" << lr.leaveDate << "\t"
-                 << lr.reason << "\t" << lr.leaveType << "\t" << lr.status << "\n";
+        {
+            string empId = "EMP" + string(3 - to_string(lr.empId).length(), '0') + to_string(lr.empId);
+            
+            fout << fitWidth(lr.leaveId, 12) << fitWidth(empId, 10) << fitWidth(lr.empName, 20) 
+                 << fitWidth(lr.fromDate, 15) << fitWidth(lr.toDate, 15) << fitWidth(lr.leaveType, 12) << lr.status << endl;
+        }
+        
+        fout << border << endl;
     }
 
     void loadDepartments()
