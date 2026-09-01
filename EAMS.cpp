@@ -247,6 +247,25 @@ string generateEmployeeId(int id)
     return oss.str();
 }
 
+int parseEmployeeId(const string &empIdStr)
+{
+    try
+    {
+        if (empIdStr.length() >= 4 && empIdStr.substr(0, 3) == "EMP")
+        {
+            return stoi(empIdStr.substr(3));
+        }
+        else
+        {
+            return -1; // Only accept EMP### format
+        }
+    }
+    catch (...)
+    {
+        return -1;
+    }
+}
+
 string generateLeaveId(int id)
 {
     ostringstream oss;
@@ -1215,7 +1234,14 @@ public:
         vector<Employee *> results;
         if (choice == 1)
         {
-            int id = getIntInput("Enter Employee ID: ");
+            string empIdStr = getLineInput("Enter Employee ID (e.g., EMP001): ");
+            int id = parseEmployeeId(empIdStr);
+            if (id == -1)
+            {
+                showError("Invalid Employee ID format. Please use EMP### format (e.g., EMP001)");
+                pauseScreen();
+                continue;
+            }
             Employee *e = findById(id);
             if (e)
                 results.push_back(e);
@@ -1261,7 +1287,14 @@ public:
             return;
         }
 
-        int id = getIntInput("Enter Employee ID to update: ");
+        string empIdStr = getLineInput("Enter Employee ID to update (e.g., EMP001): ");
+        int id = parseEmployeeId(empIdStr);
+        if (id == -1)
+        {
+            showError("Invalid Employee ID format. Please use EMP### format (e.g., EMP001)");
+            pauseScreen();
+            return;
+        }
         Employee *e = findById(id);
         if (!e)
         {
@@ -1329,7 +1362,14 @@ public:
             return;
         }
 
-        int id = getIntInput("Enter Employee ID to remove: ");
+        string empIdStr = getLineInput("Enter Employee ID to remove (e.g., EMP001): ");
+        int id = parseEmployeeId(empIdStr);
+        if (id == -1)
+        {
+            showError("Invalid Employee ID format. Please use EMP### format (e.g., EMP001)");
+            pauseScreen();
+            return;
+        }
         Employee *e = findById(id);
         if (!e)
         {
@@ -1383,7 +1423,14 @@ public:
             return;
         }
 
-        int id = getIntInput("Enter Employee ID: ");
+        string empIdStr = getLineInput("Enter Employee ID (e.g., EMP001): ");
+        int id = parseEmployeeId(empIdStr);
+        if (id == -1)
+        {
+            showError("Invalid Employee ID format. Please use EMP### format (e.g., EMP001)");
+            pauseScreen();
+            return;
+        }
         Employee *e = findById(id);
         if (!e)
         {
@@ -1447,8 +1494,14 @@ public:
 
         if (choice == 1)
         {
-            cout << "\nEnter Employee ID : ";
-            int id = getIntInput("", 1, 999);
+            string empIdStr = getLineInput("\nEnter Employee ID (e.g., EMP001): ");
+            int id = parseEmployeeId(empIdStr);
+            if (id == -1)
+            {
+                showError("Invalid Employee ID format. Please use EMP### format (e.g., EMP001)");
+                pauseScreen();
+                return;
+            }
             Employee *e = findById(id);
             cls();
             if (!e)
@@ -1979,7 +2032,14 @@ public:
             return;
         }
 
-        int empId = getIntInput("Enter Employee ID: ");
+        string empIdStr = getLineInput("Enter Employee ID (e.g., EMP001): ");
+        int empId = parseEmployeeId(empIdStr);
+        if (empId == -1)
+        {
+            showError("Invalid Employee ID format");
+            pauseScreen();
+            return;
+        }
         Employee *e = findById(empId);
         if (!e)
         {
@@ -1988,7 +2048,7 @@ public:
             return;
         }
 
-        string empIdStr = generateEmployeeId(empId);
+        empIdStr = generateEmployeeId(empId);
         cout << "\nEmployee: " << e->name << " (" << empIdStr << ")" << endl;
         separator();
 
@@ -2186,7 +2246,14 @@ public:
             return;
         }
 
-        int id = getIntInput("Enter Employee ID: ");
+        string empIdStr = getLineInput("Enter Employee ID (e.g., EMP001): ");
+        int id = parseEmployeeId(empIdStr);
+        if (id == -1)
+        {
+            showError("Invalid Employee ID format. Please use EMP### format (e.g., EMP001)");
+            pauseScreen();
+            return;
+        }
         Employee *e = findById(id);
         if (!e)
         {
@@ -2252,7 +2319,14 @@ public:
             return;
         }
 
-        int id = getIntInput("Enter Employee ID: ");
+        string empIdStr = getLineInput("Enter Employee ID (e.g., EMP001): ");
+        int id = parseEmployeeId(empIdStr);
+        if (id == -1)
+        {
+            showError("Invalid Employee ID format. Please use EMP### format (e.g., EMP001)");
+            pauseScreen();
+            return;
+        }
         Employee *e = findById(id);
         if (!e)
         {
@@ -2671,20 +2745,27 @@ LoginResult login(EAMS &manager)
         int empId;
         try
         {
-            
             if (userId.length() >= 4 && userId.substr(0, 3) == "EMP")
             {
-                string idStr = userId.substr(3); 
+                string idStr = userId.substr(3);
                 empId = stoi(idStr);
             }
             else
             {
-                empId = stoi(userId);
+                empId = -1; // Only accept EMP### format
             }
         }
         catch (...)
         {
             empId = -1;
+        }
+
+        if (empId == -1)
+        {
+            attemptsLeft--;
+            showError("Invalid User ID format. Please use EMP### format (e.g., EMP001)\n(" + to_string(attemptsLeft) + " attempt(s) left)");
+            pauseScreen();
+            continue;
         }
 
         Employee *emp = manager.findById(empId);
