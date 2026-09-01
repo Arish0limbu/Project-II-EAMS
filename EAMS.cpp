@@ -1245,12 +1245,6 @@ public:
             Employee *e = findById(id);
             if (e)
                 results.push_back(e);
-            else
-            {
-                showError("Employee Not Found");
-                pauseScreen();
-                return;
-            }
         }
         else
         {
