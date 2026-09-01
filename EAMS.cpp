@@ -314,10 +314,6 @@ bool isValidName(const string &name)
             return false;
     }
     
-    
-    if (name.find(' ') == string::npos)
-        return false;
-    
     return true;
 }
 
