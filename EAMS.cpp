@@ -1240,7 +1240,7 @@ public:
             {
                 showError("Invalid Employee ID format. Please use EMP### format (e.g., EMP001)");
                 pauseScreen();
-                continue;
+                return;
             }
             Employee *e = findById(id);
             if (e)
@@ -1249,6 +1249,7 @@ public:
             {
                 showError("Employee Not Found");
                 pauseScreen();
+                return;
             }
         }
         else
