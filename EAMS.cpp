@@ -544,10 +544,10 @@ public:
             e.position = fields[3];
             e.contact = fields[4];
             e.status = fields[5];
-            e.password = "1234"; 
-            e.age = 25; 
             e.email = (fields.size() >= 7) ? fields[6] : "";
             e.firstLogin = (fields.size() >= 8) ? (fields[7] == "Yes") : true; 
+            e.password = (fields.size() >= 9) ? fields[8] : "1234"; 
+            e.age = 25; 
             e.address = ""; 
             
             employees.push_back(e);
@@ -564,7 +564,7 @@ public:
         fout << fitWidth("", 45) << "EAMS - EMPLOYEE RECORDS" << endl;
         fout << border << endl;
         fout << fitWidth("ID", 10) << fitWidth("NAME", 20) << fitWidth("DEPARTMENT", 18) 
-             << fitWidth("POSITION", 18) << fitWidth("CONTACT", 14) << fitWidth("EMAIL", 20) << fitWidth("STATUS", 10) << "FIRST LOGIN" << endl;
+             << fitWidth("POSITION", 18) << fitWidth("CONTACT", 14) << fitWidth("EMAIL", 20) << fitWidth("STATUS", 10) << "FIRST LOGIN" << " PASSWORD" << endl;
         fout << separator << endl;
         
         for (auto &e : employees)
@@ -573,7 +573,7 @@ public:
             string firstLoginStr = e.firstLogin ? "Yes" : "No";
             fout << fitWidth(empId, 10) << fitWidth(e.name, 20) << fitWidth(e.department, 18) 
                  << fitWidth(e.position, 18) << fitWidth(e.contact, 14) << fitWidth(e.email, 20) 
-                 << fitWidth(e.status, 10) << firstLoginStr << endl;
+                 << fitWidth(e.status, 10) << firstLoginStr << " " << e.password << endl;
         }
         
         fout << border << endl;
@@ -2834,6 +2834,9 @@ int main()
                     break;
                 case 5:
                     manager.viewMyProfile(userId);
+                    break;
+                case 6:
+                    manager.changePassword(userId);
                     break;
                 case 0:
                     showSuccess("Logged Out Successfully");
