@@ -41,8 +41,6 @@
 
 <div align="center">
 
-| | | | |
-|---|---|---|
 | **Language** | C++ | **Roles** | Admin · Employee |
 | **Interface** | CLI (Terminal) | **Persistence** | Flat-file (`.txt`) |
 | **Cross-Platform** | `termios` / `conio.h` | **Footprint** | Single `.cpp` file |
@@ -57,28 +55,28 @@
 
 ```
 ╔════════════════════════════════════════════════════╗
-║           EMPLOYEE ATTENDANCE MANAGEMENT            ║
-║                      SYSTEM                         ║
+║           EMPLOYEE ATTENDANCE MANAGEMENT           ║
+║                      SYSTEM                        ║
 ╠════════════════════════════════════════════════════╣
-║                                                      ║
-║   [1] Admin Login                                   ║
-║   [2] Employee Login                                ║
-║   [0] Exit                                          ║
-║                                                      ║
+║                                                    ║
+║   [1] Admin Login                                  ║
+║   [2] Employee Login                               ║
+║   [0] Exit                                         ║
+║                                                    ║
 ╚════════════════════════════════════════════════════╝
 ```
 
 ```
 ╔════════════════════════════════════════════════════╗
-║                     EAMS LOGIN                      ║
+║                     EAMS LOGIN                     ║
 ╠════════════════════════════════════════════════════╣
-║                                                      ║
-║   User ID     : EMP004                              ║
-║   Password    : ••••••••                            ║
-║                                                      ║
-║   [ 2 ATTEMPT(S) LEFT ]                              ║
-║   [ SYSTEM READY ]                                   ║
-║                                                      ║
+║                                                    ║
+║   User ID     : EMP004                             ║
+║   Password    : ••••••••                           ║
+║                                                    ║
+║   [ 2 ATTEMPT(S) LEFT ]                            ║
+║   [ SYSTEM READY ]                                 ║
+║                                                    ║
 ╚════════════════════════════════════════════════════╝
 ```
 
@@ -387,7 +385,7 @@ EMP001    Sarah Johnson       Engineering       Software Engineer 9812345678    
 
 ```
                     ┌─────────┐
-                    │  EAMS   │
+                    │   EAMS  │
                     └────┬────┘
                          ▼
                     ┌─────────┐
@@ -403,15 +401,15 @@ EMP001    Sarah Johnson       Engineering       Software Engineer 9812345678    
         ┌──────────┐          ┌──────────┐
         │ DASHBOARD│          │ DASHBOARD│
         └────┬─────┘          └────┬─────┘
-              └──────────┬─────────┘
+             └───────────┬─────────┘
                          ▼
-     ┌───────────────────────────────────────┐
+     ┌────────────────────────────────────────────┐
      │  MANAGEMENT · ATTENDANCE · LEAVE · REPORTS │
-     └────────────────────┬────────────────────┘
+     └────────────────────┬───────────────────────┘
                           ▼
-                  ┌────────────────┐
-                  │  TXT FILE STORE │
-                  └────────────────┘
+                  ┌──────────────────┐
+                  │  TXT FILE STORE  │
+                  └──────────────────┘
 ```
 
 ---
@@ -453,7 +451,17 @@ g++ -std=c++11 -O2 -o eams EAMS.cpp
 
 ```
 EAMS/
-└── EAMS.cpp     # everything lives here — models, persistence, menus, main()
+├── EAMS.cpp                  # everything lives here — models, persistence, menus, main()
+├── EAMS.exe                  # compiled executable (Windows)
+├── README.md                 # project documentation
+├── .markdownlint.json        # markdown linting configuration
+├── employees.txt             # employee master records (generated)
+├── attendance.txt            # daily attendance log (generated)
+├── leave_requests.txt        # leave applications + status (generated)
+├── departments.txt           # department registry (generated)
+├── positions.txt             # position registry (generated)
+├── config.txt                # optional admin credential override (generated)
+└── report.txt                # optional exported attendance report (generated)
 ```
 
 Data files (`employees.txt`, `attendance.txt`, `leave_requests.txt`, `departments.txt`, `positions.txt`, `config.txt`, `report.txt`) are created and maintained automatically at runtime — see [Data Storage](#-data-storage).
@@ -475,7 +483,7 @@ Data files (`employees.txt`, `attendance.txt`, `leave_requests.txt`, `department
 <div align="center">
 
 ────────────────────────────────────────
-&nbsp;&nbsp;&nbsp;&nbsp;EAMS // SYSTEM TERMINATED
+&nbsp;&nbsp;&nbsp;&nbsp;<br>EAMS // SYSTEM TERMINATED
 &nbsp;&nbsp;&nbsp;&nbsp;BUILT WITH C++ ⚡
 ────────────────────────────────────────
 
