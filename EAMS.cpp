@@ -950,10 +950,11 @@ public:
         cout << "\n  [1] Employee Management\n"
              << "  [2] View Employees & Attendance\n"
              << "  [3] Review Leave & Update Records\n"
-             << "  [4] Logout\n" << endl;
+             << "  [4] Change Admin Credentials\n"
+             << "  [5] Logout\n" << endl;
         separator();
         cout << "\nEnter your choice : ";
-        return getIntInput("", 1, 4);
+        return getIntInput("", 1, 5);
     }
 
     int employeeManagementMenu()
@@ -968,10 +969,11 @@ public:
              << "  [5] Manage Positions\n"
              << "  [6] Update Employee Information\n"
              << "  [7] Remove Employee\n"
+             << "  [8] Change Employee Password\n"
              << "  [0] Back\n" << endl;
         separator();
         cout << "\nEnter your choice : ";
-        return getIntInput("", 0, 7);
+        return getIntInput("", 0, 8);
     }
 
     int viewEmployeesAttendanceMenu()
@@ -1963,6 +1965,74 @@ public:
         }
     }
 
+    void changeEmployeePassword()
+    {
+        cls();
+        line();
+        printCentered("|| CHANGE EMPLOYEE PASSWORD ||");
+        line();
+
+        if (employees.empty())
+        {
+            showInfo("No Employees Found");
+            pauseScreen();
+            return;
+        }
+
+        int empId = getIntInput("Enter Employee ID: ");
+        Employee *e = findById(empId);
+        if (!e)
+        {
+            showError("Employee Not Found");
+            pauseScreen();
+            return;
+        }
+
+        string empIdStr = generateEmployeeId(empId);
+        cout << "\nEmployee: " << e->name << " (" << empIdStr << ")" << endl;
+        separator();
+
+        while (true)
+        {
+            cout << "\nEnter New Password    : ";
+            string newPass = hidePassword();
+            cout << "Confirm New Password  : ";
+            string confirmPass = hidePassword();
+
+            if (newPass.empty())
+            {
+                cout << "\nPassword cannot be empty. Please try again." << endl;
+                pauseScreen();
+                continue;
+            }
+
+            if (newPass != confirmPass)
+            {
+                cout << "\nPasswords do not match. Please try again." << endl;
+                pauseScreen();
+                continue;
+            }
+
+            if (newPass == e->password)
+            {
+                cout << "\nNew password cannot be the same as the old password. Please try again." << endl;
+                pauseScreen();
+                continue;
+            }
+
+            e->password = newPass;
+            saveEmployees();
+
+            cls();
+            line();
+            printCentered("|| Password changed successfully ||");
+            line();
+            cout << "\nEmployee " << empIdStr << " password has been updated." << endl;
+            pauseScreen();
+            return;
+        }
+    }
+
     void markTodayAttendance(int empId)
     {
         cls();
@@ -2681,11 +2751,11 @@ int main()
             while (true)
             {
                 int choice = manager.adminDashboard();
-                if (choice == 4) 
+                if (choice == 5)
                 {
                     showSuccess("Logged Out Successfully");
                     pauseScreen();
-                    break; 
+                    break;
                 }
                 
                 if (choice == 1) 
@@ -2718,6 +2788,9 @@ int main()
                             break;
                         case 7:
                             manager.removeEmployee();
+                            break;
+                        case 8:
+                            manager.changeEmployeePassword();
                             break;
                         default:
                             cls();
@@ -2763,6 +2836,10 @@ int main()
                             pauseScreen();
                         }
                     }
+                }
+                else if (choice == 4)
+                {
+                    manager.changePassword();
                 }
                 else if (choice == 3) 
                 {
