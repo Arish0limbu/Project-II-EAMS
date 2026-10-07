@@ -2729,8 +2729,7 @@ LoginResult login(EAMS &manager)
     {
         cls();
         drawHeader("EAMS LOGIN");
-        cout << "\n         EMPLOYEE ATTENDANCE MANAGEMENT" << endl;
-        cout << "                    SYSTEM\n" << endl;
+        cout << "\n   \t\t\t      EMPLOYEE ATTENDANCE MANAGEMENT SYSTEM\n" << endl;
         separator();
         cout << "\nUser ID       : ";
         string userId = getLineInput("");

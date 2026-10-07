@@ -21,11 +21,11 @@
 
 ```
 ┌──────────────────────────────────────────────┐
-│  SYSTEM     : EAMS                            │
-│  LANGUAGE   : C++                             │
-│  MODE       : EMPLOYEE ATTENDANCE MANAGEMENT  │
-│  STORAGE    : FLAT-FILE (.txt)                │
-│  STATUS     : ● ONLINE                        │
+│  SYSTEM     : EAMS                           │
+│  LANGUAGE   : C++                            │
+│  MODE       : EMPLOYEE ATTENDANCE MANAGEMENT │
+│  STORAGE    : FLAT-FILE (.txt)               │
+│  STATUS     : ● ONLINE                       │
 └──────────────────────────────────────────────┘
 ```
 
@@ -282,8 +282,6 @@ Each employee gets a personal dashboard scoped to their own records only:
 
 ## 🕒 Attendance System
 
-<div align="center">
-
 | Status | Marked By | Meaning |
 |:---:|:---:|---|
 | ● **PRESENT** | Employee / Admin | Full day — auto time-in/out on self-mark |
@@ -291,7 +289,6 @@ Each employee gets a personal dashboard scoped to their own records only:
 | ● **LEAVE** | Employee / Admin / Auto | Set directly, or automatically on leave approval |
 | ● **HALF DAY** | Admin only | Manual override — not selectable by employees |
 
-</div>
 
 Reports tally each status per employee and compute an **Attendance Percentage**, where a Half Day counts as `0.5` toward the present total:
 
@@ -482,9 +479,9 @@ Data files (`employees.txt`, `attendance.txt`, `leave_requests.txt`, `department
 
 <div align="center">
 
-────────────────────────────────────────
+─────────────────────────────────────────────────────────────────────────────────────────
 &nbsp;&nbsp;&nbsp;&nbsp;<br>EAMS // SYSTEM TERMINATED
-&nbsp;&nbsp;&nbsp;&nbsp;BUILT WITH C++ ⚡
-────────────────────────────────────────
+&nbsp;&nbsp;&nbsp;&nbsp;BUILT WITH C++ ⚡<br>
+─────────────────────────────────────────────────────────────────────────────────────────
 
 </div>
